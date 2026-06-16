@@ -20,4 +20,11 @@
 *Expliquer ici la motivation du projet, l'approche "bottom-up" (du bas vers le haut) et les outils utilisés (Logisim, Rust).*
 
 ## Couche 0 : Logique Booléenne <a name="couche-0"></a>
-*Analyse des portes fondamentales (NAND, AND, OR, XOR).*
+L'implémentation de la couche 0 a permis de valider l'universalité de la porte **NAND**. 
+
+### Résultats de la recherche :
+1.  **Universalité** : Nous avons prouvé par la pratique que les portes fondamentales (NOT, AND, OR) peuvent être exclusivement construites à partir de portes NAND.
+2.  **Routage** : La conception du Multiplexeur (MUX) et du Démultiplexeur (DMUX) a posé les bases de l'aiguillage des signaux, essentiel pour la future Unité de Contrôle.
+3.  **Méthodologie** : L'approche "Double-Track" (Logisim + Rust) a permis de confirmer la justesse des circuits avant leur intégration. Les tests unitaires en Rust ont validé 100% des tables de vérité mathématiques.
+
+---
