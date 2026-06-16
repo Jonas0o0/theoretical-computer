@@ -1,0 +1,6 @@
+.idea/
+*.log
+logisim-evolution-*.jar
+target/
+node_modules/
+.DS_Store
