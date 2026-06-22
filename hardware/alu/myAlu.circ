@@ -35,7 +35,9 @@
     <tool lib="8" name="Wiring Tool"/>
     <tool lib="8" name="Text Tool"/>
     <sep/>
-    <tool lib="0" name="Pin"/>
+    <tool lib="0" name="Pin">
+      <a name="facing" val="south"/>
+    </tool>
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
       <a name="type" val="output"/>
@@ -258,15 +260,17 @@
     <comp lib="0" loc="(470,110)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="S"/>
       <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(470,180)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="C"/>
       <a name="type" val="output"/>
     </comp>
-    <comp loc="(470,110)" name="myAND"/>
-    <comp loc="(470,180)" name="myXOR"/>
+    <comp loc="(470,110)" name="myXOR"/>
+    <comp loc="(470,180)" name="myAND"/>
     <wire from="(110,110)" to="(240,110)"/>
     <wire from="(110,200)" to="(230,200)"/>
     <wire from="(230,130)" to="(230,200)"/>
@@ -277,5 +281,47 @@
     <wire from="(240,180)" to="(250,180)"/>
     <wire from="(460,110)" to="(460,160)"/>
     <wire from="(460,110)" to="(470,110)"/>
+  </circuit>
+  <circuit name="myFullAdder">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="myFullAdder"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(100,160)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(100,180)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(1040,110)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="S"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(1040,130)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="C"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(450,70)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="south"/>
+    </comp>
+    <comp loc="(380,160)" name="myHalfAdder"/>
+    <comp loc="(730,110)" name="myHalfAdder"/>
+    <comp loc="(990,130)" name="myOR"/>
+    <wire from="(100,160)" to="(160,160)"/>
+    <wire from="(100,180)" to="(160,180)"/>
+    <wire from="(380,160)" to="(510,160)"/>
+    <wire from="(380,180)" to="(770,180)"/>
+    <wire from="(450,110)" to="(510,110)"/>
+    <wire from="(450,70)" to="(450,110)"/>
+    <wire from="(510,130)" to="(510,160)"/>
+    <wire from="(730,110)" to="(1040,110)"/>
+    <wire from="(730,130)" to="(770,130)"/>
+    <wire from="(770,150)" to="(770,180)"/>
+    <wire from="(990,130)" to="(1040,130)"/>
   </circuit>
 </project>
