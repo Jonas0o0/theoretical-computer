@@ -3,9 +3,6 @@
   This file is intended to be loaded by Logisim-evolution v4.0.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
-    <tool name="Splitter">
-      <a name="facing" val="south"/>
-    </tool>
     <tool name="Pin">
       <a name="appearance" val="classic"/>
     </tool>
@@ -59,6 +56,14 @@
     <a name="circuit" val="main"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(1040,680)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="width" val="4"/>
+    </comp>
+    <comp lib="0" loc="(1040,680)" name="Splitter">
+      <a name="fanout" val="4"/>
+      <a name="incoming" val="4"/>
+    </comp>
     <comp lib="0" loc="(1230,910)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="width" val="8"/>
@@ -71,6 +76,14 @@
       <a name="appearance" val="NewPins"/>
       <a name="width" val="4"/>
     </comp>
+    <comp lib="0" loc="(1250,570)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(1250,590)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="width" val="8"/>
+    </comp>
     <comp lib="0" loc="(1450,910)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
@@ -78,6 +91,17 @@
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(1450,930)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(1470,570)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="type" val="output"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(1470,590)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="type" val="output"/>
@@ -101,7 +125,16 @@
       <a name="width" val="8"/>
     </comp>
     <comp loc="(1450,910)" name="my8bitALU"/>
+    <comp loc="(1470,570)" name="my8bitAU"/>
     <comp loc="(630,200)" name="my8bitLU"/>
+    <wire from="(1060,640)" to="(1250,640)"/>
+    <wire from="(1060,650)" to="(1240,650)"/>
+    <wire from="(1060,660)" to="(1230,660)"/>
+    <wire from="(1230,610)" to="(1230,660)"/>
+    <wire from="(1230,610)" to="(1250,610)"/>
+    <wire from="(1240,630)" to="(1240,650)"/>
+    <wire from="(1240,630)" to="(1250,630)"/>
+    <wire from="(1250,640)" to="(1250,650)"/>
     <wire from="(250,180)" to="(260,180)"/>
     <wire from="(250,200)" to="(270,200)"/>
     <wire from="(260,140)" to="(260,180)"/>
@@ -1116,7 +1149,7 @@
     <a name="circuit" val="my8bitALU"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
-    <comp lib="0" loc="(1350,420)" name="Pin">
+    <comp lib="0" loc="(1350,430)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="type" val="output"/>
@@ -1126,10 +1159,10 @@
       <a name="appearance" val="NewPins"/>
       <a name="width" val="4"/>
     </comp>
-    <comp lib="0" loc="(190,540)" name="Splitter">
+    <comp lib="0" loc="(190,1160)" name="Splitter">
+      <a name="facing" val="west"/>
       <a name="fanout" val="4"/>
       <a name="incoming" val="4"/>
-      <a name="spacing" val="2"/>
     </comp>
     <comp lib="0" loc="(220,430)" name="Pin">
       <a name="appearance" val="NewPins"/>
@@ -1147,24 +1180,64 @@
       <a name="label" val="Carry"/>
       <a name="type" val="output"/>
     </comp>
-    <comp loc="(1350,430)" name="myMUX"/>
+    <comp loc="(1090,430)" name="my8bitMUX"/>
+    <comp loc="(1120,720)" name="myOR">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp loc="(1130,500)" name="myAND">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp loc="(1160,720)" name="myAND">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp loc="(1180,940)" name="myNOT">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp loc="(1350,430)" name="my8bitMUX"/>
     <comp loc="(720,430)" name="my8bitAU"/>
     <comp loc="(740,560)" name="my8bitLU"/>
     <comp loc="(760,650)" name="my8bitSU"/>
+    <comp loc="(870,500)" name="myOR">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp loc="(890,720)" name="myAND">
+      <a name="facing" val="north"/>
+    </comp>
+    <comp loc="(910,940)" name="myOR">
+      <a name="facing" val="north"/>
+    </comp>
+    <wire from="(1090,430)" to="(1130,430)"/>
+    <wire from="(1090,450)" to="(1090,650)"/>
+    <wire from="(1090,450)" to="(1130,450)"/>
+    <wire from="(1120,1170)" to="(1210,1170)"/>
+    <wire from="(1120,720)" to="(1130,720)"/>
+    <wire from="(1120,940)" to="(1120,1170)"/>
+    <wire from="(1130,470)" to="(1130,500)"/>
+    <wire from="(1140,1180)" to="(1210,1180)"/>
+    <wire from="(1140,940)" to="(1140,1180)"/>
+    <wire from="(1150,720)" to="(1160,720)"/>
+    <wire from="(1160,1200)" to="(1210,1200)"/>
+    <wire from="(1160,940)" to="(1160,1200)"/>
+    <wire from="(1180,1160)" to="(1180,1190)"/>
+    <wire from="(1180,1190)" to="(1210,1190)"/>
+    <wire from="(170,1170)" to="(450,1170)"/>
+    <wire from="(170,1180)" to="(440,1180)"/>
+    <wire from="(170,1190)" to="(430,1190)"/>
+    <wire from="(170,1200)" to="(870,1200)"/>
     <wire from="(180,600)" to="(190,600)"/>
-    <wire from="(190,540)" to="(190,600)"/>
+    <wire from="(190,600)" to="(190,1160)"/>
     <wire from="(190,600)" to="(520,600)"/>
-    <wire from="(210,490)" to="(220,490)"/>
-    <wire from="(210,510)" to="(230,510)"/>
-    <wire from="(210,530)" to="(240,530)"/>
     <wire from="(220,430)" to="(470,430)"/>
     <wire from="(220,450)" to="(480,450)"/>
-    <wire from="(220,470)" to="(220,490)"/>
-    <wire from="(220,470)" to="(500,470)"/>
-    <wire from="(230,490)" to="(230,510)"/>
-    <wire from="(230,490)" to="(460,490)"/>
-    <wire from="(240,510)" to="(240,530)"/>
-    <wire from="(240,510)" to="(500,510)"/>
+    <wire from="(430,1190)" to="(890,1190)"/>
+    <wire from="(430,470)" to="(430,1190)"/>
+    <wire from="(430,470)" to="(500,470)"/>
+    <wire from="(440,1180)" to="(910,1180)"/>
+    <wire from="(440,490)" to="(440,1180)"/>
+    <wire from="(440,490)" to="(460,490)"/>
+    <wire from="(450,1170)" to="(930,1170)"/>
+    <wire from="(450,510)" to="(450,1170)"/>
+    <wire from="(450,510)" to="(500,510)"/>
     <wire from="(460,490)" to="(460,670)"/>
     <wire from="(460,490)" to="(500,490)"/>
     <wire from="(460,670)" to="(540,670)"/>
@@ -1177,6 +1250,20 @@
     <wire from="(490,430)" to="(490,560)"/>
     <wire from="(490,430)" to="(500,430)"/>
     <wire from="(490,560)" to="(520,560)"/>
+    <wire from="(720,430)" to="(870,430)"/>
+    <wire from="(740,560)" to="(820,560)"/>
+    <wire from="(760,650)" to="(1090,650)"/>
+    <wire from="(820,450)" to="(820,560)"/>
+    <wire from="(820,450)" to="(870,450)"/>
+    <wire from="(870,1200)" to="(1160,1200)"/>
+    <wire from="(870,470)" to="(870,500)"/>
+    <wire from="(870,720)" to="(870,1200)"/>
+    <wire from="(890,1190)" to="(1180,1190)"/>
+    <wire from="(890,940)" to="(890,1190)"/>
+    <wire from="(910,1160)" to="(910,1180)"/>
+    <wire from="(910,1180)" to="(1140,1180)"/>
+    <wire from="(930,1160)" to="(930,1170)"/>
+    <wire from="(930,1170)" to="(1120,1170)"/>
   </circuit>
   <circuit name="my8bitAU">
     <a name="appearance" val="logisim_evolution"/>
