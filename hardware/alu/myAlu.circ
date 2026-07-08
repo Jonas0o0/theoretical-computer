@@ -2116,13 +2116,10 @@
     <a name="circuit" val="myCMP"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
-    <comp lib="0" loc="(1020,280)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="label" val="S0"/>
-    </comp>
-    <comp lib="0" loc="(1240,240)" name="Pin">
+    <comp lib="0" loc="(1200,280)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
+      <a name="label" val="CTout"/>
       <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(250,260)" name="Pin">
@@ -2135,41 +2132,38 @@
       <a name="facing" val="south"/>
       <a name="label" val="A"/>
     </comp>
-    <comp lib="0" loc="(760,400)" name="Pin">
+    <comp lib="0" loc="(720,220)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="S1"/>
+      <a name="label" val="EQin"/>
     </comp>
-    <comp loc="(1240,240)" name="myMUX"/>
+    <comp lib="0" loc="(980,220)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="EQout"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(980,280)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="CTin"/>
+    </comp>
+    <comp loc="(1200,280)" name="myOR"/>
     <comp loc="(500,240)" name="myXOR"/>
-    <comp loc="(500,310)" name="myNOT"/>
-    <comp loc="(500,400)" name="myNOT"/>
+    <comp loc="(500,320)" name="myNOT"/>
     <comp loc="(720,240)" name="myNOT"/>
-    <comp loc="(720,310)" name="myAND"/>
-    <comp loc="(720,380)" name="myAND"/>
-    <comp loc="(980,240)" name="myMUX"/>
-    <wire from="(250,260)" to="(250,350)"/>
+    <comp loc="(720,300)" name="myAND"/>
+    <comp loc="(980,220)" name="myAND"/>
+    <comp loc="(980,300)" name="myAND"/>
+    <wire from="(250,260)" to="(250,320)"/>
     <wire from="(250,260)" to="(280,260)"/>
-    <wire from="(250,350)" to="(250,400)"/>
-    <wire from="(250,350)" to="(500,350)"/>
-    <wire from="(250,400)" to="(280,400)"/>
-    <wire from="(260,240)" to="(260,310)"/>
+    <wire from="(250,320)" to="(280,320)"/>
+    <wire from="(260,240)" to="(260,300)"/>
     <wire from="(260,240)" to="(280,240)"/>
-    <wire from="(260,310)" to="(260,380)"/>
-    <wire from="(260,310)" to="(280,310)"/>
-    <wire from="(260,380)" to="(500,380)"/>
-    <wire from="(500,330)" to="(500,350)"/>
-    <wire from="(720,240)" to="(730,240)"/>
-    <wire from="(720,310)" to="(740,310)"/>
-    <wire from="(720,380)" to="(750,380)"/>
-    <wire from="(730,240)" to="(730,320)"/>
-    <wire from="(730,320)" to="(980,320)"/>
-    <wire from="(740,240)" to="(740,310)"/>
-    <wire from="(740,240)" to="(760,240)"/>
-    <wire from="(750,260)" to="(750,380)"/>
-    <wire from="(750,260)" to="(760,260)"/>
-    <wire from="(760,280)" to="(760,400)"/>
-    <wire from="(980,240)" to="(1020,240)"/>
-    <wire from="(980,260)" to="(1020,260)"/>
-    <wire from="(980,260)" to="(980,320)"/>
+    <wire from="(260,300)" to="(500,300)"/>
+    <wire from="(720,220)" to="(750,220)"/>
+    <wire from="(720,240)" to="(760,240)"/>
+    <wire from="(720,300)" to="(760,300)"/>
+    <wire from="(750,220)" to="(750,320)"/>
+    <wire from="(750,220)" to="(760,220)"/>
+    <wire from="(750,320)" to="(760,320)"/>
   </circuit>
 </project>
