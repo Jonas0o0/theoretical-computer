@@ -40,6 +40,16 @@ fn test_or() {
 }
 
 #[test]
+fn test_xor() {
+    verify(|(a, b)| xor(a, b), &[
+        ((false, false), false),
+        ((false, true), true),
+        ((true, false), true),
+        ((true, true), false),
+    ]);
+}
+
+#[test]
 fn test_mux() {
     verify(|(a, b, s)| mux(a, b, s), &[
         ((false, false, false), false),
