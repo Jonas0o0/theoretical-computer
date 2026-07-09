@@ -7,3 +7,27 @@ pub fn full_adder(a: bool, b: bool, c: bool) -> (bool, bool){
     let (s1, c1) = half_adder(c, s0);
     (s1, or(c1, c0))
 }
+
+pub fn lu(a: bool, b: bool, opcode: (bool, bool, bool, bool)) -> bool {
+    let (o0, o1, o2, o3) = opcode;
+
+    let is_1000 = and(and(o3, not(o2)), and(not(o1), not(o0)));
+    let is_1111 = and(and(o3, o2), and(o1, o0));
+    let is_0110 = and(and(not(o3), o2), and(o1, not(o0)));
+    let is_0111 = and(and(o1, o0), and(not(o3), o2));
+    let is_1110 = and(and(o1, not(o0)), and(o2, o3));
+
+    let mux0 = or(or(is_1000, is_1111), is_0110);
+    let mux1 = or(or(is_0111, is_1110), or(is_1000, is_1111));
+    let mux2 = or(is_1110, is_1111);
+
+    mux(
+        mux(
+            mux(and(a, b), or(a, b), mux0),
+            mux(xor(a, b), not(a), mux0),
+            mux1,
+        ),
+        mux(a, b, mux0),
+        mux2,
+    )
+}
