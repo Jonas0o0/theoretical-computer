@@ -31,3 +31,7 @@ pub fn lu(a: bool, b: bool, opcode: (bool, bool, bool, bool)) -> bool {
         mux2,
     )
 }
+
+pub fn lu8(a: (bool, bool, bool, bool, bool, bool, bool, bool), b: (bool, bool, bool, bool, bool, bool, bool, bool), opcode: (bool, bool, bool, bool)) -> (bool, bool, bool, bool, bool, bool, bool, bool) {
+    (lu(a.0, b.0, opcode), lu(a.1, b.1, opcode), lu(a.2, b.2, opcode), lu(a.3, b.3, opcode), lu(a.4, b.4, opcode), lu(a.5, b.5, opcode), lu(a.6, b.6, opcode), lu(a.7, b.7, opcode))
+}
