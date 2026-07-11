@@ -63,3 +63,18 @@ pub fn cmp (a: bool, b: bool, eq_in: bool, ct_in: bool) -> (bool, bool) {
     let a_b = not(xor(a, b));
     (and(eq_in, a_b), or(and(a_b, ct_in), and(and(a, not(b)), eq_in)))
 }
+
+pub fn cmp8 (a: (bool, bool, bool, bool, bool, bool, bool, bool), b: (bool, bool, bool, bool, bool, bool, bool, bool), opcode: (bool, bool)) -> (bool, bool, bool, bool, bool, bool, bool, bool) {
+    let (eq_out0, ct_out0) = cmp(a.0, b.0, true, false);
+    let (eq_out1, ct_out1) = cmp(a.1, b.1, eq_out0, ct_out0);
+    let (eq_out2, ct_out2) = cmp(a.2, b.2, eq_out1, ct_out1);
+    let (eq_out3, ct_out3) = cmp(a.3, b.3, eq_out2, ct_out2);
+    let (eq_out4, ct_out4) = cmp(a.4, b.4, eq_out3, ct_out3);
+    let (eq_out5, ct_out5) = cmp(a.5, b.5, eq_out4, ct_out4);
+    let (eq_out6, ct_out6) = cmp(a.6, b.6, eq_out5, ct_out5);
+    let (eq_out7, ct_out7) = cmp(a.7, b.7, eq_out6, ct_out6);
+
+    let result = mux(mux(eq_out7, ct_out7, not(opcode.1)), and(not(eq_out7), not(ct_out7)), and(opcode.0, not(opcode.1)));
+
+    (result, result, result, result, result, result, result, result)
+}
