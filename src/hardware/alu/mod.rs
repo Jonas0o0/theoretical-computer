@@ -1,3 +1,4 @@
+use std::alloc::alloc;
 use crate::hardware::gates::{and, mux, not, or, xor};
 
 pub fn half_adder(a: bool, b: bool) -> (bool, bool){ (xor(a, b), and(a, b)) }
@@ -6,6 +7,24 @@ pub fn full_adder(a: bool, b: bool, c: bool) -> (bool, bool){
     let (s0, c0) = half_adder(a, b);
     let (s1, c1) = half_adder(c, s0);
     (s1, or(c1, c0))
+}
+
+pub fn au8(a: (bool, bool, bool, bool, bool, bool, bool, bool), b: (bool, bool, bool, bool, bool, bool, bool, bool), opcode: (bool, bool, bool)) -> ((bool, bool, bool, bool, bool, bool, bool, bool), bool) {
+    let is_001 = and(not(opcode.2), and(not(opcode.1), opcode.0));
+    let is_010 = and(not(opcode.2), and(opcode.1, not(opcode.0)));
+    let is_011 = and(not(opcode.2), and(opcode.1, opcode.0));
+    let is_100 = and(opcode.2, and(not(opcode.1), not(opcode.0)));
+
+    let (s0, c0) = full_adder(xor(a.0, is_010), xor(or(b.0, or(is_011, is_100)), or(is_001, is_100)), or(is_001, or(is_010, is_100)));
+    let (s1, c1) = full_adder(xor(a.1, is_010), xor(b.1,  or(is_001, is_100)), c0);
+    let (s2, c2) = full_adder(xor(a.2, is_010), xor(b.2,  or(is_001, is_100)), c1);
+    let (s3, c3) = full_adder(xor(a.3, is_010), xor(b.3,  or(is_001, is_100)), c2);
+    let (s4, c4) = full_adder(xor(a.4, is_010), xor(b.4,  or(is_001, is_100)), c3);
+    let (s5, c5) = full_adder(xor(a.5, is_010), xor(b.5,  or(is_001, is_100)), c4);
+    let (s6, c6) = full_adder(xor(a.6, is_010), xor(b.6,  or(is_001, is_100)), c5);
+    let (s7, c7) = full_adder(xor(a.7, is_010), xor(b.7,  or(is_001, is_100)), c6);
+
+    ((s0, s1, s2, s3, s4, s5, s6, s7), c7)
 }
 
 pub fn lu(a: bool, b: bool, opcode: (bool, bool, bool, bool)) -> bool {
