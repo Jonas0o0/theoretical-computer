@@ -58,3 +58,8 @@ pub fn lu8(a: (bool, bool, bool, bool, bool, bool, bool, bool), b: (bool, bool, 
 pub fn su8(a: (bool, bool, bool, bool, bool, bool, bool, bool), opcode: bool) -> (bool, bool, bool, bool, bool, bool, bool, bool) {
     (mux(false, a.1, opcode), mux(a.0, a.2, opcode), mux(a.1, a.3, opcode), mux(a.2, a.4, opcode), mux(a.3, a.5, opcode), mux(a.4, a.6, opcode), mux(a.5, a.7, opcode), mux(a.6, false, opcode))
 }
+
+pub fn cmp (a: bool, b: bool, eq_in: bool, ct_in: bool) -> (bool, bool) {
+    let a_b = not(xor(a, b));
+    (and(eq_in, a_b), or(and(a_b, ct_in), and(and(a, not(b)), eq_in)))
+}
