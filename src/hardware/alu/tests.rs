@@ -183,3 +183,26 @@ fn test_cmp8() {
         ],
     );
 }
+
+#[test]
+fn test_alu8() {
+    let cinq: Byte = (true, false, true, false, false, false, false, false);
+    let trois: Byte = (true, true, false, false, false, false, false, false);
+    let zero: Byte = (false, false, false, false, false, false, false, false);
+    let un: Byte = (true, false, false, false, false, false, false, false);
+    let cinq_onze: Byte = (true, true, true, true, true, true, true, true);
+
+    verify(
+        |(a, b, opcode): (Byte, Byte, (bool, bool, bool, bool))| alu8(a, b, opcode),
+        &[
+            (
+                (cinq_onze, un, (false, false, false, false)),
+                (zero, false),
+            ),
+            (
+                (cinq, trois, (false, true, true, false)),
+                ((true, true, true, false, false, false, false, false), false),
+            ),
+        ],
+    );
+}
