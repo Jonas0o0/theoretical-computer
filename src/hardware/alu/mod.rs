@@ -175,3 +175,6 @@ pub fn cmp8(a: Byte, b: Byte, opcode: (bool, bool)) -> Byte {
     let result = mux(mux(eq, ct, not(opcode.1)), and(not(eq), not(ct)), and(opcode.0, not(opcode.1)));
     splat8(result)
 }
+
+#[cfg(test)]
+mod tests;
