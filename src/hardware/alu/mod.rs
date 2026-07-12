@@ -1,4 +1,4 @@
-use crate::hardware::gates::{and, mux, not, or, xor};
+use crate::hardware::gates::{and, mux, mux8, not, or, xor};
 use crate::hardware::utils::{Byte, apply8, splat8};
 
 /// Réalise un demi-additionneur (Half Adder).
@@ -174,6 +174,18 @@ pub fn cmp8(a: Byte, b: Byte, opcode: (bool, bool)) -> Byte {
 
     let result = mux(mux(eq, ct, not(opcode.1)), and(not(eq), not(ct)), and(opcode.0, not(opcode.1)));
     splat8(result)
+}
+
+pub fn alu8(a: Byte, b: Byte, opcode: (bool, bool, bool, bool)) -> (Byte, bool) {
+    let m0 = and(opcode.3, or(xor(opcode.1, opcode.2), and(opcode.0, not(opcode.2))));
+    let m1 = or(or(and(and(opcode.0, opcode.1), opcode.3), and(opcode.0, opcode.2)), or(and(opcode.1, opcode.2), and(opcode.3, and(not(opcode.1), not(opcode.0)))));
+
+    let au8 = au8(a, b, (opcode.0, opcode.1, opcode.2));
+    let lu8 = lu8(a, b, opcode);
+    let su8 = su8(a, opcode.1);
+    let cmp8 = cmp8(a, b, (opcode.0, opcode.1));
+
+    (mux8(mux8(au8.0, lu8,m1), mux8(su8, cmp8, m1), m0), and(au8.1, or(m0, m1)))
 }
 
 #[cfg(test)]
