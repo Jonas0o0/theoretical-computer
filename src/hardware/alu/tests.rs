@@ -41,9 +41,9 @@ fn test_cmp() {
             ((false, false, true, false), (true, false)),
             ((false, false, true, true), (true, true)),
             ((false, true, false, false), (false, false)),
-            ((false, true, false, true), (false, true)),
+            ((false, true, false, true), (false, false)),
             ((false, true, true, false), (false, false)),
-            ((false, true, true, true), (false, true)),
+            ((false, true, true, true), (false, false)),
             ((true, false, false, false), (false, false)),
             ((true, false, false, true), (false, false)),
             ((true, false, true, false), (false, true)),
@@ -145,7 +145,7 @@ fn test_su8() {
     let zero: Byte = (false, false, false, false, false, false, false, false);
     let alterne: Byte = (false, true, false, true, false, true, false, true);
     let alterne_gauche: Byte = (false, false, true, false, true, false, true, false);
-    let alterne_droite: Byte = (true, false, true, false, true, false, false, false);
+    let alterne_droite: Byte = (true, false, true, false, true, false, true, false);
     let tous_uns: Byte = (true, true, true, true, true, true, true, true);
     let tous_uns_gauche: Byte = (false, true, true, true, true, true, true, true);
     let tous_uns_droite: Byte = (true, true, true, true, true, true, true, false);
