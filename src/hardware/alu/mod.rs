@@ -176,6 +176,43 @@ pub fn cmp8(a: Byte, b: Byte, opcode: (bool, bool)) -> Byte {
     splat8(result)
 }
 
+/// Unité Arithmétique et Logique (ALU) 8 bits.
+///
+/// Combine les quatre sous-unités (AU, LU, SU, CMP) et sélectionne le résultat
+/// à renvoyer en fonction de `opcode`, selon la table d'encodage suivante :
+///
+/// | Opcode | Opération | Unité |
+/// |--------|-----------|-------|
+/// | 0000   | ADD (A + B)      | AU |
+/// | 0001   | SUB (A - B)      | AU |
+/// | 0010   | RSUB (B - A)     | AU |
+/// | 0011   | INC (A + 1)      | AU |
+/// | 0100   | DEC (A - 1)      | AU |
+/// | 0101   | AND (A AND B)    | LU |
+/// | 0110   | OR (A OR B)      | LU |
+/// | 0111   | XOR (A XOR B)    | LU |
+/// | 1000   | NOT (NOT A)      | LU |
+/// | 1001   | SHL (A << 1)     | SU |
+/// | 1010   | SHR (A >> 1)     | SU |
+/// | 1011   | CMP_EQ (A == B)  | CMP |
+/// | 1100   | CMP_LT (A < B)   | CMP |
+/// | 1101   | CMP_GT (A > B)   | CMP |
+/// | 1110   | PASS_A (A)       | LU |
+/// | 1111   | PASS_B (B)       | LU |
+///
+/// Les bits `m0` et `m1` sont dérivés de l'opcode et pilotent les MUX
+/// d'aiguillage : `m1` sélectionne entre (AU, LU) et (SU, CMP), puis `m0`
+/// sélectionne le résultat final entre ces deux paires.
+///
+/// # Paramètres
+/// - `a` : premier opérande.
+/// - `b` : second opérande.
+/// - `opcode` : code de l'opération à exécuter (voir table ci-dessus).
+///
+/// # Retour
+/// Retourne `(résultat, retenue_sortante)`. La retenue sortante n'est
+/// significative que pour les opérations issues de l'unité arithmétique (AU) ;
+/// elle est masquée (mise à `false`) pour les autres opérations.
 pub fn alu8(a: Byte, b: Byte, opcode: (bool, bool, bool, bool)) -> (Byte, bool) {
     let m0 = and(opcode.3, or(xor(opcode.1, opcode.2), and(opcode.0, not(opcode.2))));
     let m1 = or(or(and(and(opcode.0, opcode.1), opcode.3), and(opcode.0, opcode.2)), or(and(opcode.1, opcode.2), and(opcode.3, and(not(opcode.1), not(opcode.0)))));
