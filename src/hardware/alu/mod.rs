@@ -172,7 +172,7 @@ pub fn cmp8(a: Byte, b: Byte, opcode: (bool, bool)) -> Byte {
         ct = c;
     }
 
-    let result = mux(mux(eq, ct, not(opcode.1)), and(not(eq), not(ct)), and(opcode.0, not(opcode.1)));
+    let result = mux(mux(eq, ct, not(opcode.1)), and(not(eq), not(ct)), and(not(opcode.0), not(opcode.1)));
     splat8(result)
 }
 
