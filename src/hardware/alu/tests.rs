@@ -176,10 +176,13 @@ fn test_cmp8() {
         &[
             ((zero, zero, (false, true)), (true, true, true, true, true, true, true, true)),
             ((un, un, (false, true)), (true, true, true, true, true, true, true, true)),
-            ((un, zero, (false, false)), (true, true, true, true, true, true, true, true)),
             ((un, zero, (false, true)), (false, false, false, false, false, false, false, false)),
-            ((grand, zero, (false, false)), (true, true, true, true, true, true, true, true)),
-            ((zero, un, (false, false)), (false, false, false, false, false, false, false, false)),
+            ((un, zero, (false, false)), (false, false, false, false, false, false, false, false)), // 1 < 0 -> false
+            ((zero, un, (false, false)), (true, true, true, true, true, true, true, true)),          // 0 < 1 -> true
+            ((zero, zero, (false, false)), (false, false, false, false, false, false, false, false)), // 0 < 0 -> false
+            ((grand, zero, (true, false)), (true, true, true, true, true, true, true, true)),  // 128 > 0 -> true
+            ((zero, grand, (true, false)), (false, false, false, false, false, false, false, false)), // 0 > 128 -> false
+            ((zero, zero, (true, false)), (false, false, false, false, false, false, false, false)),  // 0 > 0 -> false
         ],
     );
 }
