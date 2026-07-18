@@ -40,6 +40,16 @@ fn test_or() {
 }
 
 #[test]
+fn test_xor() {
+    verify(|(a, b)| xor(a, b), &[
+        ((false, false), false),
+        ((false, true), true),
+        ((true, false), true),
+        ((true, true), false),
+    ]);
+}
+
+#[test]
 fn test_mux() {
     verify(|(a, b, s)| mux(a, b, s), &[
         ((false, false, false), false),
@@ -61,4 +71,18 @@ fn test_dmux() {
         ((false, false), (false, false)),
         ((false, true), (false, false)),
     ]);
+}
+
+#[test]
+fn test_mux8() {
+    let cinq: Byte = (true, false, true, false, false, false, false, false);
+    let trois: Byte = (true, true, false, false, false, false, false, false);
+
+    verify(
+        |(a, b, opcode): (Byte, Byte, bool)| mux8(a, b, opcode),
+        &[
+            ((cinq, trois, false), cinq),
+            ((cinq, trois, true), trois),
+        ],
+    );
 }
