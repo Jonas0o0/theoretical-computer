@@ -38,9 +38,7 @@
     <tool lib="8" name="Wiring Tool"/>
     <tool lib="8" name="Text Tool"/>
     <sep/>
-    <tool lib="0" name="Pin">
-      <a name="facing" val="north"/>
-    </tool>
+    <tool lib="0" name="Pin"/>
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
       <a name="type" val="output"/>
@@ -2321,5 +2319,68 @@
     <wire from="(450,170)" to="(670,170)"/>
     <wire from="(460,180)" to="(460,600)"/>
     <wire from="(460,180)" to="(670,180)"/>
+  </circuit>
+  <circuit name="myProgramCounter">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="myProgramCounter"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(170,470)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="Reset"/>
+    </comp>
+    <comp lib="0" loc="(190,440)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="CLK"/>
+    </comp>
+    <comp lib="0" loc="(270,510)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="JumpAdress"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(270,560)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="Load"/>
+    </comp>
+    <comp lib="0" loc="(340,350)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Q"/>
+      <a name="type" val="output"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(760,420)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="One"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(760,440)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="Zero"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="4" loc="(190,370)" name="Register">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1200,400)" name="my8bitAU"/>
+    <comp loc="(560,400)" name="my8bitMUX"/>
+    <comp loc="(980,420)" name="my8bitMUX"/>
+    <wire from="(1200,380)" to="(1200,400)"/>
+    <wire from="(170,470)" to="(220,470)"/>
+    <wire from="(190,380)" to="(1200,380)"/>
+    <wire from="(190,380)" to="(190,400)"/>
+    <wire from="(220,460)" to="(220,470)"/>
+    <wire from="(250,400)" to="(300,400)"/>
+    <wire from="(270,420)" to="(270,510)"/>
+    <wire from="(270,420)" to="(340,420)"/>
+    <wire from="(270,560)" to="(340,560)"/>
+    <wire from="(300,350)" to="(300,400)"/>
+    <wire from="(300,350)" to="(340,350)"/>
+    <wire from="(300,400)" to="(340,400)"/>
+    <wire from="(340,440)" to="(340,560)"/>
+    <wire from="(340,560)" to="(700,560)"/>
+    <wire from="(560,400)" to="(980,400)"/>
+    <wire from="(700,460)" to="(700,560)"/>
+    <wire from="(700,460)" to="(760,460)"/>
   </circuit>
 </project>
