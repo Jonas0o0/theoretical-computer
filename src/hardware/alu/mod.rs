@@ -58,7 +58,7 @@ pub fn au8(a: Byte, b: Byte, opcode: (bool, bool, bool)) -> (Byte, bool) {
     let (s6, c6) = full_adder(xor(a.6, is_010), xor(b.6, sel_b), c5);
     let (s7, c7) = full_adder(xor(a.7, is_010), xor(b.7, sel_b), c6);
 
-    ((s0, s1, s2, s3, s4, s5, s6, s7), c7)
+    (Byte(s0, s1, s2, s3, s4, s5, s6, s7), c7)
 }
 
 /// Unité logique 1 bit.
@@ -126,7 +126,7 @@ pub fn lu8(a: Byte, b: Byte, opcode: (bool, bool, bool, bool)) -> Byte {
 /// La valeur décalée.
 pub fn su8(a: Byte, opcode: bool) -> Byte {
     let s = |lo: bool, hi: bool| mux(lo, hi, opcode);
-    (s(false, a.1), s(a.0, a.2), s(a.1, a.3), s(a.2, a.4), s(a.3, a.5), s(a.4, a.6), s(a.5, a.7), s(a.6, false))
+    Byte(s(false, a.1), s(a.0, a.2), s(a.1, a.3), s(a.2, a.4), s(a.3, a.5), s(a.4, a.6), s(a.5, a.7), s(a.6, false))
 }
 
 /// Comparateur 1 bit.

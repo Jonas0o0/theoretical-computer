@@ -29,7 +29,7 @@ pub fn dmux(d: bool, sel: bool) -> (bool, bool) {
 }
 
 pub fn mux8(a: Byte, b: Byte, opcode: bool) -> Byte {
-    (mux(a.0, b.0, opcode), mux(a.1, b.1, opcode), mux(a.2, b.2, opcode), mux(a.3, b.3, opcode), mux(a.4, b.4, opcode), mux(a.5, b.5, opcode), mux(a.6, b.6, opcode), mux(a.7, b.7, opcode))
+    Byte(mux(a.0, b.0, opcode), mux(a.1, b.1, opcode), mux(a.2, b.2, opcode), mux(a.3, b.3, opcode), mux(a.4, b.4, opcode), mux(a.5, b.5, opcode), mux(a.6, b.6, opcode), mux(a.7, b.7, opcode))
 }
 
 #[cfg(test)]
