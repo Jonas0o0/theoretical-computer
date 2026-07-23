@@ -73,3 +73,6 @@ impl PC {
         self.register.read_output()
     }
 }
+
+#[cfg(test)]
+mod tests;
