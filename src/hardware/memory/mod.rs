@@ -1,6 +1,6 @@
 use crate::hardware::alu::au8;
 use crate::hardware::gates::{mux, mux8};
-use crate::hardware::utils::Byte;
+use crate::hardware::utils::{Byte, Word};
 
 pub struct Register {
     value: Byte,
@@ -47,14 +47,6 @@ impl Ram {
         }
     }
 }
-
-#[derive(Clone, Copy)]
-pub struct Word(
-    pub bool, pub bool, pub bool, pub bool,
-    pub bool, pub bool, pub bool, pub bool,
-    pub bool, pub bool, pub bool, pub bool,
-    pub bool, pub bool, pub bool, pub bool,
-);
 
 pub struct Register16 {
     value: Word,

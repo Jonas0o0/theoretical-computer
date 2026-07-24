@@ -29,6 +29,14 @@ impl From<Byte> for usize {
     }
 }
 
+#[derive(Clone, Copy)]
+pub struct Word(
+    pub bool, pub bool, pub bool, pub bool,
+    pub bool, pub bool, pub bool, pub bool,
+    pub bool, pub bool, pub bool, pub bool,
+    pub bool, pub bool, pub bool, pub bool,
+);
+
 /// Applique une fonction bit à bit sur deux Byte (a op b).
 pub(crate) fn apply8<F: Fn(bool, bool) -> bool>(a: Byte, b: Byte, f: F) -> Byte {
     Byte(f(a.0, b.0), f(a.1, b.1), f(a.2, b.2), f(a.3, b.3),
