@@ -27,13 +27,13 @@ impl Register {
 }
 
 pub struct Ram {
-    memory: [Byte; 256],
+    memory: [Byte; 65_536],
 }
 
 impl Ram {
     pub fn new() -> Self {
         Ram{
-            memory: [Byte(false, false, false, false, false, false, false, false); 256],
+            memory: [Byte(false, false, false, false, false, false, false, false); 65_536],
         }
     }
 
@@ -45,6 +45,48 @@ impl Ram {
         if load {
             self.memory[usize::from(address)] = data_in;
         }
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct Word(
+    pub bool, pub bool, pub bool, pub bool,
+    pub bool, pub bool, pub bool, pub bool,
+    pub bool, pub bool, pub bool, pub bool,
+    pub bool, pub bool, pub bool, pub bool,
+);
+
+pub struct Register16 {
+    value: Word,
+}
+
+impl Register16 {
+    pub fn new() -> Self {
+        Register16 {
+            value: Word(
+                false, false, false, false,
+                false, false, false, false,
+                false, false, false, false,
+                false, false, false, false,
+            ),
+        }
+    }
+
+    pub fn clock_tick(&mut self, data_in: Word, load: bool, reset: bool) {
+        if reset {
+            self.value = Word(
+                false, false, false, false,
+                false, false, false, false,
+                false, false, false, false,
+                false, false, false, false,
+            );
+        } else if load {
+            self.value = data_in;
+        }
+    }
+
+    pub fn read_output(&self) -> Word {
+        self.value
     }
 }
 
