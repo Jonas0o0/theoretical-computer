@@ -1,5 +1,6 @@
+use log::warn;
 use crate::hardware::gates::{and, mux, mux8, not, or, xor};
-use crate::hardware::utils::{Byte, apply8, splat8};
+use crate::hardware::utils::{Byte, apply8, splat8, U16};
 
 /// Réalise un demi-additionneur (Half Adder).
 ///
@@ -59,6 +60,47 @@ pub fn au8(a: Byte, b: Byte, opcode: (bool, bool, bool)) -> (Byte, bool) {
     let (s7, c7) = full_adder(xor(a.7, is_010), xor(b.7, sel_b), c6);
 
     (Byte(s0, s1, s2, s3, s4, s5, s6, s7), c7)
+}
+
+/// Unité arithmétique 16 bits.
+///
+/// Exécute une opération arithmétique entre deux opérandes de 16 bits.
+/// L'opération réalisée dépend de `opcode`.
+///
+/// # Paramètres
+/// - `a` : premier opérande.
+/// - `b` : second opérande.
+/// - `opcode` : code de l'opération arithmétique.
+///
+/// # Retour
+/// Retourne `(résultat, retenue_sortante)`.
+pub fn au16(a: U16, b: U16, opcode: (bool, bool, bool)) -> (U16, bool) {
+    let is_001 = and(not(opcode.2), and(not(opcode.1), opcode.0));
+    let is_010 = and(not(opcode.2), and(opcode.1, not(opcode.0)));
+    let is_011 = and(not(opcode.2), and(opcode.1, opcode.0));
+    let is_100 = and(opcode.2, and(not(opcode.1), not(opcode.0)));
+
+    let sel_b    = or(is_001, is_100);           // inverse b (soustraction / incrément par complément)
+    let carry_in = or(is_001, or(is_010, is_100));
+
+    let (s0, c0) = full_adder(xor(a.0, is_010), xor(or(b.0, or(is_011, is_100)), sel_b), carry_in);
+    let (s1, c1) = full_adder(xor(a.1, is_010), xor(b.1, sel_b), c0);
+    let (s2, c2) = full_adder(xor(a.2, is_010), xor(b.2, sel_b), c1);
+    let (s3, c3) = full_adder(xor(a.3, is_010), xor(b.3, sel_b), c2);
+    let (s4, c4) = full_adder(xor(a.4, is_010), xor(b.4, sel_b), c3);
+    let (s5, c5) = full_adder(xor(a.5, is_010), xor(b.5, sel_b), c4);
+    let (s6, c6) = full_adder(xor(a.6, is_010), xor(b.6, sel_b), c5);
+    let (s7, c7) = full_adder(xor(a.7, is_010), xor(b.7, sel_b), c6);
+    let (s8, c8) = full_adder(xor(a.8, is_010), xor(b.8, sel_b), c7);
+    let (s9, c9) = full_adder(xor(a.9, is_010), xor(b.9, sel_b), c8);
+    let (s10, c10) = full_adder(xor(a.10, is_010), xor(b.10, sel_b), c9);
+    let (s11, c11) = full_adder(xor(a.11, is_010), xor(b.11, sel_b), c10);
+    let (s12, c12) = full_adder(xor(a.12, is_010), xor(b.12, sel_b), c11);
+    let (s13, c13) = full_adder(xor(a.13, is_010), xor(b.13, sel_b), c12);
+    let (s14, c14) = full_adder(xor(a.14, is_010), xor(b.14, sel_b), c13);
+    let (s15, c15) = full_adder(xor(a.15, is_010), xor(b.15, sel_b), c14);
+
+    (U16(s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15), c15)
 }
 
 /// Unité logique 1 bit.

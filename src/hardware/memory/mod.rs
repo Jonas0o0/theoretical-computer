@@ -1,6 +1,6 @@
 use crate::hardware::alu::au8;
 use crate::hardware::gates::{mux, mux8};
-use crate::hardware::utils::{Byte, Word};
+use crate::hardware::utils::{Byte, U16};
 
 pub struct Register {
     value: Byte,
@@ -49,13 +49,13 @@ impl Ram {
 }
 
 pub struct Register16 {
-    value: Word,
+    value: U16,
 }
 
 impl Register16 {
     pub fn new() -> Self {
         Register16 {
-            value: Word(
+            value: U16(
                 false, false, false, false,
                 false, false, false, false,
                 false, false, false, false,
@@ -64,9 +64,9 @@ impl Register16 {
         }
     }
 
-    pub fn clock_tick(&mut self, data_in: Word, load: bool, reset: bool) {
+    pub fn clock_tick(&mut self, data_in: U16, load: bool, reset: bool) {
         if reset {
-            self.value = Word(
+            self.value = U16(
                 false, false, false, false,
                 false, false, false, false,
                 false, false, false, false,
@@ -77,7 +77,7 @@ impl Register16 {
         }
     }
 
-    pub fn read_output(&self) -> Word {
+    pub fn read_output(&self) -> U16 {
         self.value
     }
 }

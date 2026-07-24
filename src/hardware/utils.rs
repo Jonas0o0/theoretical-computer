@@ -30,7 +30,7 @@ impl From<Byte> for usize {
 }
 
 #[derive(Clone, Copy)]
-pub struct Word(
+pub struct U16(
     pub bool, pub bool, pub bool, pub bool,
     pub bool, pub bool, pub bool, pub bool,
     pub bool, pub bool, pub bool, pub bool,
