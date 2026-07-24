@@ -1,5 +1,5 @@
-use crate::hardware::alu::au8;
-use crate::hardware::gates::{mux, mux8};
+use crate::hardware::alu::{au16, au8};
+use crate::hardware::gates::{mux, mux16, mux8};
 use crate::hardware::utils::{Byte, U16};
 
 pub struct Register {
@@ -83,27 +83,27 @@ impl Register16 {
 }
 
 pub struct PC {
-    register: Register,
+    register: Register16,
 }
 
 impl PC {
     pub fn new() -> Self {
         PC {
-            register: Register::new(),
+            register: Register16::new(),
         }
     }
 
-    pub fn clock_tick(&mut self, jump_address: Byte, load: bool, reset: bool) {
+    pub fn clock_tick(&mut self, jump_address: U16, load: bool, reset: bool) {
         let current_pc = self.register.read_output();
-        let base_address = mux8(current_pc, jump_address, load);
-        let one = Byte(true, false, false, false, false, false, false, false);
-        let zero = Byte(false, false, false, false, false, false, false, false);
-        let increment = mux8(one, zero, load);
-        let next_pc = au8(base_address, increment, (false, false, false)).0;
+        let base_address = mux16(current_pc, jump_address, load);
+        let one = U16(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+        let zero = U16(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+        let increment = mux16(one, zero, load);
+        let next_pc = au16(base_address, increment, (false, false, false)).0;
         self.register.clock_tick(next_pc, true, reset);
     }
 
-    pub fn read_output(&self) -> Byte {
+    pub fn read_output(&self) -> U16 {
         self.register.read_output()
     }
 }
