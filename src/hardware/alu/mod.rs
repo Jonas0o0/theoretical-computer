@@ -1,4 +1,3 @@
-use log::warn;
 use crate::hardware::gates::{and, mux, mux8, not, or, xor};
 use crate::hardware::utils::{Byte, apply8, splat8, U16};
 

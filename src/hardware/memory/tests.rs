@@ -34,13 +34,20 @@ fn test_ram() {
 #[test]
 fn test_pc_increment_and_jump() {
     let mut pc = PC::new();
-    assert_eq!(pc.read_output(), ZERO, "Le PC doit démarrer à 0");
-    pc.clock_tick(ZERO, false, false);
-    assert_eq!(pc.read_output(), ONE, "Le PC doit s'incrémenter de 1 au premier cycle");
-    pc.clock_tick(ZERO, false, false);
-    assert_eq!(pc.read_output(), TWO, "Le PC doit s'incrémenter à 2 au cycle suivant");
-    pc.clock_tick(VAL_A, true, false);
-    assert_eq!(pc.read_output(), VAL_A, "Le PC doit charger l'adresse de saut quand load est à true");
-    pc.clock_tick(VAL_B, false, true);
-    assert_eq!(pc.read_output(), ZERO, "Le PC doit retomber à 0 quand reset est activé");
+
+    let other_zero: U16 = U16(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    let other_one: U16 = U16(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    let other_two: U16 = U16(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    let other_val_A: U16 = U16(true, true, false, false, true, false, false, false, false, false, false, false, false, false, false, false);
+    let other_val_B: U16 = U16(false, false, true, true, false, true, false, true, false, false, false, false, false, false, false, false);
+
+    assert_eq!(pc.read_output(), other_zero, "Le PC doit démarrer à 0");
+    pc.clock_tick(other_zero, false, false);
+    assert_eq!(pc.read_output(), other_one, "Le PC doit s'incrémenter de 1 au premier cycle");
+    pc.clock_tick(other_zero, false, false);
+    assert_eq!(pc.read_output(), other_two, "Le PC doit s'incrémenter à 2 au cycle suivant");
+    pc.clock_tick(other_val_A, true, false);
+    assert_eq!(pc.read_output(), other_val_A, "Le PC doit charger l'adresse de saut quand load est à true");
+    pc.clock_tick(other_val_B, false, true);
+    assert_eq!(pc.read_output(), other_zero, "Le PC doit retomber à 0 quand reset est activé");
 }

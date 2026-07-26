@@ -29,7 +29,7 @@ impl From<Byte> for usize {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub struct U16(
     pub bool, pub bool, pub bool, pub bool,
     pub bool, pub bool, pub bool, pub bool,
