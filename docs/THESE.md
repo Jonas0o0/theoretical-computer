@@ -69,3 +69,34 @@ flowchart TD
     MUXF --> RES["Résultat (8 bits)"]
     AU -.-> CARRY["Retenue sortante\n(non utilisée pour l'instant)"]
 ```
+
+## Couche 2 : Mémoire et Registres <a name="couche-2"></a>
+L'implémentation de la couche 2 a permis d'introduire la notion d'**état** dans l'architecture, jusqu'ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits.
+
+### Résultats de la recherche :
+
+1. **Limite de la simulation combinatoire** : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire — une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n'est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n'a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.
+2. **Construction théorique de la bascule D** : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l'entrée peut modifier l'état stocké.
+3. **Registre** : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l'état est stocké directement dans une variable, et une méthode `clock_tick(data_in, load, reset)` reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par `data_in` si `load` est actif, ou la remettre à zéro si `reset` est actif — reset étant prioritaire sur load. Ce registre générique reste en 8 bits (`Byte`), en cohérence avec le reste de l'architecture (ALU, RAM).
+4. **RAM** : dimensionnée sur 65 536 cases (2¹⁶) de 8 bits chacune, adressables individuellement via une adresse de 16 bits — le gain par rapport à un adressage 8 bits (256 cases) vient uniquement de l'élargissement de l'adresse, pas de la largeur des données stockées. L'écriture (`clock_tick`) et la lecture (`read_output`) ciblent une adresse précise, sans affecter les autres cases mémoire.
+5. **Program Counter (PC)** : contrairement au registre générique, le PC repose sur un registre interne dédié de 16 bits, nécessaire pour pouvoir adresser l'intégralité des 65 536 cases de la RAM. À chaque cycle, il combine deux multiplexeurs et une unité arithmétique pour déterminer l'adresse suivante à charger : soit une adresse de saut fournie explicitement (si `load` est actif), soit l'adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.
+6. **Méthodologie** : comme pour les couches précédentes, chaque composant (`Register`, `Ram`, `PC`) a été validé par des tests unitaires en Rust, couvrant l'initialisation, le chargement, le maintien de la valeur, et la réinitialisation.
+
+### Schéma du Program Counter
+
+```mermaid
+flowchart TD
+    CUR["PC actuel (16 bits)"] --> MUX_ADDR{"MUX (load)"}
+    JUMP["Adresse de saut (16 bits)"] --> MUX_ADDR
+    MUX_ADDR --> BASE["Adresse de base"]
+
+    ONE["1"] --> MUX_INC{"MUX (load)"}
+    ZERO["0"] --> MUX_INC
+    MUX_INC --> INC["Incrément"]
+
+    BASE --> ADD["Additionneur 16 bits"]
+    INC --> ADD
+    ADD --> NEXT["PC suivant (16 bits)"]
+    NEXT --> REG["Registre interne du PC (load=true)"]
+    REG --> CUR
+```
