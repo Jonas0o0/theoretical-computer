@@ -85,23 +85,23 @@ fn test_lu() {
 
 #[test]
 fn test_lu8() {
-    let a: Byte = (false, true, false, true, false, true, false, true);
-    let b: Byte = (false, true, true, false, false, true, true, false);
+    let a: Byte = Byte(false, true, false, true, false, true, false, true);
+    let b: Byte = Byte(false, true, true, false, false, true, true, false);
 
     verify(
         |(a, b, opcode): (Byte, Byte, (bool, bool, bool, bool))| lu8(a, b, opcode),
         &[
             (
                 (a, b, (false, false, false, false)),
-                (false, true, false, false, false, true, false, false),
+                Byte(false, true, false, false, false, true, false, false),
             ),
             (
                 (a, b, (false, true, true, false)),
-                (false, true, true, true, false, true, true, true),
+                Byte(false, true, true, true, false, true, true, true),
             ),
             (
                 (a, b, (true, true, true, false)),
-                (false, false, true, true, false, false, true, true),
+                Byte(false, false, true, true, false, false, true, true),
             ),
             ((a, b, (false, true, true, true)), a),
             ((a, b, (true, true, true, true)), b),
@@ -111,15 +111,15 @@ fn test_lu8() {
 
 #[test]
 fn test_au8() {
-    let cinq: Byte = (true, false, true, false, false, false, false, false);
-    let trois: Byte = (true, true, false, false, false, false, false, false);
-    let un: Byte = (true, false, false, false, false, false, false, false);
-    let zero: Byte = (false, false, false, false, false, false, false, false);
-    let deux: Byte = (false, true, false, false, false, false, false, false);
-    let quatre: Byte = (false, false, true, false, false, false, false, false);
-    let six: Byte = (false, true, true, false, false, false, false, false);
-    let huit: Byte = (false, false, false, true, false, false, false, false);
-    let deux_cinq_cinq: Byte = (true, true, true, true, true, true, true, true);
+    let cinq: Byte = Byte(true, false, true, false, false, false, false, false);
+    let trois: Byte = Byte(true, true, false, false, false, false, false, false);
+    let un: Byte = Byte(true, false, false, false, false, false, false, false);
+    let zero: Byte = Byte(false, false, false, false, false, false, false, false);
+    let deux: Byte = Byte(false, true, false, false, false, false, false, false);
+    let quatre: Byte = Byte(false, false, true, false, false, false, false, false);
+    let six: Byte = Byte(false, true, true, false, false, false, false, false);
+    let huit: Byte = Byte(false, false, false, true, false, false, false, false);
+    let deux_cinq_cinq: Byte = Byte(true, true, true, true, true, true, true, true);
 
     verify(
         |(a, b, opcode): (Byte, Byte, (bool, bool, bool))| au8(a, b, opcode),
@@ -129,7 +129,7 @@ fn test_au8() {
             ((cinq, trois, (true, false, false)), (deux, true)),
             (
                 (trois, cinq, (true, false, false)),
-                ((false, true, true, true, true, true, true, true), false),
+                (Byte(false, true, true, true, true, true, true, true), false),
             ),
             ((cinq, zero, (true, true, false)), (six, false)),
             ((cinq, zero, (false, false, true)), (quatre, true)),
@@ -140,15 +140,15 @@ fn test_au8() {
 
 #[test]
 fn test_su8() {
-    let un: Byte = (true, false, false, false, false, false, false, false);
-    let deux: Byte = (false, true, false, false, false, false, false, false);
-    let zero: Byte = (false, false, false, false, false, false, false, false);
-    let alterne: Byte = (false, true, false, true, false, true, false, true);
-    let alterne_gauche: Byte = (false, false, true, false, true, false, true, false);
-    let alterne_droite: Byte = (true, false, true, false, true, false, true, false);
-    let tous_uns: Byte = (true, true, true, true, true, true, true, true);
-    let tous_uns_gauche: Byte = (false, true, true, true, true, true, true, true);
-    let tous_uns_droite: Byte = (true, true, true, true, true, true, true, false);
+    let un: Byte = Byte(true, false, false, false, false, false, false, false);
+    let deux: Byte = Byte(false, true, false, false, false, false, false, false);
+    let zero: Byte = Byte(false, false, false, false, false, false, false, false);
+    let alterne: Byte = Byte(false, true, false, true, false, true, false, true);
+    let alterne_gauche: Byte = Byte(false, false, true, false, true, false, true, false);
+    let alterne_droite: Byte = Byte(true, false, true, false, true, false, true, false);
+    let tous_uns: Byte = Byte(true, true, true, true, true, true, true, true);
+    let tous_uns_gauche: Byte = Byte(false, true, true, true, true, true, true, true);
+    let tous_uns_droite: Byte = Byte(true, true, true, true, true, true, true, false);
 
     verify(
         |(a, opcode): (Byte, bool)| su8(a, opcode),
@@ -167,33 +167,33 @@ fn test_su8() {
 
 #[test]
 fn test_cmp8() {
-    let zero: Byte = (false, false, false, false, false, false, false, false);
-    let un: Byte = (true, false, false, false, false, false, false, false);
-    let grand: Byte = (false, false, false, false, false, false, false, true);
+    let zero: Byte = Byte(false, false, false, false, false, false, false, false);
+    let un: Byte = Byte(true, false, false, false, false, false, false, false);
+    let grand: Byte = Byte(false, false, false, false, false, false, false, true);
 
     verify(
         |(a, b, opcode): (Byte, Byte, (bool, bool))| cmp8(a, b, opcode),
         &[
-            ((zero, zero, (false, true)), (true, true, true, true, true, true, true, true)),
-            ((un, un, (false, true)), (true, true, true, true, true, true, true, true)),
-            ((un, zero, (false, true)), (false, false, false, false, false, false, false, false)),
-            ((un, zero, (false, false)), (false, false, false, false, false, false, false, false)), // 1 < 0 -> false
-            ((zero, un, (false, false)), (true, true, true, true, true, true, true, true)),          // 0 < 1 -> true
-            ((zero, zero, (false, false)), (false, false, false, false, false, false, false, false)), // 0 < 0 -> false
-            ((grand, zero, (true, false)), (true, true, true, true, true, true, true, true)),  // 128 > 0 -> true
-            ((zero, grand, (true, false)), (false, false, false, false, false, false, false, false)), // 0 > 128 -> false
-            ((zero, zero, (true, false)), (false, false, false, false, false, false, false, false)),  // 0 > 0 -> false
+            ((zero, zero, (false, true)), Byte(true, true, true, true, true, true, true, true)),
+            ((un, un, (false, true)), Byte(true, true, true, true, true, true, true, true)),
+            ((un, zero, (false, true)), Byte(false, false, false, false, false, false, false, false)),
+            ((un, zero, (false, false)), Byte(false, false, false, false, false, false, false, false)), // 1 < 0 -> false
+            ((zero, un, (false, false)), Byte(true, true, true, true, true, true, true, true)),         // 0 < 1 -> true
+            ((zero, zero, (false, false)), Byte(false, false, false, false, false, false, false, false)), // 0 < 0 -> false
+            ((grand, zero, (true, false)), Byte(true, true, true, true, true, true, true, true)),  // 128 > 0 -> true
+            ((zero, grand, (true, false)), Byte(false, false, false, false, false, false, false, false)), // 0 > 128 -> false
+            ((zero, zero, (true, false)), Byte(false, false, false, false, false, false, false, false)),  // 0 > 0 -> false
         ],
     );
 }
 
 #[test]
 fn test_alu8() {
-    let cinq: Byte = (true, false, true, false, false, false, false, false);
-    let trois: Byte = (true, true, false, false, false, false, false, false);
-    let zero: Byte = (false, false, false, false, false, false, false, false);
-    let un: Byte = (true, false, false, false, false, false, false, false);
-    let cinq_onze: Byte = (true, true, true, true, true, true, true, true);
+    let cinq: Byte = Byte(true, false, true, false, false, false, false, false);
+    let trois: Byte = Byte(true, true, false, false, false, false, false, false);
+    let zero: Byte = Byte(false, false, false, false, false, false, false, false);
+    let un: Byte = Byte(true, false, false, false, false, false, false, false);
+    let cinq_onze: Byte = Byte(true, true, true, true, true, true, true, true);
 
     verify(
         |(a, b, opcode): (Byte, Byte, (bool, bool, bool, bool))| alu8(a, b, opcode),
@@ -204,7 +204,7 @@ fn test_alu8() {
             ),
             (
                 (cinq, trois, (false, true, true, false)),
-                ((true, true, true, false, false, false, false, false), false),
+                (Byte(true, true, true, false, false, false, false, false), false),
             ),
         ],
     );

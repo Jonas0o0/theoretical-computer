@@ -33,3 +33,14 @@
 - **Apprentissages** :
   - La table de Karnaugh m'a permis de relier facilement mes MUX à l'opcode, en trouvant simplement la suite logique de sortie correspondant à chaque opération.
   - Le code de Gray m'a également aidé dans cette démarche.
+
+## [2026-07-19] - Mémoire - Registres et RAM et Sprint 3
+- **Objectif** : Gérer l'état du processeur via des bascules (Flip-Flops), des registres et de la RAM.
+- **Réalisation** :
+  - Implémentation en Rust d'un `Register` (registre à chargement conditionnel avec reset), d'une `Ram` (65 536 cases adressables), et d'un `PC` (Program Counter avec chargement d'adresse de saut et auto-incrémentation).
+  - Tests unitaires couvrant les trois composants : `Register` (initialisation, chargement, maintien, reset), `Ram` (initialisation, écriture ciblée, isolation entre adresses, non-modification si `load = false`), et `PC` (incrémentation séquentielle, saut, reset).
+- **Difficultés** :
+  - La bascule D repose sur une boucle combinatoire (une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie), ce qui en fait un circuit séquentiel non représentable par les fonctions pures utilisées jusqu'ici (sans notion de temps ni de bouclage). Il n'était donc pas possible de la simuler en Rust à partir des portes de la Couche 0 ; l'état est simplement stocké dans une variable (value: Byte), et clock_tick reproduit le comportement attendu (charger, garder, réinitialiser) sans reconstruire le circuit séquentiel sous-jacent. 
+- **Apprentissages** :
+  - Distinction entre logique combinatoire (couches précédentes) et logique séquentielle (bascules, registres) : cette dernière nécessite une notion de temps/horloge (clock_tick), qu'un enchaînement de fonctions pures ne peut pas représenter.
+  - Construction d'une bascule D à partir de verrous (latch) : un verrou SR se construit à partir de 2 portes NOR croisées ; un verrou D en est une version sécurisée, où une porte AND est ajoutée devant chaque NOR pour contrôler l'écriture.
