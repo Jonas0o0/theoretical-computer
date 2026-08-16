@@ -44,3 +44,24 @@
 - **Apprentissages** :
   - Distinction entre logique combinatoire (couches précédentes) et logique séquentielle (bascules, registres) : cette dernière nécessite une notion de temps/horloge (clock_tick), qu'un enchaînement de fonctions pures ne peut pas représenter.
   - Construction d'une bascule D à partir de verrous (latch) : un verrou SR se construit à partir de 2 portes NOR croisées ; un verrou D en est une version sécurisée, où une porte AND est ajoutée devant chaque NOR pour contrôler l'écriture.
+
+## [2026-08-03] - Architecture - Le CPU complet et Sprint 4
+- **Objectif** : Intégrer l'ALU, les registres et l'unité de contrôle pour former le CPU.
+- **Tâches** :
+  - Définir l'ISA (Instruction Set Architecture)
+  - Créer l'unité de contrôle (Control Unit) dans Logisim
+  - Finaliser le cycle Fetch/Decode/Execute
+- **Réalisation** :
+  - Conception de mon propre ISA 8 bits, où le bit 7 sert de sélecteur entre un nombre brut chargé dans le registre A (`bit7 = 0`) et une instruction de calcul activant l'ALU (`bit7 = 1`).
+  - Pour les instructions de calcul, les 3 bits de poids faible (`rom.0`, `rom.1`, `rom.2`, notés MMM) servent de mode d'adressage : ils indiquent où va le résultat (registre D, RAM via `writeM`, etc.), et sont décodés dans la Control Unit (`cu`) pour produire les signaux de contrôle (`loadA`, `loadD`, `writeM`, `aluBMux`, `jumpEnable`).
+  - Câblage du MUX en entrée du registre A directement piloté par le bit 7 de la ROM (extrait via un splitter), sans passer par la Control Unit, pour ne pas la surcharger inutilement.
+  - Architecture mémoire à deux espaces distincts : une **ROM** (programme) adressée par le PC sur 16 bits, et une **RAM** (données) adressée par le registre A sur 8 bits (256 cases).
+  - Partie Rust entièrement terminée : simulation structurée en séparant l'état (registres, RAM, ROM, PC) de la logique combinatoire (Control Unit, MUX, ALU), le tout exécuté séquentiellement dans une méthode `tick()` pour imiter un front d'horloge.
+- **Difficultés** :
+  - Utilisation d'une RAM de petite taille (256 cases, adressée sur 8 bits), ce qui m'a obligé à revoir mes prévisions pour la gestion de la RAM et de la ROM du programme : le fait d'être resté en 8 bits pour la RAM ajoute des contraintes (notamment sur les sauts `JUMP`, limités aux 256 premières lignes de la ROM), mais ne bloque pas le projet.
+- **Apprentissages** :
+  - L'ISA est le jeu d'instructions complet compris par le processeur : chaque ligne de code assembleur est traduite en opcode binaire, décodé par la Control Unit ; une instruction hors de l'ISA n'est simplement pas reconnue.
+  - Le bit 7 comme sélecteur nombre/calcul est une technique classique pour économiser un bit de mode sans instruction dédiée.
+  - Réserver le bit 7 au choix nombre/calcul réduit la plage de nombres directement chargeables dans le registre A à 7 bits (0-127) ; au-delà, il faut passer par des opérations arithmétiques successives.
+  - Le `JUMP` ne modifie que le Program Counter (donc la lecture de la ROM), il ne sert pas à positionner une adresse en RAM. Pour écrire en RAM, le registre A sert directement de broche d'adresse : il suffit de charger l'adresse dans A, la donnée dans D, et d'activer `writeM`.
+  - La ROM (16 bits, via le PC) et la RAM (8 bits, via le registre A) sont deux espaces mémoire séparés avec des capacités différentes : le programme peut être long (jusqu'à 65 536 lignes), mais les données manipulables directement en RAM restent limitées à 256 cases.

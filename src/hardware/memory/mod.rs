@@ -27,13 +27,13 @@ impl Register {
 }
 
 pub struct Ram {
-    memory: [Byte; 65_536],
+    memory: [Byte; 256],
 }
 
 impl Ram {
     pub fn new() -> Self {
-        Ram{
-            memory: [Byte(false, false, false, false, false, false, false, false); 65_536],
+        Ram {
+            memory: [Byte(false, false, false, false, false, false, false, false); 256],
         }
     }
 
@@ -42,6 +42,28 @@ impl Ram {
     }
 
     pub fn clock_tick(&mut self, address: Byte, data_in: Byte, load: bool) {
+        if load {
+            self.memory[usize::from(address)] = data_in;
+        }
+    }
+}
+
+pub struct Rom {
+    memory: [Byte; 65_536],
+}
+
+impl Rom {
+    pub fn new() -> Self {
+        Rom {
+            memory: [Byte(false, false, false, false, false, false, false, false); 65_536],
+        }
+    }
+
+    pub fn read_output(&self, address: U16) -> Byte {
+        self.memory[usize::from(address)]
+    }
+
+    pub fn clock_tick(&mut self, address: U16, data_in: Byte, load: bool) {
         if load {
             self.memory[usize::from(address)] = data_in;
         }

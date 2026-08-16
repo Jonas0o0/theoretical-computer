@@ -100,3 +100,59 @@ flowchart TD
     NEXT --> REG["Registre interne du PC (load=true)"]
     REG --> CUR
 ```
+
+## Couche 3 : Architecture du Processeur (CPU) <a name="couche-3"></a>
+L'implémentation de la couche 3 a permis d'assembler l'ALU (Couche 1) et les éléments de mémoire (Couche 2) en un processeur complet, capable d'exécuter un programme de manière autonome via un cycle Fetch/Decode/Execute. Le jeu d'instructions complet (ISA) est spécifié dans [`hardware/cpu/ISA.md`](../hardware/cpu/ISA.md).
+
+### Résultats de la recherche :
+
+1. **Contrainte des 8 bits et solution par encodage de modes** : sur une instruction de 8 bits, une ALU à 16 opérations nécessite déjà 4 bits d'opcode, plus 1 bit pour distinguer le type d'instruction, ne laissant que 3 bits pour piloter 5 signaux physiques (source de l'entrée B, `loadA`, `loadD`, `writeM`, `jump`). La solution retenue a été de ne pas câbler ces 3 bits directement sur des fils individuels, mais de les traiter comme un sélecteur de **mode d'exécution** : chacune des 8 combinaisons possibles (`000` à `111`) préconfigure un profil matériel complet (source des données, destination du résultat, activation ou non du saut), permettant de couvrir tous les besoins avec seulement 3 bits.
+
+2. **Format de l'instruction** : chaque instruction de 8 bits suit le format `T OOOO MMM`, où `T` (bit 7) définit le type d'instruction, `OOOO` (bits 6-3) encode l'opcode ALU, et `MMM` (bits 2-0) encode le mode d'exécution.
+
+3. **Bit de type (`T`)** : ce bit de poids fort détermine le comportement global du cycle en cours.
+    - `T = 0` : instruction de type A (adresse/valeur) — l'ALU est désactivée, et les 7 bits restants (`0vvv_vvvv`) sont chargés directement dans le registre A.
+    - `T = 1` : instruction de type C (calcul) — l'ALU est activée, l'opcode `OOOO` détermine l'opération, et le mode `MMM` dirige les données. L'entrée A de l'ALU est systématiquement reliée au registre D.
+
+4. **Table des modes d'exécution (`MMM`)** : chaque mode définit à la fois la source de l'entrée B de l'ALU (registre A ou `RAM[A]`), la destination du résultat (registre D, registre A, `RAM[A]`, ou aucune), et si une condition de saut est évaluée.
+
+   | Mode | Entrée B | Destination | Saut | Usage |
+       |---|---|---|---|---|
+   | `000` | Registre A | Registre D | Non | Calcul pur (`D = D + A`) |
+   | `001` | RAM[A] | Registre D | Non | Lecture mémoire (`D = D + RAM[A]`) |
+   | `010` | Registre A | Registre A | Non | Mise à jour d'adresse (`A = D + A`) |
+   | `011` | Registre A | RAM[A] | Non | Écriture mémoire (`RAM[A] = D op A`) |
+   | `100` | RAM[A] | RAM[A] | Non | Modification mémoire directe (`RAM[A] = D op RAM`) |
+   | `101` | Registre A | Aucune | Oui, si résultat ALU ≠ 0 | Comparer D et A, sauter à A si vrai |
+   | `110` | RAM[A] | Aucune | Oui, si résultat ALU ≠ 0 | Comparer D et RAM, sauter à A si vrai |
+   | `111` | Registre A | Registre D **et** Registre A | Non | Clonage : copie du résultat dans D et A |
+
+5. **Saut conditionnel** : les modes `101` et `110` sont conçus pour être combinés avec les opcodes de comparaison de l'ALU (`CMP_EQ`, `CMP_LT`, `CMP_GT`). Le saut n'est déclenché que si la sortie de l'ALU est strictement différente de `00000000` — condition naturellement remplie par les opérations de comparaison, qui renvoient `11111111` si la condition est vraie.
+
+6. **Aiguillage du registre A** : le multiplexeur en entrée du registre A (choix entre une valeur issue de la ROM ou un résultat de l'ALU) est piloté directement par le bit `T` de la ROM, extrait via un splitter, plutôt que par la Control Unit — un choix d'optimisation matérielle évitant de surcharger cette dernière avec un signal déjà disponible directement.
+
+7. **Deux espaces mémoire distincts** : la ROM (programme) est adressée par le PC sur 16 bits (jusqu'à 65 536 lignes de code), tandis que la RAM (données) reste adressée sur 8 bits via le registre A (256 cases). Cette asymétrie a nécessité de revoir les prévisions de gestion de la RAM et de la ROM, notamment pour les sauts, qui restent cantonnés aux 256 premières lignes de la ROM (page zéro).
+
+8. **Séparation adresse / écriture en RAM** : le `JUMP` ne modifie que le Program Counter (position de lecture dans la ROM) et n'intervient pas dans l'écriture en RAM. Pour écrire une donnée en RAM, le registre A sert directement de broche d'adresse : il suffit de charger l'adresse voulue dans A, la donnée dans D, puis d'activer `writeM` (mode `011` ou `100`).
+
+9. **Passage à l'implémentation Rust** : la simulation du CPU sépare clairement l'état (registres, RAM, ROM, PC) de la logique combinatoire (Control Unit, MUX, ALU), l'ensemble étant orchestré séquentiellement dans une méthode `tick()`, qui imite un front d'horloge et enchaîne les étapes Fetch, Decode et Execute.
+
+10. **Méthodologie** : comme pour les couches précédentes, l'approche "Double-Track" (Logisim + Rust) a permis de valider la Control Unit et le cycle d'exécution avant intégration complète du CPU.
+
+### Schéma du cycle Fetch/Decode/Execute
+
+```mermaid
+flowchart TD
+    PC["PC (16 bits)"] --> FETCH["Fetch : lecture de la ROM à l'adresse PC"]
+    FETCH --> BITT{"Bit T (bit 7)"}
+
+    BITT -->|0| NUM["Type A : valeur brute -> Registre A"]
+    BITT -->|1| DECODE["Type C : Decode OOOO + MMM"]
+
+    DECODE --> CU["Control Unit : génère loadA / loadD / writeM / jumpEnable selon MMM"]
+    CU --> EXEC["Execute : ALU calcule (OOOO), registres/RAM mis à jour"]
+
+    NUM --> NEXT["PC suivant (incrément ou jump)"]
+    EXEC --> NEXT
+    NEXT --> PC
+```
