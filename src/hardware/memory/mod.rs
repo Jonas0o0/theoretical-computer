@@ -1,5 +1,5 @@
-use crate::hardware::alu::{au16, au8};
-use crate::hardware::gates::{mux, mux16, mux8};
+use crate::hardware::alu::{au16};
+use crate::hardware::gates::{mux16};
 use crate::hardware::utils::{Byte, U16};
 
 pub struct Register {
@@ -63,10 +63,8 @@ impl Rom {
         self.memory[usize::from(address)]
     }
 
-    pub fn clock_tick(&mut self, address: U16, data_in: Byte, load: bool) {
-        if load {
-            self.memory[usize::from(address)] = data_in;
-        }
+    pub fn write(&mut self, address: usize, data_in: Byte) {
+        self.memory[address] = data_in;
     }
 }
 

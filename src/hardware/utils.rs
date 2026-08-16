@@ -74,7 +74,7 @@ pub fn splat8(v: bool) -> Byte {
 }
 
 /// Fonction utilitaire pour convertir un u8 (venant du fichier) en ta structure Byte
-fn u8_to_byte(val: u8) -> Byte {
+pub fn u8_to_byte(val: u8) -> Byte {
     Byte(
         (val & 0b0000_0001) != 0,
         (val & 0b0000_0010) != 0,
@@ -88,7 +88,7 @@ fn u8_to_byte(val: u8) -> Byte {
 }
 
 /// Fonction inverse pour lire la RAM et reconvertir ton Byte en u8 (ASCII)
-fn byte_to_u8(b: &Byte) -> u8 {
+pub fn byte_to_u8(b: &Byte) -> u8 {
     let mut val = 0;
     if b.0 { val |= 0b0000_0001; }
     if b.1 { val |= 0b0000_0010; }
