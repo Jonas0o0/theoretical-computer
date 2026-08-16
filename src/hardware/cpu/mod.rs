@@ -86,3 +86,6 @@ impl Cpu {
         self.pc.clock_tick(jump_addr, do_jump, reset);
     }
 }
+
+#[cfg(test)]
+mod tests;
