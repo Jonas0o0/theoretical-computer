@@ -91,3 +91,5 @@ fn parse_instruction(instruction: &str) -> u8 {
     let opcode_shifted = opcode << 3;
     b7 | opcode_shifted | mmm
 }
+#[cfg(test)]
+mod tests;
