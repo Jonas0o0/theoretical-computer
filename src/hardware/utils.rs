@@ -72,3 +72,31 @@ pub(crate) fn apply8<F: Fn(bool, bool) -> bool>(a: Byte, b: Byte, f: F) -> Byte 
 pub fn splat8(v: bool) -> Byte {
     Byte(v, v, v, v, v, v, v, v)
 }
+
+/// Fonction utilitaire pour convertir un u8 (venant du fichier) en ta structure Byte
+fn u8_to_byte(val: u8) -> Byte {
+    Byte(
+        (val & 0b0000_0001) != 0,
+        (val & 0b0000_0010) != 0,
+        (val & 0b0000_0100) != 0,
+        (val & 0b0000_1000) != 0,
+        (val & 0b0001_0000) != 0,
+        (val & 0b0010_0000) != 0,
+        (val & 0b0100_0000) != 0,
+        (val & 0b1000_0000) != 0,
+    )
+}
+
+/// Fonction inverse pour lire la RAM et reconvertir ton Byte en u8 (ASCII)
+fn byte_to_u8(b: &Byte) -> u8 {
+    let mut val = 0;
+    if b.0 { val |= 0b0000_0001; }
+    if b.1 { val |= 0b0000_0010; }
+    if b.2 { val |= 0b0000_0100; }
+    if b.3 { val |= 0b0000_1000; }
+    if b.4 { val |= 0b0001_0000; }
+    if b.5 { val |= 0b0010_0000; }
+    if b.6 { val |= 0b0100_0000; }
+    if b.7 { val |= 0b1000_0000; }
+    val
+}
