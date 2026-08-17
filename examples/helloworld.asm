@@ -2,15 +2,7 @@
 // PROGRAMME : HELLO WORLD
 // ==========================================
 
-// --- 1. Preuve de vie mathématique ---
-// Calcul de 17 + 3, stocké dans RAM[3]
-VAL 17
-PASS_B D
-VAL 3
-ADD RAM
-
-
-// --- 2. Mot "HELLO" ---
+// --- 1. Mot "HELLO" ---
 
 // 'H' (72) -> RAM[100]
 VAL 72
@@ -43,7 +35,7 @@ VAL 104
 PASS_A RAM
 
 
-// --- 3. Espace " " ---
+// --- 2. Espace " " ---
 
 // ' ' (32) -> RAM[105]
 VAL 32
@@ -52,7 +44,7 @@ VAL 105
 PASS_A RAM
 
 
-// --- 4. Mot "WORLD" ---
+// --- 3. Mot "WORLD" ---
 
 // 'W' (87) -> RAM[106]
 VAL 87
