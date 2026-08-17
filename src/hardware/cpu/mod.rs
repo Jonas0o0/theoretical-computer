@@ -1,6 +1,8 @@
 use crate::hardware::gates::{and, mux8, not, or};
 use crate::hardware::utils::{Byte};
 use crate::hardware::memory::{Register, PC, Ram, Rom};
+use crate::hardware::alu::alu8;
+use crate::hardware::utils::U16;
 
 
 /// Unité de contrôle 8 bits.
@@ -51,7 +53,7 @@ impl Cpu {
         }
     }
 
-    pub fn tick(&mut self, reset: bool) {
+    pub fn clock_tick(&mut self, reset: bool) {
         let current_pc = self.pc.read_output();
         let instruction = self.rom.read_output(current_pc);
 
