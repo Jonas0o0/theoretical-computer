@@ -32,22 +32,26 @@ fn main() {
         cpu.clock_tick(false);
     }
 
-    println!("--- RÉSULTATS ---");
+    println!("--- ÉTAT DE LA RAM (Valeurs non nulles) ---");
 
-    let addr_preuve = u8_to_byte(3);
-    let resultat_math = byte_to_u8(&cpu.ram.read_output(addr_preuve));
-    println!("Preuve de vie (RAM[3]) : 17 + 3 = {}", resultat_math);
+    println!("{:<10} | {:<12} | {}", "Adresse", "Valeur (Num)", "ASCII");
+    println!("------------------------------------------");
 
-    print!("Écran (RAM[100..110]) : ");
-    for adresse in 100..=110 {
+    for adresse in 0..=255 {
         let ram_val_byte = cpu.ram.read_output(u8_to_byte(adresse));
-        let ascii_val = byte_to_u8(&ram_val_byte);
+        let val = byte_to_u8(&ram_val_byte);
 
-        if ascii_val != 0 {
-            print!("{}", ascii_val as char);
+        if val != 0 {
+            let ascii_char = if val >= 32 && val <= 126 {
+                (val as char).to_string()
+            } else {
+                ".".to_string()
+            };
+
+            println!("{:<10} | {:<12} | {}", adresse, val, ascii_char);
         }
     }
 
-    println!("\n-----------------");
+    println!("------------------------------------------");
     println!("Arrêt de la machine.");
 }
