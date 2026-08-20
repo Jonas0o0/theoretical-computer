@@ -156,3 +156,60 @@ flowchart TD
     EXEC --> NEXT
     NEXT --> PC
 ```
+
+## Couche 4 : Machine Virtuelle et Émulation <a name="couche-4"></a>
+L'implémentation de la couche 4 a permis de construire une Machine Virtuelle (VM) capable d'exécuter le CPU simulé (Couche 3) à haute performance, et de le doter d'entrées/sorties pour interagir avec l'extérieur.
+
+### Résultats de la recherche :
+
+1. **Machine Virtuelle** : conception d'une VM simulant fidèlement le cycle d'horloge du CPU, ses registres, et ses 256 octets de RAM, offrant un environnement d'exécution rapide sans passer par la simulation porte-à-porte de Logisim.
+2. **Memory-Mapped I/O** : intégration d'entrées/sorties pilotées directement via la RAM — lecture du clavier et affichage graphique (textuel/emoji) — en réservant certaines adresses mémoire à ces périphériques plutôt qu'à des données de programme classiques.
+3. **Arbitrage de l'espace mémoire** : les 256 octets de RAM disponibles ayant dû être partagés entre les variables du programme, la pile, et les adresses réservées au Memory-Mapped I/O, un découpage précis de cet espace a été nécessaire pour éviter toute saturation ou collision entre ces usages.
+4. **Méthodologie** : validation de la VM par l'exécution d'un premier programme bas niveau, manipulant directement la RAM.
+
+### Apprentissages clés
+
+Compréhension concrète du principe du Memory-Mapped I/O : piloter des périphériques (clavier, écran) non pas via des instructions dédiées, mais en lisant/écrivant simplement à des adresses RAM réservées à cet effet — le CPU n'a donc pas besoin d'instructions spécifiques pour l'I/O, seulement d'un espace mémoire bien découpé.
+
+---
+
+## Couche 5 : Langage d'Assemblage <a name="couche-5"></a>
+La couche 5 a permis de créer un assembleur, premier outil logiciel permettant de programmer le CPU sans écrire directement les instructions en binaire.
+
+### Résultats de la recherche :
+
+1. **Assembleur** : implémentation en Rust d'un parseur traduisant des mnémoniques textuels (assembleur) en instructions binaires 8 bits, conformes à l'ISA défini en Couche 3.
+2. **Premier programme exécuté** : validation de la chaîne complète (assembleur → binaire → VM → CPU simulé) par l'exécution réussie d'un programme *Hello World*, écrivant une chaîne ASCII en mémoire.
+3. **Facilité de mise en œuvre** : contrairement aux couches précédentes, la traduction assembleur → binaire et son exécution se sont mises en place sans difficulté majeure, la logique de correspondance mnémonique → opcode/mode découlant directement de l'ISA déjà spécifié.
+
+### Apprentissages clés
+
+Manipulation concrète du fonctionnement d'un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s'articule avec le cycle d'exécution bas niveau déjà construit.
+
+## Couche 6 : Compilation et Langage Haut Niveau <a name="couche-6"></a>
+*(Section en cours de construction — seule la première étape, l'analyse lexicale, a été réalisée à ce stade.)*
+
+La couche 6 vise à construire un compilateur pour un mini-langage de programmation propre, nommé **JUMP**, capable de générer du code assembleur (Couche 5) à partir d'un code source de plus haut niveau.
+
+### Résultats de la recherche (à date) :
+
+1. **Spécification du langage JUMP** : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).
+2. **Analyse lexicale (Lexer)** : implémentation en Rust d'un Lexer découpant un fichier source JUMP en un vecteur de `Tokens` typés — première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).
+
+### Prochaines étapes
+
+- Analyse syntaxique (Parser) : construction d'un arbre syntaxique (AST) à partir du flux de Tokens.
+- Génération de code : traduction de l'AST en instructions assembleur JUMP → ISA (Couche 5).
+
+### Schéma de la chaîne d'outils complète
+
+```mermaid
+flowchart LR
+    SRC["Code source JUMP (.jump)"] --> LEX["Lexer -> Tokens"]
+    LEX --> PARSE["Parser -> AST (à venir)"]
+    PARSE --> CODEGEN["Génération de code (à venir)"]
+    CODEGEN --> ASM["Assembleur (mnémoniques -> binaire)"]
+    ASM --> VM["Machine Virtuelle"]
+    VM --> CPU["CPU simulé (Couche 3)"]
+    CPU --> RAM["RAM 256 octets + Memory-Mapped I/O"]
+```
