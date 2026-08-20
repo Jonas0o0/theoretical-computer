@@ -1,6 +1,11 @@
 use std::{env, fs, process};
+use std::time::Duration;
+use crossterm::event::{poll, read, Event, KeyCode};
+use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use theoretical_computer::hardware::cpu::Cpu;
 use theoretical_computer::hardware::utils::{u8_to_byte, byte_to_u8};
+
+const KEY_MEMORY_CASE: u8 = 255;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -26,9 +31,27 @@ fn main() {
     }
 
     println!("Exécution du programme en cours...\n");
-    let nombre_instructions = bytecode.len();
 
-    for _ in 0..nombre_instructions {
+    enable_raw_mode().unwrap();
+
+    loop {
+        if poll(Duration::from_millis(0)).unwrap() {
+            if let Event::Key(key_event) = read().unwrap() {
+                match key_event.code {
+                    KeyCode::Char('q') => {
+                        disable_raw_mode().unwrap();
+                        println!("\nArrêt du programme.");
+                        process::exit(0);
+                    }
+                    KeyCode::Up | KeyCode::Char('z') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'z')),
+                    KeyCode::Down | KeyCode::Char('s') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b's')),
+                    KeyCode::Left | KeyCode::Char('q') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'q')),
+                    KeyCode::Right | KeyCode::Char('d') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'd')),
+                    _ => {}
+                }
+            }
+        }
+
         cpu.clock_tick(false);
     }
 
