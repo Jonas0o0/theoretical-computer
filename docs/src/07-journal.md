@@ -65,3 +65,39 @@
   - Réserver le bit 7 au choix nombre/calcul réduit la plage de nombres directement chargeables dans le registre A à 7 bits (0-127) ; au-delà, il faut passer par des opérations arithmétiques successives.
   - Le `JUMP` ne modifie que le Program Counter (donc la lecture de la ROM), il ne sert pas à positionner une adresse en RAM. Pour écrire en RAM, le registre A sert directement de broche d'adresse : il suffit de charger l'adresse dans A, la donnée dans D, et d'activer `writeM`.
   - La ROM (16 bits, via le PC) et la RAM (8 bits, via le registre A) sont deux espaces mémoire séparés avec des capacités différentes : le programme peut être long (jusqu'à 65 536 lignes), mais les données manipulables directement en RAM restent limitées à 256 cases.
+
+## [2026-08-16] - Software Stack - Assembleur et VM et Sprint 5
+- **Objectif** : Créer les outils permettant de programmer le CPU.
+- **Tâches** :
+  - Développer l'assembleur en Rust (Parsing ASM -> Binaire)
+  - Finaliser la Machine Virtuelle haute performance
+  - Exécuter un premier programme 'Hello World' sur le CPU simulé
+    Tu as totalement raison, si c'est allé tout seul et que l'apprentissage principal c'est d'avoir découvert la logique de l'assembleur, il ne faut pas inventer des galères artificielles !
+* **Réalisation** :
+* Implémentation d'un parseur d'assembleur en Rust capable de traduire des mnémoniques textuels en binaire.
+* Conception de la Machine Virtuelle (VM) simulant le cycle d'horloge, les registres et les 256 octets de RAM.
+* Exécution réussie d'un premier programme bas niveau (*Hello World* en ASCII en mémoire).
+* **Difficultés** :
+* Aucune difficulté majeure notable ; la logique séquentielle de traduction et d'exécution s'est mise en place naturellement.
+* **Apprentissages** :
+* Découverte concrète et manipulation directe du fonctionnement de l'assembleur et du cycle d'exécution d'un processeur de bas niveau.
+
+## [2026-08-20] - Compilateur - Analyse Lexicale et I/O VM et Sprint 6
+- **Objectif** : Préparer la VM pour le jeu et créer la première brique du compilateur : le Lexer (Analyseur Lexical).
+- **Tâches** :
+  - Implémenter le Memory-Mapped I/O dans la VM (lecture du clavier via la RAM et affichage graphique).
+  - Définir la grammaire et la syntaxe exacte du mini-langage de programmation (**JUMP**).
+  - Initialiser le nouveau projet Rust pour le compilateur.
+  - Développer le Lexer pour transformer le code source brut en liste de Tokens structurés.
+- **Réalisation** :
+  - Intégration du Memory-Mapped I/O et des graphismes textuels/emojis dans la Machine Virtuelle.
+  - Rédaction de la spécification complète du langage JUMP et intégration dans le mdBook.
+  - Implémentation en Rust du Lexer capable de découper un fichier source JUMP en un vecteur de `Tokens` typés.
+- **Difficultés** :
+  - Réfléxion rigoureusement au découpage et à l'optimisation des 256 octets de RAM disponibles : il a fallu arbitrer précisément entre l'espace alloué aux variables du programme, la pile et les adresses réservées au Memory-Mapped I/O pour ne rien saturer.
+- **Apprentissages** :
+  - Compréhension du fonctionnement du Memory-Mapped I/O pour piloter des périphériques via la RAM.
+  - Découverte des bases de la compilation et de la première phase d'analyse lexicale.
+
+
+

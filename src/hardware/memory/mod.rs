@@ -46,6 +46,10 @@ impl Ram {
             self.memory[usize::from(address)] = data_in;
         }
     }
+
+    pub fn write(&mut self, address: usize, data_in: Byte) {
+        self.memory[address] = data_in;
+    }
 }
 
 pub struct Rom {
