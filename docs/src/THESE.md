@@ -102,7 +102,7 @@ flowchart TD
 ```
 
 ## Couche 3 : Architecture du Processeur (CPU) <a name="couche-3"></a>
-L'implémentation de la couche 3 a permis d'assembler l'ALU (Couche 1) et les éléments de mémoire (Couche 2) en un processeur complet, capable d'exécuter un programme de manière autonome via un cycle Fetch/Decode/Execute. Le jeu d'instructions complet (ISA) est spécifié dans [`hardware/cpu/ISA.md`](../hardware/cpu/ISA.md).
+L'implémentation de la couche 3 a permis d'assembler l'ALU (Couche 1) et les éléments de mémoire (Couche 2) en un processeur complet, capable d'exécuter un programme de manière autonome via un cycle Fetch/Decode/Execute. Le jeu d'instructions complet (ISA) est spécifié dans [`hardware/cpu/ISA.md`](../../hardware/cpu/ISA.md).
 
 ### Résultats de la recherche :
 

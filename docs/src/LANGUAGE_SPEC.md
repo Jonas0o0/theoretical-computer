@@ -4,7 +4,7 @@
 **Cible :** CPU 8-bits (256 octets RAM)
 **Version :** 1.0.0
 
-JUMP est un langage impératif de haut niveau conçu pour l'écosystème matériel `theorical-computeur`. Ce document sert de guide de développement et explique les choix architecturaux du compilateur.
+JUMP est un langage impératif de haut niveau conçu pour l'écosystème matériel `theoretical-computeur`. Ce document sert de guide de développement et explique les choix architecturaux du compilateur.
 
 ---
 
