@@ -26,7 +26,7 @@ Deux outils complémentaires sont utilisés tout au long du projet, selon une m�
 - **Rust**, pour l'émulation logicielle des mêmes composants, permettant de valider leur comportement via des tests unitaires rigoureux (tables de vérité, cas limites, etc.).
 
 ## Couche 0 : Logique Booléenne <a name="couche-0"></a>
-L'implémentation de la couche 0 a permis de valider l'universalité de la porte **NAND**. 
+L'implémentation de la couche 0 a permis de valider l'universalité de la porte **NAND**.
 
 ### Résultats de la recherche :
 1.  **Universalité** : Nous avons prouvé par la pratique que les portes fondamentales (NOT, AND, OR) peuvent être exclusivement construites à partir de portes NAND.
@@ -71,16 +71,18 @@ flowchart TD
 ```
 
 ## Couche 2 : Mémoire et Registres <a name="couche-2"></a>
-L'implémentation de la couche 2 a permis d'introduire la notion d'**état** dans l'architecture, jusqu'ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits.
+L'implémentation de la couche 2 a permis d'introduire la notion d'**état** dans l'architecture, jusqu'ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM de 256 cases, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits (pour l'adressage de la ROM, voir Couche 3).
 
 ### Résultats de la recherche :
 
 1. **Limite de la simulation combinatoire** : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire — une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n'est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n'a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.
 2. **Construction théorique de la bascule D** : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l'entrée peut modifier l'état stocké.
 3. **Registre** : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l'état est stocké directement dans une variable, et une méthode `clock_tick(data_in, load, reset)` reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par `data_in` si `load` est actif, ou la remettre à zéro si `reset` est actif — reset étant prioritaire sur load. Ce registre générique reste en 8 bits (`Byte`), en cohérence avec le reste de l'architecture (ALU, RAM).
-4. **RAM** : dimensionnée sur 65 536 cases (2¹⁶) de 8 bits chacune, adressables individuellement via une adresse de 16 bits — le gain par rapport à un adressage 8 bits (256 cases) vient uniquement de l'élargissement de l'adresse, pas de la largeur des données stockées. L'écriture (`clock_tick`) et la lecture (`read_output`) ciblent une adresse précise, sans affecter les autres cases mémoire.
-5. **Program Counter (PC)** : contrairement au registre générique, le PC repose sur un registre interne dédié de 16 bits, nécessaire pour pouvoir adresser l'intégralité des 65 536 cases de la RAM. À chaque cycle, il combine deux multiplexeurs et une unité arithmétique pour déterminer l'adresse suivante à charger : soit une adresse de saut fournie explicitement (si `load` est actif), soit l'adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.
+4. **RAM** : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L'écriture (`clock_tick`) et la lecture (`read_output`) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP ([04-memory-map.md](04-memory-map.md)).
+5. **Program Counter (PC)** : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d'adresser une ROM (mémoire de programme) bien plus grande que la RAM de données — jusqu'à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l'adresse suivante à charger : soit une adresse de saut fournie explicitement (si `load` est actif), soit l'adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.
 6. **Méthodologie** : comme pour les couches précédentes, chaque composant (`Register`, `Ram`, `PC`) a été validé par des tests unitaires en Rust, couvrant l'initialisation, le chargement, le maintien de la valeur, et la réinitialisation.
+
+> **Note** : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception — voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).
 
 ### Schéma du Program Counter
 
@@ -111,13 +113,13 @@ L'implémentation de la couche 3 a permis d'assembler l'ALU (Couche 1) et les é
 2. **Format de l'instruction** : chaque instruction de 8 bits suit le format `T OOOO MMM`, où `T` (bit 7) définit le type d'instruction, `OOOO` (bits 6-3) encode l'opcode ALU, et `MMM` (bits 2-0) encode le mode d'exécution.
 
 3. **Bit de type (`T`)** : ce bit de poids fort détermine le comportement global du cycle en cours.
-    - `T = 0` : instruction de type A (adresse/valeur) — l'ALU est désactivée, et les 7 bits restants (`0vvv_vvvv`) sont chargés directement dans le registre A.
-    - `T = 1` : instruction de type C (calcul) — l'ALU est activée, l'opcode `OOOO` détermine l'opération, et le mode `MMM` dirige les données. L'entrée A de l'ALU est systématiquement reliée au registre D.
+   - `T = 0` : instruction de type A (adresse/valeur) — l'ALU est désactivée, et les 7 bits restants (`0vvv_vvvv`) sont chargés directement dans le registre A.
+   - `T = 1` : instruction de type C (calcul) — l'ALU est activée, l'opcode `OOOO` détermine l'opération, et le mode `MMM` dirige les données. L'entrée A de l'ALU est systématiquement reliée au registre D.
 
 4. **Table des modes d'exécution (`MMM`)** : chaque mode définit à la fois la source de l'entrée B de l'ALU (registre A ou `RAM[A]`), la destination du résultat (registre D, registre A, `RAM[A]`, ou aucune), et si une condition de saut est évaluée.
 
    | Mode | Entrée B | Destination | Saut | Usage |
-       |---|---|---|---|---|
+          |---|---|---|---|---|
    | `000` | Registre A | Registre D | Non | Calcul pur (`D = D + A`) |
    | `001` | RAM[A] | Registre D | Non | Lecture mémoire (`D = D + RAM[A]`) |
    | `010` | Registre A | Registre A | Non | Mise à jour d'adresse (`A = D + A`) |
@@ -213,3 +215,12 @@ flowchart LR
     VM --> CPU["CPU simulé (Couche 3)"]
     CPU --> RAM["RAM 256 octets + Memory-Mapped I/O"]
 ```
+
+## Conclusion <a name="conclusion"></a>
+*(Section provisoire — à compléter au fil des prochains sprints.)*
+
+À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu'à l'analyse lexicale d'un langage de programmation propre (JUMP). L'approche bottom-up et la méthodologie "Double-Track" (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l'intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).
+
+Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d'abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), ou l'arbitrage d'un espace mémoire limité entre plusieurs usages concurrents (Couche 4).
+
+La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : analyse syntaxique (Parser), génération d'un AST, allocation mémoire automatique des variables, et génération de code assembleur — pour clore la chaîne complète, des portes logiques jusqu'à un programme de haut niveau exécutable sur le matériel simulé.
