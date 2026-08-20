@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>6. Notes de Thèse / Théorie - Documentation Theoretical Computeur</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-1fe2e400.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-a51d7fec.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Documentation Theoretical Computeur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="thèse--construction-dun-ordinateur-à-partir-de-zéro-from-scratch"><a class="header" href="#thèse--construction-dun-ordinateur-à-partir-de-zéro-from-scratch">Thèse : Construction d’un Ordinateur à partir de Zéro (from Scratch)</a></h1>
+<h2 id="résumé"><a class="header" href="#résumé">Résumé</a></h2>
+<p><em>Ce document retrace la conception et l’implémentation complète d’une architecture informatique, des portes logiques jusqu’au langage de haut niveau.</em></p>
+<h2 id="table-des-matières"><a class="header" href="#table-des-matières">Table des Matières</a></h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#couche-0">Couche 0 : Logique Booléenne (Hardware)</a></li>
+<li><a href="#couche-1">Couche 1 : Arithmétique et ALU</a></li>
+<li><a href="#couche-2">Couche 2 : Mémoire et Registres</a></li>
+<li><a href="#couche-3">Couche 3 : Architecture du Processeur (CPU)</a></li>
+<li><a href="#couche-4">Couche 4 : Machine Virtuelle et Émulation</a></li>
+<li><a href="#couche-5">Couche 5 : Langage d’Assemblage</a></li>
+<li><a href="#couche-6">Couche 6 : Compilation et Langage Haut Niveau</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ol>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction <a name="introduction"></a></a></h2>
+<p>Ce projet a pour ambition de construire un ordinateur complet <strong>from scratch</strong>, en partant des portes logiques les plus élémentaires (NAND) pour aboutir, couche après couche, à un langage de programmation de haut niveau. L’objectif n’est pas de produire un système optimisé pour un usage réel, mais de comprendre en profondeur <em>comment</em> un ordinateur fonctionne, en construisant chaque abstraction soi-même plutôt que de la considérer comme acquise.</p>
+<p>L’approche suivie est <strong>“bottom-up”</strong> : chaque couche s’appuie exclusivement sur les composants validés dans la couche précédente. Ainsi, la logique booléenne (couche 0) sert de fondation à l’arithmétique et à l’ALU (couche 1), qui elle-même servira de base à la mémoire et aux registres (couche 2), et ainsi de suite jusqu’au compilateur.</p>
+<p>Deux outils complémentaires sont utilisés tout au long du projet, selon une méthodologie <strong>“Double-Track”</strong> :</p>
+<ul>
+<li><strong>Logisim</strong>, pour la conception visuelle et la simulation des circuits logiques.</li>
+<li><strong>Rust</strong>, pour l’émulation logicielle des mêmes composants, permettant de valider leur comportement via des tests unitaires rigoureux (tables de vérité, cas limites, etc.).</li>
+</ul>
+<h2 id="couche-0--logique-booléenne"><a class="header" href="#couche-0--logique-booléenne">Couche 0 : Logique Booléenne <a name="couche-0"></a></a></h2>
+<p>L’implémentation de la couche 0 a permis de valider l’universalité de la porte <strong>NAND</strong>.</p>
+<h3 id="résultats-de-la-recherche-"><a class="header" href="#résultats-de-la-recherche-">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Universalité</strong> : Nous avons prouvé par la pratique que les portes fondamentales (NOT, AND, OR) peuvent être exclusivement construites à partir de portes NAND.</li>
+<li><strong>Routage</strong> : La conception du Multiplexeur (MUX) et du Démultiplexeur (DMUX) a posé les bases de l’aiguillage des signaux, essentiel pour la future Unité de Contrôle.</li>
+<li><strong>Méthodologie</strong> : L’approche “Double-Track” (Logisim + Rust) a permis de confirmer la justesse des circuits avant leur intégration. Les tests unitaires en Rust ont validé 100% des tables de vérité mathématiques.</li>
+</ol>
+<h2 id="couche-1--arithmétique-et-alu"><a class="header" href="#couche-1--arithmétique-et-alu">Couche 1 : Arithmétique et ALU <a name="couche-1"></a></a></h2>
+<p>L’implémentation de la couche 1 a permis de construire une Unité Arithmétique et Logique (ALU) 8 bits complète, orchestrant quatre sous-unités (AU, LU, SU, CMP) via un opcode unique de 4 bits, encodant 16 opérations.</p>
+<h3 id="résultats-de-la-recherche--1"><a class="header" href="#résultats-de-la-recherche--1">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Encodage de l’opcode</strong> : Un opcode de 4 bits a été choisi pour coder les 16 opérations supportées (ADD, SUB, RSUB, INC, DEC, AND, OR, XOR, NOT, SHL, SHR, CMP_EQ, CMP_LT, CMP_GT, PASS_A, PASS_B), réparties entre les unités responsables (AU, LU, SU). Cet encodage a été conçu pour que les bits de l’opcode servent directement de sélecteurs de MUX à l’intérieur de chaque sous-unité, sans décodage intermédiaire coûteux.</li>
+<li><strong>Unité Arithmétique (AU)</strong> : Construite en assemblant 8 <em>full adders</em> en chaîne, elle réalise ADD, SUB, RSUB, INC et DEC à partir d’un même chemin de données, en jouant sur l’inversion conditionnelle des opérandes (complément à deux) et sur la retenue d’entrée, sélectionnées par les 3 premiers bits de l’opcode.</li>
+<li><strong>Unité Logique (LU)</strong> : Réalisée bit à bit (puis répliquée sur 8 bits), elle combine AND, OR, XOR, NOT, ainsi que le passage direct de A ou B (PASS_A, PASS_B), via une cascade de MUX imbriqués pilotée par les 4 bits de l’opcode.</li>
+<li><strong>Unité de Décalage (SU)</strong> : Réalise SHL et SHR (décalage logique gauche/droite d’un bit), le sens du décalage étant sélectionné par un seul bit de l’opcode.</li>
+<li><strong>Comparateur (CMP)</strong> : Comme identifié lors des difficultés du sprint, le CMP fonctionne en propageant deux signaux (égalité et supériorité) d’un bit à l’autre, le résultat final n’étant déterminé qu’au niveau du CMP 8 bits, où l’opcode sélectionne le signal de sortie correspondant (CMP_EQ, CMP_LT, CMP_GT).</li>
+<li><strong>Simplification logique (Karnaugh &amp; Gray)</strong> : La table de Karnaugh a permis de dériver simplement les équations de sélection des MUX à partir de l’opcode, en identifiant les regroupements d’opérations partageant un même signal de sélection. Le code de Gray a complété cette démarche en facilitant l’analyse des transitions entre opérations voisines.</li>
+<li><strong>Méthodologie</strong> : L’approche “Double-Track” (Logisim + Rust) a de nouveau permis de valider chaque sous-unité indépendamment avant son intégration dans l’ALU finale. Les tests unitaires en Rust ont validé 100% des 16 opérations de la table de vérité de l’ALU. Ce sprint a nécessité 3 semaines au lieu d’une, principalement en raison des corrections apportées au CMP et à l’ALU.</li>
+</ol>
+<h3 id="schéma-de-sélection-de-lalu"><a class="header" href="#schéma-de-sélection-de-lalu">Schéma de sélection de l’ALU</a></h3>
+<pre><code class="language-mermaid">flowchart TD
+    OP["Opcode (4 bits)"] --&gt; M0["m0"]
+    OP --&gt; M1["m1"]
+
+    OP --&gt; AU["Unité Arithmétique (AU)\nADD / SUB / RSUB / INC / DEC"]
+    OP --&gt; LU["Unité Logique (LU)\nAND / OR / XOR / NOT / PASS_A / PASS_B"]
+    OP --&gt; SU["Unité de Décalage (SU)\nSHL / SHR"]
+    OP --&gt; CMP["Comparateur (CMP)\nCMP_EQ / CMP_LT / CMP_GT"]
+
+    AU --&gt; MUX1{"MUX (m1)"}
+    LU --&gt; MUX1
+    SU --&gt; MUX2{"MUX (m1)"}
+    CMP --&gt; MUX2
+
+    MUX1 --&gt; MUXF{"MUX final (m0)"}
+    MUX2 --&gt; MUXF
+
+    MUXF --&gt; RES["Résultat (8 bits)"]
+    AU -.-&gt; CARRY["Retenue sortante\n(non utilisée pour l'instant)"]
+</code></pre>
+<h2 id="couche-2--mémoire-et-registres"><a class="header" href="#couche-2--mémoire-et-registres">Couche 2 : Mémoire et Registres <a name="couche-2"></a></a></h2>
+<p>L’implémentation de la couche 2 a permis d’introduire la notion d’<strong>état</strong> dans l’architecture, jusqu’ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM de 256 cases, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits (pour l’adressage de la ROM, voir Couche 3).</p>
+<h3 id="résultats-de-la-recherche--2"><a class="header" href="#résultats-de-la-recherche--2">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Limite de la simulation combinatoire</strong> : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire — une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n’est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n’a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.</li>
+<li><strong>Construction théorique de la bascule D</strong> : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l’entrée peut modifier l’état stocké.</li>
+<li><strong>Registre</strong> : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l’état est stocké directement dans une variable, et une méthode <code>clock_tick(data_in, load, reset)</code> reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par <code>data_in</code> si <code>load</code> est actif, ou la remettre à zéro si <code>reset</code> est actif — reset étant prioritaire sur load. Ce registre générique reste en 8 bits (<code>Byte</code>), en cohérence avec le reste de l’architecture (ALU, RAM).</li>
+<li><strong>RAM</strong> : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L’écriture (<code>clock_tick</code>) et la lecture (<code>read_output</code>) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP (<a href="04-memory-map.html">04-memory-map.md</a>).</li>
+<li><strong>Program Counter (PC)</strong> : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d’adresser une ROM (mémoire de programme) bien plus grande que la RAM de données — jusqu’à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l’adresse suivante à charger : soit une adresse de saut fournie explicitement (si <code>load</code> est actif), soit l’adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.</li>
+<li><strong>Méthodologie</strong> : comme pour les couches précédentes, chaque composant (<code>Register</code>, <code>Ram</code>, <code>PC</code>) a été validé par des tests unitaires en Rust, couvrant l’initialisation, le chargement, le maintien de la valeur, et la réinitialisation.</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong> : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception — voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).</p>
+</blockquote>
+<h3 id="schéma-du-program-counter"><a class="header" href="#schéma-du-program-counter">Schéma du Program Counter</a></h3>
+<pre><code class="language-mermaid">flowchart TD
+    CUR["PC actuel (16 bits)"] --&gt; MUX_ADDR{"MUX (load)"}
+    JUMP["Adresse de saut (16 bits)"] --&gt; MUX_ADDR
+    MUX_ADDR --&gt; BASE["Adresse de base"]
+
+    ONE["1"] --&gt; MUX_INC{"MUX (load)"}
+    ZERO["0"] --&gt; MUX_INC
+    MUX_INC --&gt; INC["Incrément"]
+
+    BASE --&gt; ADD["Additionneur 16 bits"]
+    INC --&gt; ADD
+    ADD --&gt; NEXT["PC suivant (16 bits)"]
+    NEXT --&gt; REG["Registre interne du PC (load=true)"]
+    REG --&gt; CUR
+</code></pre>
+<h2 id="couche-3--architecture-du-processeur-cpu"><a class="header" href="#couche-3--architecture-du-processeur-cpu">Couche 3 : Architecture du Processeur (CPU) <a name="couche-3"></a></a></h2>
+<p>L’implémentation de la couche 3 a permis d’assembler l’ALU (Couche 1) et les éléments de mémoire (Couche 2) en un processeur complet, capable d’exécuter un programme de manière autonome via un cycle Fetch/Decode/Execute. Le jeu d’instructions complet (ISA) est spécifié dans <a href="../../hardware/cpu/ISA.html"><code>hardware/cpu/ISA.md</code></a>.</p>
+<h3 id="résultats-de-la-recherche--3"><a class="header" href="#résultats-de-la-recherche--3">Résultats de la recherche :</a></h3>
+<ol>
+<li>
+<p><strong>Contrainte des 8 bits et solution par encodage de modes</strong> : sur une instruction de 8 bits, une ALU à 16 opérations nécessite déjà 4 bits d’opcode, plus 1 bit pour distinguer le type d’instruction, ne laissant que 3 bits pour piloter 5 signaux physiques (source de l’entrée B, <code>loadA</code>, <code>loadD</code>, <code>writeM</code>, <code>jump</code>). La solution retenue a été de ne pas câbler ces 3 bits directement sur des fils individuels, mais de les traiter comme un sélecteur de <strong>mode d’exécution</strong> : chacune des 8 combinaisons possibles (<code>000</code> à <code>111</code>) préconfigure un profil matériel complet (source des données, destination du résultat, activation ou non du saut), permettant de couvrir tous les besoins avec seulement 3 bits.</p>
+</li>
+<li>
+<p><strong>Format de l’instruction</strong> : chaque instruction de 8 bits suit le format <code>T OOOO MMM</code>, où <code>T</code> (bit 7) définit le type d’instruction, <code>OOOO</code> (bits 6-3) encode l’opcode ALU, et <code>MMM</code> (bits 2-0) encode le mode d’exécution.</p>
+</li>
+<li>
+<p><strong>Bit de type (<code>T</code>)</strong> : ce bit de poids fort détermine le comportement global du cycle en cours.</p>
+<ul>
+<li><code>T = 0</code> : instruction de type A (adresse/valeur) — l’ALU est désactivée, et les 7 bits restants (<code>0vvv_vvvv</code>) sont chargés directement dans le registre A.</li>
+<li><code>T = 1</code> : instruction de type C (calcul) — l’ALU est activée, l’opcode <code>OOOO</code> détermine l’opération, et le mode <code>MMM</code> dirige les données. L’entrée A de l’ALU est systématiquement reliée au registre D.</li>
+</ul>
+</li>
+<li>
+<p><strong>Table des modes d’exécution (<code>MMM</code>)</strong> : chaque mode définit à la fois la source de l’entrée B de l’ALU (registre A ou <code>RAM[A]</code>), la destination du résultat (registre D, registre A, <code>RAM[A]</code>, ou aucune), et si une condition de saut est évaluée.</p>
+<p>| Mode | Entrée B | Destination | Saut | Usage |
+|—|—|—|—|—|
+| <code>000</code> | Registre A | Registre D | Non | Calcul pur (<code>D = D + A</code>) |
+| <code>001</code> | RAM[A] | Registre D | Non | Lecture mémoire (<code>D = D + RAM[A]</code>) |
+| <code>010</code> | Registre A | Registre A | Non | Mise à jour d’adresse (<code>A = D + A</code>) |
+| <code>011</code> | Registre A | RAM[A] | Non | Écriture mémoire (<code>RAM[A] = D op A</code>) |
+| <code>100</code> | RAM[A] | RAM[A] | Non | Modification mémoire directe (<code>RAM[A] = D op RAM</code>) |
+| <code>101</code> | Registre A | Aucune | Oui, si résultat ALU ≠ 0 | Comparer D et A, sauter à A si vrai |
+| <code>110</code> | RAM[A] | Aucune | Oui, si résultat ALU ≠ 0 | Comparer D et RAM, sauter à A si vrai |
+| <code>111</code> | Registre A | Registre D <strong>et</strong> Registre A | Non | Clonage : copie du résultat dans D et A |</p>
+</li>
+<li>
+<p><strong>Saut conditionnel</strong> : les modes <code>101</code> et <code>110</code> sont conçus pour être combinés avec les opcodes de comparaison de l’ALU (<code>CMP_EQ</code>, <code>CMP_LT</code>, <code>CMP_GT</code>). Le saut n’est déclenché que si la sortie de l’ALU est strictement différente de <code>00000000</code> — condition naturellement remplie par les opérations de comparaison, qui renvoient <code>11111111</code> si la condition est vraie.</p>
+</li>
+<li>
+<p><strong>Aiguillage du registre A</strong> : le multiplexeur en entrée du registre A (choix entre une valeur issue de la ROM ou un résultat de l’ALU) est piloté directement par le bit <code>T</code> de la ROM, extrait via un splitter, plutôt que par la Control Unit — un choix d’optimisation matérielle évitant de surcharger cette dernière avec un signal déjà disponible directement.</p>
+</li>
+<li>
+<p><strong>Deux espaces mémoire distincts</strong> : la ROM (programme) est adressée par le PC sur 16 bits (jusqu’à 65 536 lignes de code), tandis que la RAM (données) reste adressée sur 8 bits via le registre A (256 cases). Cette asymétrie a nécessité de revoir les prévisions de gestion de la RAM et de la ROM, notamment pour les sauts, qui restent cantonnés aux 256 premières lignes de la ROM (page zéro).</p>
+</li>
+<li>
+<p><strong>Séparation adresse / écriture en RAM</strong> : le <code>JUMP</code> ne modifie que le Program Counter (position de lecture dans la ROM) et n’intervient pas dans l’écriture en RAM. Pour écrire une donnée en RAM, le registre A sert directement de broche d’adresse : il suffit de charger l’adresse voulue dans A, la donnée dans D, puis d’activer <code>writeM</code> (mode <code>011</code> ou <code>100</code>).</p>
+</li>
+<li>
+<p><strong>Passage à l’implémentation Rust</strong> : la simulation du CPU sépare clairement l’état (registres, RAM, ROM, PC) de la logique combinatoire (Control Unit, MUX, ALU), l’ensemble étant orchestré séquentiellement dans une méthode <code>tick()</code>, qui imite un front d’horloge et enchaîne les étapes Fetch, Decode et Execute.</p>
+</li>
+<li>
+<p><strong>Méthodologie</strong> : comme pour les couches précédentes, l’approche “Double-Track” (Logisim + Rust) a permis de valider la Control Unit et le cycle d’exécution avant intégration complète du CPU.</p>
+</li>
+</ol>
+<h3 id="schéma-du-cycle-fetchdecodeexecute"><a class="header" href="#schéma-du-cycle-fetchdecodeexecute">Schéma du cycle Fetch/Decode/Execute</a></h3>
+<pre><code class="language-mermaid">flowchart TD
+    PC["PC (16 bits)"] --&gt; FETCH["Fetch : lecture de la ROM à l'adresse PC"]
+    FETCH --&gt; BITT{"Bit T (bit 7)"}
+
+    BITT --&gt;|0| NUM["Type A : valeur brute -&gt; Registre A"]
+    BITT --&gt;|1| DECODE["Type C : Decode OOOO + MMM"]
+
+    DECODE --&gt; CU["Control Unit : génère loadA / loadD / writeM / jumpEnable selon MMM"]
+    CU --&gt; EXEC["Execute : ALU calcule (OOOO), registres/RAM mis à jour"]
+
+    NUM --&gt; NEXT["PC suivant (incrément ou jump)"]
+    EXEC --&gt; NEXT
+    NEXT --&gt; PC
+</code></pre>
+<h2 id="couche-4--machine-virtuelle-et-émulation"><a class="header" href="#couche-4--machine-virtuelle-et-émulation">Couche 4 : Machine Virtuelle et Émulation <a name="couche-4"></a></a></h2>
+<p>L’implémentation de la couche 4 a permis de construire une Machine Virtuelle (VM) capable d’exécuter le CPU simulé (Couche 3) à haute performance, et de le doter d’entrées/sorties pour interagir avec l’extérieur.</p>
+<h3 id="résultats-de-la-recherche--4"><a class="header" href="#résultats-de-la-recherche--4">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Machine Virtuelle</strong> : conception d’une VM simulant fidèlement le cycle d’horloge du CPU, ses registres, et ses 256 octets de RAM, offrant un environnement d’exécution rapide sans passer par la simulation porte-à-porte de Logisim.</li>
+<li><strong>Memory-Mapped I/O</strong> : intégration d’entrées/sorties pilotées directement via la RAM — lecture du clavier et affichage graphique (textuel/emoji) — en réservant certaines adresses mémoire à ces périphériques plutôt qu’à des données de programme classiques.</li>
+<li><strong>Arbitrage de l’espace mémoire</strong> : les 256 octets de RAM disponibles ayant dû être partagés entre les variables du programme, la pile, et les adresses réservées au Memory-Mapped I/O, un découpage précis de cet espace a été nécessaire pour éviter toute saturation ou collision entre ces usages.</li>
+<li><strong>Méthodologie</strong> : validation de la VM par l’exécution d’un premier programme bas niveau, manipulant directement la RAM.</li>
+</ol>
+<h3 id="apprentissages-clés"><a class="header" href="#apprentissages-clés">Apprentissages clés</a></h3>
+<p>Compréhension concrète du principe du Memory-Mapped I/O : piloter des périphériques (clavier, écran) non pas via des instructions dédiées, mais en lisant/écrivant simplement à des adresses RAM réservées à cet effet — le CPU n’a donc pas besoin d’instructions spécifiques pour l’I/O, seulement d’un espace mémoire bien découpé.</p>
+<hr>
+<h2 id="couche-5--langage-dassemblage"><a class="header" href="#couche-5--langage-dassemblage">Couche 5 : Langage d’Assemblage <a name="couche-5"></a></a></h2>
+<p>La couche 5 a permis de créer un assembleur, premier outil logiciel permettant de programmer le CPU sans écrire directement les instructions en binaire.</p>
+<h3 id="résultats-de-la-recherche--5"><a class="header" href="#résultats-de-la-recherche--5">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Assembleur</strong> : implémentation en Rust d’un parseur traduisant des mnémoniques textuels (assembleur) en instructions binaires 8 bits, conformes à l’ISA défini en Couche 3.</li>
+<li><strong>Premier programme exécuté</strong> : validation de la chaîne complète (assembleur → binaire → VM → CPU simulé) par l’exécution réussie d’un programme <em>Hello World</em>, écrivant une chaîne ASCII en mémoire.</li>
+<li><strong>Facilité de mise en œuvre</strong> : contrairement aux couches précédentes, la traduction assembleur → binaire et son exécution se sont mises en place sans difficulté majeure, la logique de correspondance mnémonique → opcode/mode découlant directement de l’ISA déjà spécifié.</li>
+</ol>
+<h3 id="apprentissages-clés-1"><a class="header" href="#apprentissages-clés-1">Apprentissages clés</a></h3>
+<p>Manipulation concrète du fonctionnement d’un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s’articule avec le cycle d’exécution bas niveau déjà construit.</p>
+<h2 id="couche-6--compilation-et-langage-haut-niveau"><a class="header" href="#couche-6--compilation-et-langage-haut-niveau">Couche 6 : Compilation et Langage Haut Niveau <a name="couche-6"></a></a></h2>
+<p><em>(Section en cours de construction — seule la première étape, l’analyse lexicale, a été réalisée à ce stade.)</em></p>
+<p>La couche 6 vise à construire un compilateur pour un mini-langage de programmation propre, nommé <strong>JUMP</strong>, capable de générer du code assembleur (Couche 5) à partir d’un code source de plus haut niveau.</p>
+<h3 id="résultats-de-la-recherche-à-date-"><a class="header" href="#résultats-de-la-recherche-à-date-">Résultats de la recherche (à date) :</a></h3>
+<ol>
+<li><strong>Spécification du langage JUMP</strong> : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).</li>
+<li><strong>Analyse lexicale (Lexer)</strong> : implémentation en Rust d’un Lexer découpant un fichier source JUMP en un vecteur de <code>Tokens</code> typés — première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).</li>
+</ol>
+<h3 id="prochaines-étapes"><a class="header" href="#prochaines-étapes">Prochaines étapes</a></h3>
+<ul>
+<li>Analyse syntaxique (Parser) : construction d’un arbre syntaxique (AST) à partir du flux de Tokens.</li>
+<li>Génération de code : traduction de l’AST en instructions assembleur JUMP → ISA (Couche 5).</li>
+</ul>
+<h3 id="schéma-de-la-chaîne-doutils-complète"><a class="header" href="#schéma-de-la-chaîne-doutils-complète">Schéma de la chaîne d’outils complète</a></h3>
+<pre><code class="language-mermaid">flowchart LR
+    SRC["Code source JUMP (.jump)"] --&gt; LEX["Lexer -&gt; Tokens"]
+    LEX --&gt; PARSE["Parser -&gt; AST (à venir)"]
+    PARSE --&gt; CODEGEN["Génération de code (à venir)"]
+    CODEGEN --&gt; ASM["Assembleur (mnémoniques -&gt; binaire)"]
+    ASM --&gt; VM["Machine Virtuelle"]
+    VM --&gt; CPU["CPU simulé (Couche 3)"]
+    CPU --&gt; RAM["RAM 256 octets + Memory-Mapped I/O"]
+</code></pre>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion <a name="conclusion"></a></a></h2>
+<p><em>(Section provisoire — à compléter au fil des prochains sprints.)</em></p>
+<p>À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu’à l’analyse lexicale d’un langage de programmation propre (JUMP). L’approche bottom-up et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).</p>
+<p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), ou l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4).</p>
+<p>La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : analyse syntaxique (Parser), génération d’un AST, allocation mémoire automatique des variables, et génération de code assembleur — pour clore la chaîne complète, des portes logiques jusqu’à un programme de haut niveau exécutable sur le matériel simulé.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="05-language-spec.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="07-journal.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="05-language-spec.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="07-journal.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

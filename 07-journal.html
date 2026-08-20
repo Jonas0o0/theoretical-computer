@@ -1,0 +1,384 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>7. Journal de Bord (Sprint Log) - Documentation Theoretical Computeur</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-1fe2e400.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-a51d7fec.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Documentation Theoretical Computeur</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="journal-de-bord-lab-notebook"><a class="header" href="#journal-de-bord-lab-notebook">Journal de Bord (Lab Notebook)</a></h1>
+<h2 id="format-dentrée-"><a class="header" href="#format-dentrée-">Format d’entrée :</a></h2>
+<ul>
+<li><strong>Date</strong> : [Date]</li>
+<li><strong>Objectif</strong> : [Ce que je veux faire]</li>
+<li><strong>Réalisation</strong> : [Ce que j’ai fait]</li>
+<li><strong>Difficultés</strong> : [Bloquages rencontrés]</li>
+<li><strong>Apprentissages</strong> : [Ce que j’ai compris aujourd’hui]</li>
+</ul>
+<hr>
+<h2 id="2026-06-14---initialisation-du-projet-et-sprint-1"><a class="header" href="#2026-06-14---initialisation-du-projet-et-sprint-1">[2026-06-14] - Initialisation du Projet et Sprint 1</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Mise en place de la structure de projet et réalisation de la couche 0 (Portes Logiques).</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Configuration de l’environnement (Installation de Rust/Cargo via rustup).</li>
+<li>Initialisation du dépôt GitHub et des Issues de suivi (Sprints).</li>
+<li>Création des schémas Logisim (<code>myGates.circ</code>) utilisant des sous-circuits.</li>
+<li>Développement de l’émulateur Rust avec une architecture Cargo modulaire.</li>
+<li>Implémentation d’un moteur de test générique (<code>verify</code>) pour valider les tables de vérité.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> : Configuration du PATH pour Rust et gestion des types génériques en Rust pour les tests unitaires.</li>
+<li><strong>Apprentissages</strong> : Maîtrise de la logique NAND, structuration de projets Rust complexes et utilisation du GitHub CLI pour la gestion de projet.</li>
+<li><strong>Statut</strong> : Sprint 1 validé (6/6 tests réussis).</li>
+</ul>
+<h2 id="2026-06-21---arithmétique---construction-de-lalu-et-sprint-2"><a class="header" href="#2026-06-21---arithmétique---construction-de-lalu-et-sprint-2">[2026-06-21] - Arithmétique - Construction de l’ALU et Sprint 2</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Construire une Unité Arithmétique et Logique (ALU) capable d’effectuer des opérations binaires.</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Création des schémas Logisim (myAlu.circ)</li>
+<li>Émulation de l’ALU et de ses composants en Rust</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li>Pour le CMP, mon erreur était de comparer les bits entre eux indépendamment, sans tenir compte des résultats précédents. De plus, mon CMP 1 bit gérait directement les signaux EQ et GT avec des MUX, alors que le MUX final n’aurait dû être placé qu’au niveau du CMP 8 bits. J’ai corrigé mon circuit en conséquence, et le CMP 1 bit s’est finalement avéré possible à réaliser.</li>
+<li>Pour l’ALU, la construction en 1 bit ne fonctionnait pas, donc j’ai directement conçu l’ALU en 8 bits en assemblant tous les full adders en chaîne, et j’ai géré les bonnes opérations via l’opcode.</li>
+<li>Le dépassement à 3 semaines (au lieu d’une semaine initialement prévue) s’explique par le fait que je pensais que la méthode “construire en 1 bit puis assembler pour obtenir le 8 bits” serait simple à généraliser. Le CMP et l’ALU m’ont donc ralenti, tout comme la phase de recherche nécessaire pour comprendre et trouver les bonnes solutions.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li>La table de Karnaugh m’a permis de relier facilement mes MUX à l’opcode, en trouvant simplement la suite logique de sortie correspondant à chaque opération.</li>
+<li>Le code de Gray m’a également aidé dans cette démarche.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2026-07-19---mémoire---registres-et-ram-et-sprint-3"><a class="header" href="#2026-07-19---mémoire---registres-et-ram-et-sprint-3">[2026-07-19] - Mémoire - Registres et RAM et Sprint 3</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Gérer l’état du processeur via des bascules (Flip-Flops), des registres et de la RAM.</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Implémentation en Rust d’un <code>Register</code> (registre à chargement conditionnel avec reset), d’une <code>Ram</code> (65 536 cases adressables), et d’un <code>PC</code> (Program Counter avec chargement d’adresse de saut et auto-incrémentation).</li>
+<li>Tests unitaires couvrant les trois composants : <code>Register</code> (initialisation, chargement, maintien, reset), <code>Ram</code> (initialisation, écriture ciblée, isolation entre adresses, non-modification si <code>load = false</code>), et <code>PC</code> (incrémentation séquentielle, saut, reset).</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li>La bascule D repose sur une boucle combinatoire (une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie), ce qui en fait un circuit séquentiel non représentable par les fonctions pures utilisées jusqu’ici (sans notion de temps ni de bouclage). Il n’était donc pas possible de la simuler en Rust à partir des portes de la Couche 0 ; l’état est simplement stocké dans une variable (value: Byte), et clock_tick reproduit le comportement attendu (charger, garder, réinitialiser) sans reconstruire le circuit séquentiel sous-jacent.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li>Distinction entre logique combinatoire (couches précédentes) et logique séquentielle (bascules, registres) : cette dernière nécessite une notion de temps/horloge (clock_tick), qu’un enchaînement de fonctions pures ne peut pas représenter.</li>
+<li>Construction d’une bascule D à partir de verrous (latch) : un verrou SR se construit à partir de 2 portes NOR croisées ; un verrou D en est une version sécurisée, où une porte AND est ajoutée devant chaque NOR pour contrôler l’écriture.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2026-08-03---architecture---le-cpu-complet-et-sprint-4"><a class="header" href="#2026-08-03---architecture---le-cpu-complet-et-sprint-4">[2026-08-03] - Architecture - Le CPU complet et Sprint 4</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Intégrer l’ALU, les registres et l’unité de contrôle pour former le CPU.</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Définir l’ISA (Instruction Set Architecture)</li>
+<li>Créer l’unité de contrôle (Control Unit) dans Logisim</li>
+<li>Finaliser le cycle Fetch/Decode/Execute</li>
+</ul>
+</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Conception de mon propre ISA 8 bits, où le bit 7 sert de sélecteur entre un nombre brut chargé dans le registre A (<code>bit7 = 0</code>) et une instruction de calcul activant l’ALU (<code>bit7 = 1</code>).</li>
+<li>Pour les instructions de calcul, les 3 bits de poids faible (<code>rom.0</code>, <code>rom.1</code>, <code>rom.2</code>, notés MMM) servent de mode d’adressage : ils indiquent où va le résultat (registre D, RAM via <code>writeM</code>, etc.), et sont décodés dans la Control Unit (<code>cu</code>) pour produire les signaux de contrôle (<code>loadA</code>, <code>loadD</code>, <code>writeM</code>, <code>aluBMux</code>, <code>jumpEnable</code>).</li>
+<li>Câblage du MUX en entrée du registre A directement piloté par le bit 7 de la ROM (extrait via un splitter), sans passer par la Control Unit, pour ne pas la surcharger inutilement.</li>
+<li>Architecture mémoire à deux espaces distincts : une <strong>ROM</strong> (programme) adressée par le PC sur 16 bits, et une <strong>RAM</strong> (données) adressée par le registre A sur 8 bits (256 cases).</li>
+<li>Partie Rust entièrement terminée : simulation structurée en séparant l’état (registres, RAM, ROM, PC) de la logique combinatoire (Control Unit, MUX, ALU), le tout exécuté séquentiellement dans une méthode <code>tick()</code> pour imiter un front d’horloge.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li>Utilisation d’une RAM de petite taille (256 cases, adressée sur 8 bits), ce qui m’a obligé à revoir mes prévisions pour la gestion de la RAM et de la ROM du programme : le fait d’être resté en 8 bits pour la RAM ajoute des contraintes (notamment sur les sauts <code>JUMP</code>, limités aux 256 premières lignes de la ROM), mais ne bloque pas le projet.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li>L’ISA est le jeu d’instructions complet compris par le processeur : chaque ligne de code assembleur est traduite en opcode binaire, décodé par la Control Unit ; une instruction hors de l’ISA n’est simplement pas reconnue.</li>
+<li>Le bit 7 comme sélecteur nombre/calcul est une technique classique pour économiser un bit de mode sans instruction dédiée.</li>
+<li>Réserver le bit 7 au choix nombre/calcul réduit la plage de nombres directement chargeables dans le registre A à 7 bits (0-127) ; au-delà, il faut passer par des opérations arithmétiques successives.</li>
+<li>Le <code>JUMP</code> ne modifie que le Program Counter (donc la lecture de la ROM), il ne sert pas à positionner une adresse en RAM. Pour écrire en RAM, le registre A sert directement de broche d’adresse : il suffit de charger l’adresse dans A, la donnée dans D, et d’activer <code>writeM</code>.</li>
+<li>La ROM (16 bits, via le PC) et la RAM (8 bits, via le registre A) sont deux espaces mémoire séparés avec des capacités différentes : le programme peut être long (jusqu’à 65 536 lignes), mais les données manipulables directement en RAM restent limitées à 256 cases.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2026-08-16---software-stack---assembleur-et-vm-et-sprint-5"><a class="header" href="#2026-08-16---software-stack---assembleur-et-vm-et-sprint-5">[2026-08-16] - Software Stack - Assembleur et VM et Sprint 5</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Créer les outils permettant de programmer le CPU.</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Développer l’assembleur en Rust (Parsing ASM -&gt; Binaire)</li>
+<li>Finaliser la Machine Virtuelle haute performance</li>
+<li>Exécuter un premier programme ‘Hello World’ sur le CPU simulé
+Tu as totalement raison, si c’est allé tout seul et que l’apprentissage principal c’est d’avoir découvert la logique de l’assembleur, il ne faut pas inventer des galères artificielles !</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>Réalisation</strong> :</li>
+<li>Implémentation d’un parseur d’assembleur en Rust capable de traduire des mnémoniques textuels en binaire.</li>
+<li>Conception de la Machine Virtuelle (VM) simulant le cycle d’horloge, les registres et les 256 octets de RAM.</li>
+<li>Exécution réussie d’un premier programme bas niveau (<em>Hello World</em> en ASCII en mémoire).</li>
+<li><strong>Difficultés</strong> :</li>
+<li>Aucune difficulté majeure notable ; la logique séquentielle de traduction et d’exécution s’est mise en place naturellement.</li>
+<li><strong>Apprentissages</strong> :</li>
+<li>Découverte concrète et manipulation directe du fonctionnement de l’assembleur et du cycle d’exécution d’un processeur de bas niveau.</li>
+</ul>
+<h2 id="2026-08-20---compilateur---analyse-lexicale-et-io-vm-et-sprint-6"><a class="header" href="#2026-08-20---compilateur---analyse-lexicale-et-io-vm-et-sprint-6">[2026-08-20] - Compilateur - Analyse Lexicale et I/O VM et Sprint 6</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Préparer la VM pour le jeu et créer la première brique du compilateur : le Lexer (Analyseur Lexical).</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Implémenter le Memory-Mapped I/O dans la VM (lecture du clavier via la RAM et affichage graphique).</li>
+<li>Définir la grammaire et la syntaxe exacte du mini-langage de programmation (<strong>JUMP</strong>).</li>
+<li>Initialiser le nouveau projet Rust pour le compilateur.</li>
+<li>Développer le Lexer pour transformer le code source brut en liste de Tokens structurés.</li>
+</ul>
+</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Intégration du Memory-Mapped I/O et des graphismes textuels/emojis dans la Machine Virtuelle.</li>
+<li>Rédaction de la spécification complète du langage JUMP et intégration dans le mdBook.</li>
+<li>Implémentation en Rust du Lexer capable de découper un fichier source JUMP en un vecteur de <code>Tokens</code> typés.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li>Réfléxion rigoureusement au découpage et à l’optimisation des 256 octets de RAM disponibles : il a fallu arbitrer précisément entre l’espace alloué aux variables du programme, la pile et les adresses réservées au Memory-Mapped I/O pour ne rien saturer.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li>Compréhension du fonctionnement du Memory-Mapped I/O pour piloter des périphériques via la RAM.</li>
+<li>Découverte des bases de la compilation et de la première phase d’analyse lexicale.</li>
+</ul>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="06-these.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="06-these.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
