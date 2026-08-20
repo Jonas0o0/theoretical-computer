@@ -5,7 +5,7 @@
 [![Rust](https://img.shields.io/badge/Rust-000000?style=flat&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![Logisim](https://img.shields.io/badge/Logisim-Evolution-blue)](http://www.cburch.com/logisim/)
 
-**[Documentation complète (mdBook)](./docs)**
+**[Documentation complète (mdBook)](https://tc.jonas-facon.dev)**
 
 ---
 
