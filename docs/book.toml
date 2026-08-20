@@ -1,4 +1,7 @@
 [book]
 title = "Documentation Theoretical Computeur"
-authors = ["Jonas0o0"]
-language = "en"
+authors = ["Jonas Facon"]
+language = "FR"
+
+[output.html]
+additional-assets = ["CNAME"]
