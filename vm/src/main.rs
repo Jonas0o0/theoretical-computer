@@ -1,6 +1,9 @@
 use std::{env, fs, process};
+use std::io::stdout;
 use std::time::Duration;
+use crossterm::cursor::MoveTo;
 use crossterm::event::{poll, read, Event, KeyCode};
+use crossterm::execute;
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use theoretical_computer::hardware::cpu::Cpu;
 use theoretical_computer::hardware::utils::{u8_to_byte, byte_to_u8};
@@ -35,23 +38,8 @@ fn main() {
     enable_raw_mode().unwrap();
 
     loop {
-        if poll(Duration::from_millis(0)).unwrap() {
-            if let Event::Key(key_event) = read().unwrap() {
-                match key_event.code {
-                    KeyCode::Char('q') => {
-                        disable_raw_mode().unwrap();
-                        println!("\nArrêt du programme.");
-                        process::exit(0);
-                    }
-                    KeyCode::Up | KeyCode::Char('z') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'z')),
-                    KeyCode::Down | KeyCode::Char('s') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b's')),
-                    KeyCode::Left | KeyCode::Char('q') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'q')),
-                    KeyCode::Right | KeyCode::Char('d') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'd')),
-                    _ => {}
-                }
-            }
-        }
-
+        key_input(&mut cpu);
+        print_ram(&mut cpu);
         cpu.clock_tick(false);
     }
 
@@ -77,4 +65,48 @@ fn main() {
 
     println!("------------------------------------------");
     println!("Arrêt de la machine.");
+}
+
+fn key_input(cpu: &mut Cpu) {
+    if poll(Duration::from_millis(0)).unwrap() {
+        if let Event::Key(key_event) = read().unwrap() {
+            match key_event.code {
+                KeyCode::Char('q') => {
+                    disable_raw_mode().unwrap();
+                    println!("\nArrêt du programme.");
+                    process::exit(0);
+                }
+                KeyCode::Up | KeyCode::Char('z') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'z')),
+                KeyCode::Down | KeyCode::Char('s') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b's')),
+                KeyCode::Left | KeyCode::Char('q') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'q')),
+                KeyCode::Right | KeyCode::Char('d') => cpu.ram.write(usize::from(u8_to_byte(KEY_MEMORY_CASE)), u8_to_byte(b'd')),
+                _ => {}
+            }
+        }
+    }
+}
+
+fn print_ram(cpu: &mut Cpu) {
+    let color_byte = cpu.ram.read_output(u8_to_byte(252));
+    let x_byte = cpu.ram.read_output(u8_to_byte(253));
+    let y_byte = cpu.ram.read_output(u8_to_byte(254));
+
+    let color = byte_to_u8(&color_byte);
+    let x = byte_to_u8(&x_byte);
+    let y = byte_to_u8(&y_byte);
+
+    if color != 0 {
+        let mut stdout = stdout();
+
+        let _ = execute!(stdout, MoveTo(x as u16, y as u16));
+
+        match color {
+            1 => print!("██"),
+            2 => print!("🍎"),
+            3 => print!("  "),
+            _ => {}
+        }
+
+        cpu.ram.write(usize::from(u8_to_byte(252)), u8_to_byte(0));
+    }
 }
