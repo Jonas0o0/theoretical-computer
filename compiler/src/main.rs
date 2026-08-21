@@ -1,6 +1,7 @@
 use crate::lexer::Lexer;
 
 mod lexer;
+mod ast;
 
 fn main() {
     let code = "let x = 10; poke(252, 1);";
