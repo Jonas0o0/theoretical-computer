@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f3a43352.js";
+            window.path_to_searchindex_js = "searchindex-4ce29abd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -242,15 +242,15 @@
 <p>L’implémentation de la couche 2 a permis d’introduire la notion d’<strong>état</strong> dans l’architecture, jusqu’ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM de 256 cases, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits (pour l’adressage de la ROM, voir Couche 3).</p>
 <h3 id="résultats-de-la-recherche--2"><a class="header" href="#résultats-de-la-recherche--2">Résultats de la recherche :</a></h3>
 <ol>
-<li><strong>Limite de la simulation combinatoire</strong> : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire — une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n’est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n’a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.</li>
+<li><strong>Limite de la simulation combinatoire</strong> : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n’est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n’a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.</li>
 <li><strong>Construction théorique de la bascule D</strong> : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l’entrée peut modifier l’état stocké.</li>
-<li><strong>Registre</strong> : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l’état est stocké directement dans une variable, et une méthode <code>clock_tick(data_in, load, reset)</code> reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par <code>data_in</code> si <code>load</code> est actif, ou la remettre à zéro si <code>reset</code> est actif — reset étant prioritaire sur load. Ce registre générique reste en 8 bits (<code>Byte</code>), en cohérence avec le reste de l’architecture (ALU, RAM).</li>
+<li><strong>Registre</strong> : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l’état est stocké directement dans une variable, et une méthode <code>clock_tick(data_in, load, reset)</code> reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par <code>data_in</code> si <code>load</code> est actif, ou la remettre à zéro si <code>reset</code> est actif reset étant prioritaire sur load. Ce registre générique reste en 8 bits (<code>Byte</code>), en cohérence avec le reste de l’architecture (ALU, RAM).</li>
 <li><strong>RAM</strong> : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L’écriture (<code>clock_tick</code>) et la lecture (<code>read_output</code>) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP (<a href="04-memory-map.html">04-memory-map.md</a>).</li>
-<li><strong>Program Counter (PC)</strong> : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d’adresser une ROM (mémoire de programme) bien plus grande que la RAM de données — jusqu’à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l’adresse suivante à charger : soit une adresse de saut fournie explicitement (si <code>load</code> est actif), soit l’adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.</li>
+<li><strong>Program Counter (PC)</strong> : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d’adresser une ROM (mémoire de programme) bien plus grande que la RAM de données jusqu’à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l’adresse suivante à charger : soit une adresse de saut fournie explicitement (si <code>load</code> est actif), soit l’adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.</li>
 <li><strong>Méthodologie</strong> : comme pour les couches précédentes, chaque composant (<code>Register</code>, <code>Ram</code>, <code>PC</code>) a été validé par des tests unitaires en Rust, couvrant l’initialisation, le chargement, le maintien de la valeur, et la réinitialisation.</li>
 </ol>
 <blockquote>
-<p><strong>Note</strong> : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception — voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).</p>
+<p><strong>Note</strong> : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).</p>
 </blockquote>
 <h3 id="schéma-du-program-counter"><a class="header" href="#schéma-du-program-counter">Schéma du Program Counter</a></h3>
 <pre><code class="language-mermaid">flowchart TD
@@ -281,8 +281,8 @@
 <li>
 <p><strong>Bit de type (<code>T</code>)</strong> : ce bit de poids fort détermine le comportement global du cycle en cours.</p>
 <ul>
-<li><code>T = 0</code> : instruction de type A (adresse/valeur) — l’ALU est désactivée, et les 7 bits restants (<code>0vvv_vvvv</code>) sont chargés directement dans le registre A.</li>
-<li><code>T = 1</code> : instruction de type C (calcul) — l’ALU est activée, l’opcode <code>OOOO</code> détermine l’opération, et le mode <code>MMM</code> dirige les données. L’entrée A de l’ALU est systématiquement reliée au registre D.</li>
+<li><code>T = 0</code> : instruction de type A (adresse/valeur) l’ALU est désactivée, et les 7 bits restants (<code>0vvv_vvvv</code>) sont chargés directement dans le registre A.</li>
+<li><code>T = 1</code> : instruction de type C (calcul) l’ALU est activée, l’opcode <code>OOOO</code> détermine l’opération, et le mode <code>MMM</code> dirige les données. L’entrée A de l’ALU est systématiquement reliée au registre D.</li>
 </ul>
 </li>
 <li>
@@ -299,10 +299,10 @@
 | <code>111</code> | Registre A | Registre D <strong>et</strong> Registre A | Non | Clonage : copie du résultat dans D et A |</p>
 </li>
 <li>
-<p><strong>Saut conditionnel</strong> : les modes <code>101</code> et <code>110</code> sont conçus pour être combinés avec les opcodes de comparaison de l’ALU (<code>CMP_EQ</code>, <code>CMP_LT</code>, <code>CMP_GT</code>). Le saut n’est déclenché que si la sortie de l’ALU est strictement différente de <code>00000000</code> — condition naturellement remplie par les opérations de comparaison, qui renvoient <code>11111111</code> si la condition est vraie.</p>
+<p><strong>Saut conditionnel</strong> : les modes <code>101</code> et <code>110</code> sont conçus pour être combinés avec les opcodes de comparaison de l’ALU (<code>CMP_EQ</code>, <code>CMP_LT</code>, <code>CMP_GT</code>). Le saut n’est déclenché que si la sortie de l’ALU est strictement différente de <code>00000000</code> condition naturellement remplie par les opérations de comparaison, qui renvoient <code>11111111</code> si la condition est vraie.</p>
 </li>
 <li>
-<p><strong>Aiguillage du registre A</strong> : le multiplexeur en entrée du registre A (choix entre une valeur issue de la ROM ou un résultat de l’ALU) est piloté directement par le bit <code>T</code> de la ROM, extrait via un splitter, plutôt que par la Control Unit — un choix d’optimisation matérielle évitant de surcharger cette dernière avec un signal déjà disponible directement.</p>
+<p><strong>Aiguillage du registre A</strong> : le multiplexeur en entrée du registre A (choix entre une valeur issue de la ROM ou un résultat de l’ALU) est piloté directement par le bit <code>T</code> de la ROM, extrait via un splitter, plutôt que par la Control Unit un choix d’optimisation matérielle évitant de surcharger cette dernière avec un signal déjà disponible directement.</p>
 </li>
 <li>
 <p><strong>Deux espaces mémoire distincts</strong> : la ROM (programme) est adressée par le PC sur 16 bits (jusqu’à 65 536 lignes de code), tandis que la RAM (données) reste adressée sur 8 bits via le registre A (256 cases). Cette asymétrie a nécessité de revoir les prévisions de gestion de la RAM et de la ROM, notamment pour les sauts, qui restent cantonnés aux 256 premières lignes de la ROM (page zéro).</p>
@@ -337,12 +337,12 @@
 <h3 id="résultats-de-la-recherche--4"><a class="header" href="#résultats-de-la-recherche--4">Résultats de la recherche :</a></h3>
 <ol>
 <li><strong>Machine Virtuelle</strong> : conception d’une VM simulant fidèlement le cycle d’horloge du CPU, ses registres, et ses 256 octets de RAM, offrant un environnement d’exécution rapide sans passer par la simulation porte-à-porte de Logisim.</li>
-<li><strong>Memory-Mapped I/O</strong> : intégration d’entrées/sorties pilotées directement via la RAM — lecture du clavier et affichage graphique (textuel/emoji) — en réservant certaines adresses mémoire à ces périphériques plutôt qu’à des données de programme classiques.</li>
+<li><strong>Memory-Mapped I/O</strong> : intégration d’entrées/sorties pilotées directement via la RAM lecture du clavier et affichage graphique (textuel/emoji) en réservant certaines adresses mémoire à ces périphériques plutôt qu’à des données de programme classiques.</li>
 <li><strong>Arbitrage de l’espace mémoire</strong> : les 256 octets de RAM disponibles ayant dû être partagés entre les variables du programme, la pile, et les adresses réservées au Memory-Mapped I/O, un découpage précis de cet espace a été nécessaire pour éviter toute saturation ou collision entre ces usages.</li>
 <li><strong>Méthodologie</strong> : validation de la VM par l’exécution d’un premier programme bas niveau, manipulant directement la RAM.</li>
 </ol>
 <h3 id="apprentissages-clés"><a class="header" href="#apprentissages-clés">Apprentissages clés</a></h3>
-<p>Compréhension concrète du principe du Memory-Mapped I/O : piloter des périphériques (clavier, écran) non pas via des instructions dédiées, mais en lisant/écrivant simplement à des adresses RAM réservées à cet effet — le CPU n’a donc pas besoin d’instructions spécifiques pour l’I/O, seulement d’un espace mémoire bien découpé.</p>
+<p>Compréhension concrète du principe du Memory-Mapped I/O : piloter des périphériques (clavier, écran) non pas via des instructions dédiées, mais en lisant/écrivant simplement à des adresses RAM réservées à cet effet le CPU n’a donc pas besoin d’instructions spécifiques pour l’I/O, seulement d’un espace mémoire bien découpé.</p>
 <hr>
 <h2 id="couche-5--langage-dassemblage"><a class="header" href="#couche-5--langage-dassemblage">Couche 5 : Langage d’Assemblage <a name="couche-5"></a></a></h2>
 <p>La couche 5 a permis de créer un assembleur, premier outil logiciel permettant de programmer le CPU sans écrire directement les instructions en binaire.</p>
@@ -355,14 +355,14 @@
 <h3 id="apprentissages-clés-1"><a class="header" href="#apprentissages-clés-1">Apprentissages clés</a></h3>
 <p>Manipulation concrète du fonctionnement d’un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s’articule avec le cycle d’exécution bas niveau déjà construit.</p>
 <h2 id="couche-6--compilation-et-langage-haut-niveau"><a class="header" href="#couche-6--compilation-et-langage-haut-niveau">Couche 6 : Compilation et Langage Haut Niveau <a name="couche-6"></a></a></h2>
-<p><em>(Section en cours de construction — analyse lexicale et analyse syntaxique réalisées ; génération de code à venir.)</em></p>
+<p><em>(Section en cours de construction analyse lexicale et analyse syntaxique réalisées ; génération de code à venir.)</em></p>
 <p>La couche 6 vise à construire un compilateur pour un mini-langage de programmation propre, nommé <strong>JUMP</strong>, capable de générer du code assembleur (Couche 5) à partir d’un code source de plus haut niveau.</p>
 <h3 id="résultats-de-la-recherche-à-date-"><a class="header" href="#résultats-de-la-recherche-à-date-">Résultats de la recherche (à date) :</a></h3>
 <ol>
 <li><strong>Spécification du langage JUMP</strong> : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).</li>
-<li><strong>Analyse lexicale (Lexer)</strong> : implémentation en Rust d’un Lexer découpant un fichier source JUMP en un vecteur de <code>Tokens</code> typés — première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).</li>
+<li><strong>Analyse lexicale (Lexer)</strong> : implémentation en Rust d’un Lexer découpant un fichier source JUMP en un vecteur de <code>Tokens</code> typés première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).</li>
 <li><strong>Memory-Mapped I/O</strong> : intégration au niveau de la VM (voir Couche 4), avec un découpage précis des 256 octets de RAM entre variables, pile et adresses réservées à l’I/O.</li>
-<li><strong>Structures de l’AST</strong> : définition en Rust des énumérations <code>Program</code>, <code>Stmt</code>, <code>Expr</code> et <code>BinaryOperator</code>, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent — les points-virgules, parenthèses, ou la fin de fichier (<code>EOF</code>), purement syntaxiques, n’ont pas leur place dans l’arbre.</li>
+<li><strong>Structures de l’AST</strong> : définition en Rust des énumérations <code>Program</code>, <code>Stmt</code>, <code>Expr</code> et <code>BinaryOperator</code>, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent les points-virgules, parenthèses, ou la fin de fichier (<code>EOF</code>), purement syntaxiques, n’ont pas leur place dans l’arbre.</li>
 <li><strong>Analyse syntaxique (Parser)</strong> : implémentation d’un Parser à <strong>descente récursive</strong>, qui consomme le flux de Tokens produit par le Lexer pour construire l’AST. Le code a été factorisé via une fonction <code>parse_block()</code> dédiée à la lecture du contenu entre accolades, et un mapping optimisé pour la résolution des opérateurs mathématiques et de leur priorité.</li>
 <li><strong>Grammaire sans parenthèses obligatoires</strong> : les conditions (<code>if</code>) et boucles (<code>while</code>) suivent une syntaxe proche de Rust, sans parenthèses imposées autour de la condition.</li>
 <li><strong>Séparation Statements / Expressions</strong> : délimitation stricte entre les instructions (<code>Statements</code>, qui exécutent une action, comme une assignation ou une boucle) et les expressions (<code>Expressions</code>, qui produisent une valeur, comme une opération arithmétique), afin de structurer le Parser proprement et éviter les conflits logiques.</li>
@@ -377,7 +377,7 @@
 </ul>
 <h3 id="apprentissages-clés-2"><a class="header" href="#apprentissages-clés-2">Apprentissages clés</a></h3>
 <ul>
-<li>Séparation stricte des responsabilités : le Parser se contente de vérifier la grammaire et de construire l’AST — c’est au Générateur de Code (étape suivante) que revient la gestion de la logique et de la sémantique.</li>
+<li>Séparation stricte des responsabilités : le Parser se contente de vérifier la grammaire et de construire l’AST c’est au Générateur de Code (étape suivante) que revient la gestion de la logique et de la sémantique.</li>
 <li>L’AST est une représentation épurée du programme : seuls les éléments porteurs de sens logique y figurent, la syntaxe pure (ponctuation, délimiteurs) étant consommée et éliminée par le Parser.</li>
 <li>La conception d’un langage doit composer avec les contraintes du matériel sous-jacent : l’absence de pile d’exécution sur le CPU a directement orienté le choix de ne pas supporter les arguments de fonctions dans cette première version du langage.</li>
 </ul>
@@ -398,10 +398,10 @@
     CPU --&gt; RAM["RAM 256 octets + Memory-Mapped I/O"]
 </code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion <a name="conclusion"></a></a></h2>
-<p><em>(Section provisoire — sera compléter au fil des prochains sprints.)</em></p>
+<p><em>(Section provisoire | sera compléter au fil des prochains sprints.)</em></p>
 <p>À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu’à l’analyse syntaxique d’un langage de programmation propre (JUMP). L’approche bottom-up et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).</p>
 <p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4), ou le changement de paradigme d’une analyse linéaire à une structure arborescente récursive (Couche 6, Parser).</p>
-<p>La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : allocation mémoire automatique des variables, puis génération de code assembleur — pour clore la chaîne complète, des portes logiques jusqu’à un programme de haut niveau exécutable sur le matériel simulé.</p>
+<p>La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : allocation mémoire automatique des variables, puis génération de code assembleur pour clore la chaîne complète, des portes logiques jusqu’à un programme de haut niveau exécutable sur le matériel simulé.</p>
 
                     </main>
 
