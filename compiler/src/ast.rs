@@ -4,6 +4,8 @@ pub enum BinaryOperator {
     Sub,       // -
     Equal,     // ==
     NotEqual,  // !=
+    LessThan,    // <
+    GreaterThan, // >
 }
 
 #[derive(Debug, Clone, PartialEq)]
