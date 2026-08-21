@@ -46,6 +46,11 @@ pub enum Stmt {
         body: Vec<Stmt>,
     },
 
+    While {
+        condition: Expr,
+        body: Vec<Stmt>,
+    },
+
     InlineFn {
         name: String,
         body: Vec<Stmt>,
