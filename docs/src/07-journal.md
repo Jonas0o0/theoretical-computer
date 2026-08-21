@@ -99,5 +99,26 @@
   - Compréhension du fonctionnement du Memory-Mapped I/O pour piloter des périphériques via la RAM.
   - Découverte des bases de la compilation et de la première phase d'analyse lexicale.
 
+## [2026-08-21] - Compilateur - Arbre Syntaxique (Parser) et Sprint 7
+- **Objectif** : Construire la structure logique du code en transformant la suite de Tokens en un Arbre Syntaxique Abstrait (AST).
+- **Tâches** :
+  - Définir les structures de l'AST en Rust (enum pour les assignations, boucles, conditions).
+  - Développer le Parser (Analyseur Syntaxique) pour construire l'AST en mémoire.
+  - Gérer la priorité des opérations mathématiques et logiques.
+  - Implémenter une gestion d'erreurs basique (signaler les erreurs de syntaxe à la compilation).
+- **Réalisation** :
+  - Création des énumérations de l'AST (`Program`, `Stmt`, `Expr`, `BinaryOperator`) pour le langage JUMP.
+  - Implémentation d'un Parser à descente récursive fonctionnel.
+  - Factorisation du code avec la création de `parse_block()` pour lire les contenus entre accolades et l'optimisation du mapping des opérateurs mathématiques.
+  - Gestion de la grammaire sans parenthèses obligatoires pour les `if` et `while` (style Rust).
+  - Validation de la chaîne : le Lexer génère les tokens, et le Parser construit un arbre correctement imbriqué.
+- **Difficultés** :
+  - Le changement de paradigme m'a demandé un temps d'adaptation : il a fallu basculer d'une analyse linéaire (liste de tokens du Lexer) à la construction d'une structure hiérarchique et imbriquée (AST), ce qui nécessite de bien maîtriser les appels de fonctions récursives.
+  - La résolution des ambiguïtés syntaxiques a été un point délicat. J'ai dû appréhender la subtilité entre la lecture définitive d'un jeton (`advance`/`consume`) et l'anticipation du jeton suivant (`peek`) pour orienter l'analyseur (par exemple, déterminer si un identifiant est suivi d'un `=` pour une assignation, ou d'une `(` pour un appel de fonction).
+  - Il a fallu délimiter strictement la frontière entre les instructions (`Statements`, qui exécutent une action) et les évaluations (`Expressions`, qui produisent une valeur) pour structurer le parser proprement et éviter les conflits logiques.
+- **Apprentissages** :
+  - J'ai bien assimilé la stricte séparation des rôles : le Parser ne fait que vérifier la grammaire, c'est le Compilateur qui gérera la logique par la suite.
+  - L'AST ne stocke que ce qui a du sens logique. Les notions de texte comme les points-virgules, les parenthèses ou la fin du fichier (`EOF`) n'ont pas leur place dans l'arbre.
+  - J'ai dû adapter le design du langage aux contraintes matérielles. C'est ce qui a motivé le choix de ne pas gérer les arguments de fonctions dans la V1, à cause de l'absence de pile (stack) matérielle sur mon CPU 8-bits.
 
 
