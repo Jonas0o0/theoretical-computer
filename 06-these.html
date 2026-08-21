@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1fe2e400.js";
+            window.path_to_searchindex_js = "searchindex-f3a43352.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -355,33 +355,53 @@
 <h3 id="apprentissages-clés-1"><a class="header" href="#apprentissages-clés-1">Apprentissages clés</a></h3>
 <p>Manipulation concrète du fonctionnement d’un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s’articule avec le cycle d’exécution bas niveau déjà construit.</p>
 <h2 id="couche-6--compilation-et-langage-haut-niveau"><a class="header" href="#couche-6--compilation-et-langage-haut-niveau">Couche 6 : Compilation et Langage Haut Niveau <a name="couche-6"></a></a></h2>
-<p><em>(Section en cours de construction — seule la première étape, l’analyse lexicale, a été réalisée à ce stade.)</em></p>
+<p><em>(Section en cours de construction — analyse lexicale et analyse syntaxique réalisées ; génération de code à venir.)</em></p>
 <p>La couche 6 vise à construire un compilateur pour un mini-langage de programmation propre, nommé <strong>JUMP</strong>, capable de générer du code assembleur (Couche 5) à partir d’un code source de plus haut niveau.</p>
 <h3 id="résultats-de-la-recherche-à-date-"><a class="header" href="#résultats-de-la-recherche-à-date-">Résultats de la recherche (à date) :</a></h3>
 <ol>
 <li><strong>Spécification du langage JUMP</strong> : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).</li>
 <li><strong>Analyse lexicale (Lexer)</strong> : implémentation en Rust d’un Lexer découpant un fichier source JUMP en un vecteur de <code>Tokens</code> typés — première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).</li>
+<li><strong>Memory-Mapped I/O</strong> : intégration au niveau de la VM (voir Couche 4), avec un découpage précis des 256 octets de RAM entre variables, pile et adresses réservées à l’I/O.</li>
+<li><strong>Structures de l’AST</strong> : définition en Rust des énumérations <code>Program</code>, <code>Stmt</code>, <code>Expr</code> et <code>BinaryOperator</code>, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent — les points-virgules, parenthèses, ou la fin de fichier (<code>EOF</code>), purement syntaxiques, n’ont pas leur place dans l’arbre.</li>
+<li><strong>Analyse syntaxique (Parser)</strong> : implémentation d’un Parser à <strong>descente récursive</strong>, qui consomme le flux de Tokens produit par le Lexer pour construire l’AST. Le code a été factorisé via une fonction <code>parse_block()</code> dédiée à la lecture du contenu entre accolades, et un mapping optimisé pour la résolution des opérateurs mathématiques et de leur priorité.</li>
+<li><strong>Grammaire sans parenthèses obligatoires</strong> : les conditions (<code>if</code>) et boucles (<code>while</code>) suivent une syntaxe proche de Rust, sans parenthèses imposées autour de la condition.</li>
+<li><strong>Séparation Statements / Expressions</strong> : délimitation stricte entre les instructions (<code>Statements</code>, qui exécutent une action, comme une assignation ou une boucle) et les expressions (<code>Expressions</code>, qui produisent une valeur, comme une opération arithmétique), afin de structurer le Parser proprement et éviter les conflits logiques.</li>
+<li><strong>Contrainte matérielle sur le design du langage</strong> : la V1 de JUMP ne gère pas les arguments de fonctions, en raison de l’absence de pile (stack) matérielle sur le CPU 8 bits (Couche 3). Les fonctions (<code>fn</code>) restent donc de simples macros d’inlining, sans paramètres.</li>
+<li><strong>Méthodologie</strong> : validation de la chaîne Lexer → Parser par construction d’un AST correctement imbriqué à partir de programmes JUMP de test.</li>
 </ol>
+<h3 id="difficultés-rencontrées"><a class="header" href="#difficultés-rencontrées">Difficultés rencontrées</a></h3>
+<ul>
+<li><strong>Changement de paradigme</strong> : passage d’une analyse linéaire (liste de Tokens produite par le Lexer) à la construction d’une structure hiérarchique et imbriquée (l’AST), nécessitant une bonne maîtrise des appels de fonctions récursives.</li>
+<li><strong>Ambiguïtés syntaxiques</strong> : distinction entre la consommation définitive d’un jeton (<code>advance</code>/<code>consume</code>) et l’anticipation du jeton suivant sans le consommer (<code>peek</code>), nécessaire par exemple pour déterminer si un identifiant est suivi d’un <code>=</code> (assignation) ou d’une <code>(</code> (appel de fonction), avant de décider comment le traiter.</li>
+<li><strong>Frontière Statements / Expressions</strong> : nécessité de délimiter clairement ces deux catégories dès la conception du Parser pour éviter les conflits logiques par la suite.</li>
+</ul>
+<h3 id="apprentissages-clés-2"><a class="header" href="#apprentissages-clés-2">Apprentissages clés</a></h3>
+<ul>
+<li>Séparation stricte des responsabilités : le Parser se contente de vérifier la grammaire et de construire l’AST — c’est au Générateur de Code (étape suivante) que revient la gestion de la logique et de la sémantique.</li>
+<li>L’AST est une représentation épurée du programme : seuls les éléments porteurs de sens logique y figurent, la syntaxe pure (ponctuation, délimiteurs) étant consommée et éliminée par le Parser.</li>
+<li>La conception d’un langage doit composer avec les contraintes du matériel sous-jacent : l’absence de pile d’exécution sur le CPU a directement orienté le choix de ne pas supporter les arguments de fonctions dans cette première version du langage.</li>
+</ul>
 <h3 id="prochaines-étapes"><a class="header" href="#prochaines-étapes">Prochaines étapes</a></h3>
 <ul>
-<li>Analyse syntaxique (Parser) : construction d’un arbre syntaxique (AST) à partir du flux de Tokens.</li>
+<li>Allocateur mémoire : parcours de l’AST pour attribuer une adresse RAM fixe à chaque variable (<code>let</code>).</li>
 <li>Génération de code : traduction de l’AST en instructions assembleur JUMP → ISA (Couche 5).</li>
 </ul>
 <h3 id="schéma-de-la-chaîne-doutils-complète"><a class="header" href="#schéma-de-la-chaîne-doutils-complète">Schéma de la chaîne d’outils complète</a></h3>
 <pre><code class="language-mermaid">flowchart LR
     SRC["Code source JUMP (.jump)"] --&gt; LEX["Lexer -&gt; Tokens"]
-    LEX --&gt; PARSE["Parser -&gt; AST (à venir)"]
-    PARSE --&gt; CODEGEN["Génération de code (à venir)"]
+    LEX --&gt; PARSE["Parser -&gt; AST"]
+    PARSE --&gt; ALLOC["Allocateur mémoire (à venir)"]
+    ALLOC --&gt; CODEGEN["Génération de code (à venir)"]
     CODEGEN --&gt; ASM["Assembleur (mnémoniques -&gt; binaire)"]
     ASM --&gt; VM["Machine Virtuelle"]
     VM --&gt; CPU["CPU simulé (Couche 3)"]
     CPU --&gt; RAM["RAM 256 octets + Memory-Mapped I/O"]
 </code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion <a name="conclusion"></a></a></h2>
-<p><em>(Section provisoire — à compléter au fil des prochains sprints.)</em></p>
-<p>À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu’à l’analyse lexicale d’un langage de programmation propre (JUMP). L’approche bottom-up et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).</p>
-<p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), ou l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4).</p>
-<p>La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : analyse syntaxique (Parser), génération d’un AST, allocation mémoire automatique des variables, et génération de code assembleur — pour clore la chaîne complète, des portes logiques jusqu’à un programme de haut niveau exécutable sur le matériel simulé.</p>
+<p><em>(Section provisoire — sera compléter au fil des prochains sprints.)</em></p>
+<p>À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu’à l’analyse syntaxique d’un langage de programmation propre (JUMP). L’approche bottom-up et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).</p>
+<p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4), ou le changement de paradigme d’une analyse linéaire à une structure arborescente récursive (Couche 6, Parser).</p>
+<p>La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : allocation mémoire automatique des variables, puis génération de code assembleur — pour clore la chaîne complète, des portes logiques jusqu’à un programme de haut niveau exécutable sur le matériel simulé.</p>
 
                     </main>
 

@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1fe2e400.js";
+            window.path_to_searchindex_js = "searchindex-f3a43352.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -327,6 +327,41 @@ Tu as totalement raison, si c’est allé tout seul et que l’apprentissage pri
 <ul>
 <li>Compréhension du fonctionnement du Memory-Mapped I/O pour piloter des périphériques via la RAM.</li>
 <li>Découverte des bases de la compilation et de la première phase d’analyse lexicale.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2026-08-21---compilateur---arbre-syntaxique-parser-et-sprint-7"><a class="header" href="#2026-08-21---compilateur---arbre-syntaxique-parser-et-sprint-7">[2026-08-21] - Compilateur - Arbre Syntaxique (Parser) et Sprint 7</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Construire la structure logique du code en transformant la suite de Tokens en un Arbre Syntaxique Abstrait (AST).</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Définir les structures de l’AST en Rust (enum pour les assignations, boucles, conditions).</li>
+<li>Développer le Parser (Analyseur Syntaxique) pour construire l’AST en mémoire.</li>
+<li>Gérer la priorité des opérations mathématiques et logiques.</li>
+<li>Implémenter une gestion d’erreurs basique (signaler les erreurs de syntaxe à la compilation).</li>
+</ul>
+</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Création des énumérations de l’AST (<code>Program</code>, <code>Stmt</code>, <code>Expr</code>, <code>BinaryOperator</code>) pour le langage JUMP.</li>
+<li>Implémentation d’un Parser à descente récursive fonctionnel.</li>
+<li>Factorisation du code avec la création de <code>parse_block()</code> pour lire les contenus entre accolades et l’optimisation du mapping des opérateurs mathématiques.</li>
+<li>Gestion de la grammaire sans parenthèses obligatoires pour les <code>if</code> et <code>while</code> (style Rust).</li>
+<li>Validation de la chaîne : le Lexer génère les tokens, et le Parser construit un arbre correctement imbriqué.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li>Le changement de paradigme m’a demandé un temps d’adaptation : il a fallu basculer d’une analyse linéaire (liste de tokens du Lexer) à la construction d’une structure hiérarchique et imbriquée (AST), ce qui nécessite de bien maîtriser les appels de fonctions récursives.</li>
+<li>La résolution des ambiguïtés syntaxiques a été un point délicat. J’ai dû appréhender la subtilité entre la lecture définitive d’un jeton (<code>advance</code>/<code>consume</code>) et l’anticipation du jeton suivant (<code>peek</code>) pour orienter l’analyseur (par exemple, déterminer si un identifiant est suivi d’un <code>=</code> pour une assignation, ou d’une <code>(</code> pour un appel de fonction).</li>
+<li>Il a fallu délimiter strictement la frontière entre les instructions (<code>Statements</code>, qui exécutent une action) et les évaluations (<code>Expressions</code>, qui produisent une valeur) pour structurer le parser proprement et éviter les conflits logiques.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li>J’ai bien assimilé la stricte séparation des rôles : le Parser ne fait que vérifier la grammaire, c’est le Compilateur qui gérera la logique par la suite.</li>
+<li>L’AST ne stocke que ce qui a du sens logique. Les notions de texte comme les points-virgules, les parenthèses ou la fin du fichier (<code>EOF</code>) n’ont pas leur place dans l’arbre.</li>
+<li>J’ai dû adapter le design du langage aux contraintes matérielles. C’est ce qui a motivé le choix de ne pas gérer les arguments de fonctions dans la V1, à cause de l’absence de pile (stack) matérielle sur mon CPU 8-bits.</li>
 </ul>
 </li>
 </ul>
