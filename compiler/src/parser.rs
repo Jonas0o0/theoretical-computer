@@ -45,6 +45,18 @@ impl Parser {
         }
     }
 
+    fn parse_block(&mut self) -> Result<Vec<Stmt>, String> {
+        self.consume(Token::LBrace, "On attend une '{' au début du bloc")?;
+
+        let mut statements = Vec::new();
+        while self.peek() != &Token::RBrace && self.peek() != &Token::EOF {
+            statements.push(self.parse_statement()?);
+        }
+        self.consume(Token::RBrace, "On attend une '}' à la fin du bloc")?;
+
+        Ok(statements)
+    }
+
     fn parse_let_statement(&mut self) -> Result<Stmt, String> {
         self.advance();
 
@@ -61,6 +73,15 @@ impl Parser {
 
         Ok(Stmt::Let { name, value })
     }
+
+    fn parse_if_statement(&mut self) -> Result<Stmt, String> {
+        self.advance();
+        let condition = self.parse_expression()?;
+        let body = self.parse_block()?;
+        Ok(Stmt::If { condition, body })
+    }
+
+
 
     fn parse_expression(&mut self) -> Result<Expr, String> {
         let token = self.advance().clone();
