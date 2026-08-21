@@ -75,14 +75,14 @@ L'implémentation de la couche 2 a permis d'introduire la notion d'**état** dan
 
 ### Résultats de la recherche :
 
-1. **Limite de la simulation combinatoire** : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire — une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n'est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n'a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.
+1. **Limite de la simulation combinatoire** : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n'est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n'a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.
 2. **Construction théorique de la bascule D** : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l'entrée peut modifier l'état stocké.
-3. **Registre** : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l'état est stocké directement dans une variable, et une méthode `clock_tick(data_in, load, reset)` reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par `data_in` si `load` est actif, ou la remettre à zéro si `reset` est actif — reset étant prioritaire sur load. Ce registre générique reste en 8 bits (`Byte`), en cohérence avec le reste de l'architecture (ALU, RAM).
+3. **Registre** : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l'état est stocké directement dans une variable, et une méthode `clock_tick(data_in, load, reset)` reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par `data_in` si `load` est actif, ou la remettre à zéro si `reset` est actif reset étant prioritaire sur load. Ce registre générique reste en 8 bits (`Byte`), en cohérence avec le reste de l'architecture (ALU, RAM).
 4. **RAM** : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L'écriture (`clock_tick`) et la lecture (`read_output`) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP ([04-memory-map.md](04-memory-map.md)).
-5. **Program Counter (PC)** : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d'adresser une ROM (mémoire de programme) bien plus grande que la RAM de données — jusqu'à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l'adresse suivante à charger : soit une adresse de saut fournie explicitement (si `load` est actif), soit l'adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.
+5. **Program Counter (PC)** : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d'adresser une ROM (mémoire de programme) bien plus grande que la RAM de données jusqu'à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l'adresse suivante à charger : soit une adresse de saut fournie explicitement (si `load` est actif), soit l'adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.
 6. **Méthodologie** : comme pour les couches précédentes, chaque composant (`Register`, `Ram`, `PC`) a été validé par des tests unitaires en Rust, couvrant l'initialisation, le chargement, le maintien de la valeur, et la réinitialisation.
 
-> **Note** : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception — voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).
+> **Note** : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).
 
 ### Schéma du Program Counter
 
@@ -113,8 +113,8 @@ L'implémentation de la couche 3 a permis d'assembler l'ALU (Couche 1) et les é
 2. **Format de l'instruction** : chaque instruction de 8 bits suit le format `T OOOO MMM`, où `T` (bit 7) définit le type d'instruction, `OOOO` (bits 6-3) encode l'opcode ALU, et `MMM` (bits 2-0) encode le mode d'exécution.
 
 3. **Bit de type (`T`)** : ce bit de poids fort détermine le comportement global du cycle en cours.
-   - `T = 0` : instruction de type A (adresse/valeur) — l'ALU est désactivée, et les 7 bits restants (`0vvv_vvvv`) sont chargés directement dans le registre A.
-   - `T = 1` : instruction de type C (calcul) — l'ALU est activée, l'opcode `OOOO` détermine l'opération, et le mode `MMM` dirige les données. L'entrée A de l'ALU est systématiquement reliée au registre D.
+   - `T = 0` : instruction de type A (adresse/valeur) l'ALU est désactivée, et les 7 bits restants (`0vvv_vvvv`) sont chargés directement dans le registre A.
+   - `T = 1` : instruction de type C (calcul) l'ALU est activée, l'opcode `OOOO` détermine l'opération, et le mode `MMM` dirige les données. L'entrée A de l'ALU est systématiquement reliée au registre D.
 
 4. **Table des modes d'exécution (`MMM`)** : chaque mode définit à la fois la source de l'entrée B de l'ALU (registre A ou `RAM[A]`), la destination du résultat (registre D, registre A, `RAM[A]`, ou aucune), et si une condition de saut est évaluée.
 
@@ -129,9 +129,9 @@ L'implémentation de la couche 3 a permis d'assembler l'ALU (Couche 1) et les é
    | `110` | RAM[A] | Aucune | Oui, si résultat ALU ≠ 0 | Comparer D et RAM, sauter à A si vrai |
    | `111` | Registre A | Registre D **et** Registre A | Non | Clonage : copie du résultat dans D et A |
 
-5. **Saut conditionnel** : les modes `101` et `110` sont conçus pour être combinés avec les opcodes de comparaison de l'ALU (`CMP_EQ`, `CMP_LT`, `CMP_GT`). Le saut n'est déclenché que si la sortie de l'ALU est strictement différente de `00000000` — condition naturellement remplie par les opérations de comparaison, qui renvoient `11111111` si la condition est vraie.
+5. **Saut conditionnel** : les modes `101` et `110` sont conçus pour être combinés avec les opcodes de comparaison de l'ALU (`CMP_EQ`, `CMP_LT`, `CMP_GT`). Le saut n'est déclenché que si la sortie de l'ALU est strictement différente de `00000000` condition naturellement remplie par les opérations de comparaison, qui renvoient `11111111` si la condition est vraie.
 
-6. **Aiguillage du registre A** : le multiplexeur en entrée du registre A (choix entre une valeur issue de la ROM ou un résultat de l'ALU) est piloté directement par le bit `T` de la ROM, extrait via un splitter, plutôt que par la Control Unit — un choix d'optimisation matérielle évitant de surcharger cette dernière avec un signal déjà disponible directement.
+6. **Aiguillage du registre A** : le multiplexeur en entrée du registre A (choix entre une valeur issue de la ROM ou un résultat de l'ALU) est piloté directement par le bit `T` de la ROM, extrait via un splitter, plutôt que par la Control Unit un choix d'optimisation matérielle évitant de surcharger cette dernière avec un signal déjà disponible directement.
 
 7. **Deux espaces mémoire distincts** : la ROM (programme) est adressée par le PC sur 16 bits (jusqu'à 65 536 lignes de code), tandis que la RAM (données) reste adressée sur 8 bits via le registre A (256 cases). Cette asymétrie a nécessité de revoir les prévisions de gestion de la RAM et de la ROM, notamment pour les sauts, qui restent cantonnés aux 256 premières lignes de la ROM (page zéro).
 
@@ -165,13 +165,13 @@ L'implémentation de la couche 4 a permis de construire une Machine Virtuelle (V
 ### Résultats de la recherche :
 
 1. **Machine Virtuelle** : conception d'une VM simulant fidèlement le cycle d'horloge du CPU, ses registres, et ses 256 octets de RAM, offrant un environnement d'exécution rapide sans passer par la simulation porte-à-porte de Logisim.
-2. **Memory-Mapped I/O** : intégration d'entrées/sorties pilotées directement via la RAM — lecture du clavier et affichage graphique (textuel/emoji) — en réservant certaines adresses mémoire à ces périphériques plutôt qu'à des données de programme classiques.
+2. **Memory-Mapped I/O** : intégration d'entrées/sorties pilotées directement via la RAM lecture du clavier et affichage graphique (textuel/emoji) en réservant certaines adresses mémoire à ces périphériques plutôt qu'à des données de programme classiques.
 3. **Arbitrage de l'espace mémoire** : les 256 octets de RAM disponibles ayant dû être partagés entre les variables du programme, la pile, et les adresses réservées au Memory-Mapped I/O, un découpage précis de cet espace a été nécessaire pour éviter toute saturation ou collision entre ces usages.
 4. **Méthodologie** : validation de la VM par l'exécution d'un premier programme bas niveau, manipulant directement la RAM.
 
 ### Apprentissages clés
 
-Compréhension concrète du principe du Memory-Mapped I/O : piloter des périphériques (clavier, écran) non pas via des instructions dédiées, mais en lisant/écrivant simplement à des adresses RAM réservées à cet effet — le CPU n'a donc pas besoin d'instructions spécifiques pour l'I/O, seulement d'un espace mémoire bien découpé.
+Compréhension concrète du principe du Memory-Mapped I/O : piloter des périphériques (clavier, écran) non pas via des instructions dédiées, mais en lisant/écrivant simplement à des adresses RAM réservées à cet effet le CPU n'a donc pas besoin d'instructions spécifiques pour l'I/O, seulement d'un espace mémoire bien découpé.
 
 ---
 
@@ -189,16 +189,16 @@ La couche 5 a permis de créer un assembleur, premier outil logiciel permettant 
 Manipulation concrète du fonctionnement d'un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s'articule avec le cycle d'exécution bas niveau déjà construit.
 
 ## Couche 6 : Compilation et Langage Haut Niveau <a name="couche-6"></a>
-*(Section en cours de construction — analyse lexicale et analyse syntaxique réalisées ; génération de code à venir.)*
+*(Section en cours de construction analyse lexicale et analyse syntaxique réalisées ; génération de code à venir.)*
 
 La couche 6 vise à construire un compilateur pour un mini-langage de programmation propre, nommé **JUMP**, capable de générer du code assembleur (Couche 5) à partir d'un code source de plus haut niveau.
 
 ### Résultats de la recherche (à date) :
 
 1. **Spécification du langage JUMP** : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).
-2. **Analyse lexicale (Lexer)** : implémentation en Rust d'un Lexer découpant un fichier source JUMP en un vecteur de `Tokens` typés — première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).
+2. **Analyse lexicale (Lexer)** : implémentation en Rust d'un Lexer découpant un fichier source JUMP en un vecteur de `Tokens` typés première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).
 3. **Memory-Mapped I/O** : intégration au niveau de la VM (voir Couche 4), avec un découpage précis des 256 octets de RAM entre variables, pile et adresses réservées à l'I/O.
-4. **Structures de l'AST** : définition en Rust des énumérations `Program`, `Stmt`, `Expr` et `BinaryOperator`, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent — les points-virgules, parenthèses, ou la fin de fichier (`EOF`), purement syntaxiques, n'ont pas leur place dans l'arbre.
+4. **Structures de l'AST** : définition en Rust des énumérations `Program`, `Stmt`, `Expr` et `BinaryOperator`, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent les points-virgules, parenthèses, ou la fin de fichier (`EOF`), purement syntaxiques, n'ont pas leur place dans l'arbre.
 5. **Analyse syntaxique (Parser)** : implémentation d'un Parser à **descente récursive**, qui consomme le flux de Tokens produit par le Lexer pour construire l'AST. Le code a été factorisé via une fonction `parse_block()` dédiée à la lecture du contenu entre accolades, et un mapping optimisé pour la résolution des opérateurs mathématiques et de leur priorité.
 6. **Grammaire sans parenthèses obligatoires** : les conditions (`if`) et boucles (`while`) suivent une syntaxe proche de Rust, sans parenthèses imposées autour de la condition.
 7. **Séparation Statements / Expressions** : délimitation stricte entre les instructions (`Statements`, qui exécutent une action, comme une assignation ou une boucle) et les expressions (`Expressions`, qui produisent une valeur, comme une opération arithmétique), afin de structurer le Parser proprement et éviter les conflits logiques.
@@ -213,7 +213,7 @@ La couche 6 vise à construire un compilateur pour un mini-langage de programmat
 
 ### Apprentissages clés
 
-- Séparation stricte des responsabilités : le Parser se contente de vérifier la grammaire et de construire l'AST — c'est au Générateur de Code (étape suivante) que revient la gestion de la logique et de la sémantique.
+- Séparation stricte des responsabilités : le Parser se contente de vérifier la grammaire et de construire l'AST c'est au Générateur de Code (étape suivante) que revient la gestion de la logique et de la sémantique.
 - L'AST est une représentation épurée du programme : seuls les éléments porteurs de sens logique y figurent, la syntaxe pure (ponctuation, délimiteurs) étant consommée et éliminée par le Parser.
 - La conception d'un langage doit composer avec les contraintes du matériel sous-jacent : l'absence de pile d'exécution sur le CPU a directement orienté le choix de ne pas supporter les arguments de fonctions dans cette première version du langage.
 
@@ -237,10 +237,10 @@ flowchart LR
 ```
 
 ## Conclusion <a name="conclusion"></a>
-*(Section provisoire — sera compléter au fil des prochains sprints.)*
+*(Section provisoire | sera compléter au fil des prochains sprints.)*
 
 À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu'à l'analyse syntaxique d'un langage de programmation propre (JUMP). L'approche bottom-up et la méthodologie "Double-Track" (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l'intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).
 
 Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d'abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l'arbitrage d'un espace mémoire limité entre plusieurs usages concurrents (Couche 4), ou le changement de paradigme d'une analyse linéaire à une structure arborescente récursive (Couche 6, Parser).
 
-La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : allocation mémoire automatique des variables, puis génération de code assembleur — pour clore la chaîne complète, des portes logiques jusqu'à un programme de haut niveau exécutable sur le matériel simulé.
+La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : allocation mémoire automatique des variables, puis génération de code assembleur pour clore la chaîne complète, des portes logiques jusqu'à un programme de haut niveau exécutable sur le matériel simulé.
