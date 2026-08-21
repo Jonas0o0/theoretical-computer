@@ -16,6 +16,9 @@ pub enum Token {
     // Opérateurs et Ponctuation
     Assign,      // =
     Equal,       // ==
+    NotEqual,    // !=
+    LessThan,    // <
+    GreaterThan, // >
     Plus,        // +
     Minus,       // -
     LBrace,      // {
@@ -24,6 +27,8 @@ pub enum Token {
     RParen,      // )
     Comma,       // ,
     Semicolon,   // ;
+
+    EOF,
 }
 
 pub struct Lexer {
@@ -80,6 +85,14 @@ impl Lexer {
                         tokens.push(Token::Assign);
                     }
                 }
+                '!' => {
+                    if self.peek_next() == '=' {
+                        self.position += 1;
+                        tokens.push(Token::NotEqual);
+                    } else {
+                        panic!("Caractère non reconnu : {}", current);
+                    }
+                }
                 '+' => tokens.push(Token::Plus),
                 '-' => tokens.push(Token::Minus),
                 '{' => tokens.push(Token::LBrace),
@@ -88,6 +101,8 @@ impl Lexer {
                 ')' => tokens.push(Token::RParen),
                 ',' => tokens.push(Token::Comma),
                 ';' => tokens.push(Token::Semicolon),
+                '<' => tokens.push(Token::LessThan),
+                '>' => tokens.push(Token::GreaterThan),
                 _ => {
                     panic!("Caractère non reconnu : {}", current);
                 }
