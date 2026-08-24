@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::ast::{Expr, Program, Stmt};
+use crate::ast::{Program, Stmt};
 
 pub struct SymbolTable {
     table: HashMap<String, u8>,
@@ -71,61 +71,6 @@ impl CodeGen {
             Stmt::InlineFn {name, body} => self.compile_InlineFn(name, body),
             Stmt::FnCall(name) => self.compileFnCall(name),
             _ => Err(format!("Compilation non implémentée pour cette instruction : {:?}", stmt)),
-        }
-    }
-
-    fn compile_let(&mut self, name: &str, value: &Expr) -> Result<(), String> {
-        let address = self.symbols.define(name.to_string())?;
-
-    }
-
-    fn compile_expression(&mut self, expr: &Expr) -> Result<(), String> {
-        match expr {
-            Expr::Number(n) => {
-                self.emit(&format!("VAL {}", n));
-                self.emit("PASS_B D");
-                Ok(())
-            }
-
-            Expr::Identifier(name) => {
-                let address = self.symbols.lookup(name)
-                    .ok_or(format!("Erreur : Variable '{}' non définie.", name))?;
-
-                self.emit(&format!("VAL {}", address));
-                self.emit("PASS_B D_B");
-                Ok(())
-            }
-
-            Expr::BinaryOp { left, operator, right } => {
-                self.compile_expression(right)?;
-                let temp_addr = 240;
-                self.emit(&format!("// --- Mise en cache de la partie droite (adresse {}) ---", temp_addr));
-                self.emit(&format!("VAL {}", temp_addr));
-                self.emit("PASS_A RAM");
-
-                self.compile_expression(left)?;
-
-                self.emit(&format!("// --- Calcul de l'opération ({:?}) ---", operator));
-                self.emit(&format!("VAL {}", temp_addr));
-
-                let asm_op = match operator {
-                    crate::ast::BinaryOperator::Add => "ADD",
-                    crate::ast::BinaryOperator::Sub => "SUB",
-                    crate::ast::BinaryOperator::Equal => "CMP_EQ",
-                    crate::ast::BinaryOperator::NotEqual => {
-                        self.emit("CMP_EQ D_B");
-                        self.emit("NOT D");
-                        return Ok(());
-                    }
-                    crate::ast::BinaryOperator::LessThan => "CMP_LT",
-                    crate::ast::BinaryOperator::GreaterThan => "CMP_GT",
-                    _ => return Err(format!("L'opérateur {:?} n'est pas encore géré.", operator)),
-                };
-                self.emit(&format!("{} D_B", asm_op));
-
-                Ok(())
-            }
-            _ => Err(format!("Compilation non implémentée pour cette expression : {:?}", expr)),
         }
     }
 }
