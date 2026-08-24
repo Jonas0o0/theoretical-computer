@@ -51,15 +51,6 @@ impl CodeGen {
         self.output.push(instruction.to_string());
     }
 
-    fn current_address(&self) -> usize {
-        self.output.iter()
-            .filter(|line| {
-                let trimmed = line.trim();
-                !trimmed.is_empty() && !trimmed.starts_with("//")
-            })
-            .count()
-    }
-
     pub fn compile(&mut self, program: &Program) -> Result<String, String> {
         for stmt in &program.statements {
             self.compile_statement(stmt)?;
@@ -75,7 +66,7 @@ impl CodeGen {
             Stmt::If { condition, body } => self.compile_if(condition, body),
             Stmt::While { condition, body } => self.compile_while(condition, body),
             Stmt::Loop { body } => self.compile_loop(body),
-            Stmt::InlineFn { name, body } => self.compile_inline_fn(name, body),
+            Stmt::InlineFn {name, body} => self.compile_inline_fn(name, body),
             Stmt::FnCall(name) => self.compile_fn_call(name),
             _ => Err(format!("Compilation non implémentée pour cette instruction : {:?}", stmt)),
         }
@@ -130,55 +121,52 @@ impl CodeGen {
     }
 
     fn compile_loop(&mut self, body: &Vec<Stmt>) -> Result<(), String> {
-        let start_address = self.current_address();
+        let start_address = self.output.len();
 
         self.emit("// --- LOOP ---");
         for stmt in body {
             self.compile_statement(stmt)?;
         }
-        self.emit("VAL 255");
-        self.emit("PASS_B D");
+
         self.emit(&format!("VAL {}", start_address));
         self.emit("PASS_A JMP");
-
         Ok(())
     }
 
     fn compile_if(&mut self, condition: &Expr, body: &Vec<Stmt>) -> Result<(), String> {
         self.emit("// --- IF ---");
         self.compile_expression(condition)?;
-        self.emit("VAL 0");
-        self.emit("CMP_EQ D");
+
         let jump_index = self.output.len();
         self.emit("VAL 0");
+
         self.emit("PASS_A JMP");
+
         for stmt in body {
             self.compile_statement(stmt)?;
         }
-        let end_address = self.current_address();
+
+        let end_address = self.output.len();
         self.output[jump_index] = format!("VAL {}", end_address);
 
         Ok(())
     }
 
     fn compile_while(&mut self, condition: &Expr, body: &Vec<Stmt>) -> Result<(), String> {
-        let start_address = self.current_address();
+        let start_address = self.output.len();
 
         self.emit("// --- WHILE ---");
         self.compile_expression(condition)?;
-        self.emit("VAL 0");
-        self.emit("CMP_EQ D");
         let jump_index = self.output.len();
         self.emit("VAL 0");
         self.emit("PASS_A JMP");
+
         for stmt in body {
             self.compile_statement(stmt)?;
         }
-        self.emit("VAL 255");
-        self.emit("PASS_B D");
         self.emit(&format!("VAL {}", start_address));
         self.emit("PASS_A JMP");
-        let end_address = self.current_address();
+        let end_address = self.output.len();
         self.output[jump_index] = format!("VAL {}", end_address);
 
         Ok(())
@@ -200,7 +188,7 @@ impl CodeGen {
             }
             Expr::BinaryOp { left, operator, right } => {
                 self.compile_expression(right)?;
-                let temp_addr = 240; // Zone OS
+                let temp_addr = 240;
                 self.emit(&format!("// --- Cache droite (adresse {}) ---", temp_addr));
                 self.emit(&format!("VAL {}", temp_addr));
                 self.emit("PASS_A RAM");
