@@ -4,7 +4,6 @@ use crate::parser::Parser; // N'oublie pas d'importer ton Parser !
 mod lexer;
 mod ast;
 mod parser;
-mod codegen;
 
 fn main() {
     let code = "
