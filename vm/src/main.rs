@@ -8,7 +8,10 @@ use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use theoretical_computer::hardware::cpu::Cpu;
 use theoretical_computer::hardware::utils::{u8_to_byte, byte_to_u8};
 
-const KEY_MEMORY_CASE: u8 = 255;
+const COLOR_BTE_CASE: u8 = 124;
+const X_BYTE_CASE: u8 = 125;
+const Y_BYTE_CASE: u8 = 126;
+const KEY_MEMORY_CASE: u8 = 127;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -87,9 +90,9 @@ fn key_input(cpu: &mut Cpu) {
 }
 
 fn print_ram(cpu: &mut Cpu) {
-    let color_byte = cpu.ram.read_output(u8_to_byte(252));
-    let x_byte = cpu.ram.read_output(u8_to_byte(253));
-    let y_byte = cpu.ram.read_output(u8_to_byte(254));
+    let color_byte = cpu.ram.read_output(u8_to_byte(COLOR_BTE_CASE));
+    let x_byte = cpu.ram.read_output(u8_to_byte(X_BYTE_CASE));
+    let y_byte = cpu.ram.read_output(u8_to_byte(Y_BYTE_CASE));
 
     let color = byte_to_u8(&color_byte);
     let x = byte_to_u8(&x_byte);
