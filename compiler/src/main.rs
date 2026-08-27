@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, process};
 use std::fs;
 
 use crate::lexer::Lexer;
@@ -56,10 +56,29 @@ fn main() {
         }
     };
     println!("{}", assembleur);
-    let output_filename = input_filename.replace(".jmp", ".asm");
+    let asm_filename = input_filename.replace(".jmp", ".asm");
 
-    match fs::write(&output_filename, &assembleur) {
-        Ok(_) => println!("\nSuccès ! Fichier assembleur sauvegardé sous : {}", output_filename),
-        Err(e) => eprintln!("\nErreur lors de la sauvegarde du fichier assembleur : {}", e),
+    match fs::write(&asm_filename, &assembleur) {
+        Ok(_) => println!("\nSuccès ! Fichier assembleur sauvegardé sous : {}", asm_filename),
+        Err(e) => {eprintln!("\nErreur lors de la sauvegarde du fichier assembleur : {}", e); return},
+    }
+
+    println!("\n=== 4. APPEL DE L'ASSEMBLEUR ===");
+    let status = process::Command::new("cargo")
+        .arg("run")
+        .arg("-p")
+        .arg("assembler")
+        .arg("--")
+        .arg(&asm_filename)
+        .status();
+
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nPipeline complet terminé avec succès !");
+        }
+        _ => {
+            eprintln!("\nErreur : L'assemblage a échoué.");
+            process::exit(1);
+        }
     }
 }
