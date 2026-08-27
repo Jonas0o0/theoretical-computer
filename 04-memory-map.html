@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4ce29abd.js";
+            window.path_to_searchindex_js = "searchindex-12d5ac23.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -174,38 +174,42 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="carte-mémoire-memory-map---cpu-8-bits"><a class="header" href="#carte-mémoire-memory-map---cpu-8-bits">Carte Mémoire (Memory Map) - CPU 8 bits</a></h1>
-<p>Ce document décrit l’organisation des 256 octets de la RAM de notre processeur.
+                        <h1 id="carte-mémoire---cpu-8-bits-v2"><a class="header" href="#carte-mémoire---cpu-8-bits-v2">Carte Mémoire - CPU 8 bits (V2)</a></h1>
+<p>Ce document décrit l’organisation de la RAM de notre processeur.
 Afin de pouvoir interagir avec le monde extérieur (Clavier et Écran) sans modifier l’architecture matérielle du CPU, nous utilisons la technique du <strong>Memory-Mapped I/O</strong>.</p>
-<p>La Machine Virtuelle (VM) observe en permanence certaines adresses spécifiques à la fin de la RAM pour déclencher des actions.</p>
+<blockquote>
+<p><strong>Note d’Architecture (Le mur des 7 bits) :</strong>
+Dans notre ISA, le bit de poids fort de l’instruction sert à définir le type (<code>T=0</code> pour une adresse/valeur, <code>T=1</code> pour un calcul). L’instruction <code>VAL</code> ne dispose donc que de 7 bits, limitant l’accès direct en écriture (<code>poke</code>) aux adresses de <code>0</code> à <code>127</code>. La carte mémoire a été optimisée (“Zero Page”) pour placer les I/O dans cette zone hautement accessible.</p>
+</blockquote>
 <h2 id="répartition-globale"><a class="header" href="#répartition-globale">Répartition Globale</a></h2>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th style="text-align: left">Adresses (Décimal)</th><th style="text-align: left">Adresses (Hex)</th><th style="text-align: left">Utilisation</th></tr>
+<tr><th>Adresses (Décimal)</th><th>Adresses (Hex)</th><th>Utilisation</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left"><strong>0 à 239</strong></td><td style="text-align: left"><code>0x00 - 0xEF</code></td><td style="text-align: left"><strong>RAM Standard (Libre)</strong> - Espace disponible pour le code utilisateur, les variables et les tableaux (ex: le corps du Snake).</td></tr>
-<tr><td style="text-align: left"><strong>240 à 251</strong></td><td style="text-align: left"><code>0xF0 - 0xFB</code></td><td style="text-align: left"><strong>Zone de Sécurité</strong> - Réservée pour les variables internes critiques de l’OS ou du jeu (ex: taille du serpent, pointeurs).</td></tr>
-<tr><td style="text-align: left"><strong>252 à 255</strong></td><td style="text-align: left"><code>0xFC - 0xFF</code></td><td style="text-align: left"><strong>Memory-Mapped I/O</strong> - Adresses matérielles pour contrôler l’écran et lire le clavier.</td></tr>
+<tr><td><strong>0 à 119</strong></td><td><code>0x00 - 0x77</code></td><td><strong>RAM Standard (Libre)</strong> - Espace disponible pour le code utilisateur, les variables et les tableaux (ex: le corps du Snake).</td></tr>
+<tr><td><strong>120 à 123</strong></td><td><code>0x78 - 0x7B</code></td><td><strong>Zone de Sécurité (OS)</strong> - Réservée pour les variables internes critiques du compilateur (ex: cache mathématique) ou du jeu.</td></tr>
+<tr><td><strong>124 à 127</strong></td><td><code>0x7C - 0x7F</code></td><td><strong>Memory-Mapped I/O</strong> - Adresses matérielles pour contrôler l’écran et lire le clavier.</td></tr>
+<tr><td><strong>128 à 255</strong></td><td><code>0x80 - 0xFF</code></td><td><strong>RAM Supérieure (Shadow RAM)</strong> - Zone mémoire difficilement accessible en écriture directe. Réservée pour de futures extensions (lecture seule, etc.).</td></tr>
 </tbody>
 </table>
 </div>
 <hr>
 <h2 id="détail-des-entréessorties-io"><a class="header" href="#détail-des-entréessorties-io">Détail des Entrées/Sorties (I/O)</a></h2>
-<h3 id="clavier-adresse-255"><a class="header" href="#clavier-adresse-255">Clavier (Adresse 255)</a></h3>
+<h3 id="clavier-adresse-127"><a class="header" href="#clavier-adresse-127">Clavier (Adresse 127)</a></h3>
 <p>La Machine Virtuelle injecte le code ASCII de la dernière touche pressée dans cette case de la RAM.</p>
 <ul>
 <li><strong>Action requise :</strong> Le programme Assembleur doit lire cette case, puis la <strong>remettre à 0</strong> pour éviter de lire la même touche en boucle.</li>
 </ul>
-<h3 id="écran-adresses-252-253-254"><a class="header" href="#écran-adresses-252-253-254">Écran (Adresses 252, 253, 254)</a></h3>
-<p>Pour dessiner un pixel à l’écran, le processeur doit écrire les coordonnées X et Y, puis utiliser l’adresse <code>252</code> comme une <strong>gâchette</strong> en y insérant un code couleur.</p>
+<h3 id="écran-adresses-124-125-126"><a class="header" href="#écran-adresses-124-125-126">Écran (Adresses 124, 125, 126)</a></h3>
+<p>Pour dessiner un pixel à l’écran, le processeur doit écrire les coordonnées X et Y, puis utiliser l’adresse <code>124</code> comme une <strong>gâchette</strong> en y insérant un code couleur.</p>
 <ul>
-<li><strong>Adresse <code>253</code> :</strong> Coordonnée X (de 0 à la largeur du terminal).</li>
-<li><strong>Adresse <code>254</code> :</strong> Coordonnée Y (de 0 à la hauteur du terminal).</li>
-<li><strong>Adresse <code>252</code> :</strong> Code de dessin (Gâchette). Dès que cette case est différente de <code>0</code>, la VM dessine et remet automatiquement la case à <code>0</code>.</li>
+<li><strong>Adresse <code>125</code> :</strong> Coordonnée X (de 0 à la largeur du terminal).</li>
+<li><strong>Adresse <code>126</code> :</strong> Coordonnée Y (de 0 à la hauteur du terminal).</li>
+<li><strong>Adresse <code>124</code> :</strong> Code de dessin (Gâchette). Dès que cette case est différente de <code>0</code>, la VM dessine et remet automatiquement la case à <code>0</code>.</li>
 </ul>
-<p><strong>Codes de dessin disponibles (Adresse 252) :</strong></p>
+<p><strong>Codes de dessin disponibles (Adresse 124) :</strong></p>
 <ul>
 <li><code>0</code> = En attente (Aucune action)</li>
 <li><code>1</code> = ██ (Bloc plein / Corps du serpent)</li>

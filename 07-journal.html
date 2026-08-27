@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4ce29abd.js";
+            window.path_to_searchindex_js = "searchindex-12d5ac23.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -362,6 +362,40 @@ Tu as totalement raison, si c’est allé tout seul et que l’apprentissage pri
 <li>J’ai bien assimilé la stricte séparation des rôles : le Parser ne fait que vérifier la grammaire, c’est le Compilateur qui gérera la logique par la suite.</li>
 <li>L’AST ne stocke que ce qui a du sens logique. Les notions de texte comme les points-virgules, les parenthèses ou la fin du fichier (<code>EOF</code>) n’ont pas leur place dans l’arbre.</li>
 <li>J’ai dû adapter le design du langage aux contraintes matérielles. C’est ce qui a motivé le choix de ne pas gérer les arguments de fonctions dans la V1, à cause de l’absence de pile (stack) matérielle sur mon CPU 8-bits.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2026-08-22---compilateur---génération-de-code-assembleur-et-sprint-8"><a class="header" href="#2026-08-22---compilateur---génération-de-code-assembleur-et-sprint-8">[2026-08-22] - Compilateur - Génération de Code Assembleur et Sprint 8</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Traduire l’AST de manière automatisée en instructions assembleur brutes, et valider la chaîne de compilation complète de bout en bout.</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Développer un gestionnaire basique d’adresses mémoire (allocation automatique des variables dans la RAM).</li>
+<li>Développer le générateur de code (parcourir l’AST et recracher les instructions ASM).</li>
+<li>Relier le compilateur à l’assembleur pour automatiser la création du binaire .bin.</li>
+<li>Compiler et exécuter avec succès un programme de test simple (ex: boucle while et clignotement de RAM).</li>
+</ul>
+</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li>Conception et développement intégral du module de génération de code (<code>codegen.rs</code>) traduisant l’ensemble de l’AST (variables, boucles, conditions, fonctions inlinées et opérations binaires) en assembleur.</li>
+<li>Gestion de la table des symboles pour l’allocation automatique de la RAM utilisateur (limitée à l’adresse 119 pour préserver l’espace de l’OS et des entrées-sorties Memory-Mapped).</li>
+<li>Mise en place du <em>backpatching</em> et de l’optimisation des sauts via les instructions de l’ALU (<code>SHL</code>, <code>INC</code>).</li>
+<li>Automatisation complète du pipeline de compilation en invoquant l’assembleur via un sous-processus <code>Command</code> directement depuis le compilateur.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li>Gestion de la limite stricte de la ROM (127 instructions maximales) causée par le codage sur 7 bits de l’instruction <code>VAL</code>.</li>
+<li>Résolution du paradoxe des sauts conditionnels où le calcul de l’adresse cible écrasait par inadvertance le registre <code>D</code> (qui stockait le résultat de la condition).</li>
+<li>Structuration de la logique pour mapper proprement les opérateurs du langage de haut niveau (<code>JUMP</code>) vers les opcodes spécifiques de l’ALU sans corrompre la pile ou l’état des registres.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li>Maîtrise de la contrainte matérielle de la “Zero-Page” et de la segmentation mémoire.</li>
+<li>Apprentissage concret de la rigueur nécessaire lors de l’écriture d’un compilateur de bout en bout, où chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel.</li>
+<li>Application du principe DRY (<em>Don’t Repeat Yourself</em>) en architecturant une toolchain modulaire interconnectée.</li>
 </ul>
 </li>
 </ul>
