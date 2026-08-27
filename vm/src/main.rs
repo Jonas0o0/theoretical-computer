@@ -59,6 +59,9 @@ fn main() {
         thread::sleep(Duration::from_millis(5));
     }
 
+    execute!(stdout, Show, LeaveAlternateScreen).unwrap();
+    disable_raw_mode().unwrap();
+
     println!("--- ÉTAT DE LA RAM (Valeurs non nulles) ---");
 
     println!("{:<10} | {:<12} | {}", "Adresse", "Valeur (Num)", "ASCII");

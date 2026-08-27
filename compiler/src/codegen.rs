@@ -15,9 +15,9 @@ impl SymbolTable {
     }
 
     pub fn define(&mut self, name: String) -> Result<u8, String> {
-        if self.next_address > 239 {
+        if self.next_address > 119 {
             return Err(format!(
-                "Erreur de compilation : Dépassement de la RAM utilisateur ! La variable '{}' ne peut pas dépasser l'adresse 239.",
+                "Erreur de compilation : Dépassement de la RAM utilisateur ! La variable '{}' ne peut pas dépasser l'adresse 119.",
                 name
             ));
         }
@@ -93,6 +93,32 @@ impl CodeGen {
     fn compile_assign(&mut self, name: &str, value: &Expr) -> Result<(), String> {
         let address = self.symbols.lookup(name)
             .ok_or(format!("Erreur : Variable '{}' non déclarée.", name))?;
+
+        // OPTIMISATION : Détect x = x + 1 ou x = x - 1
+        if let Expr::BinaryOp { left, operator, right } = value {
+            if let Expr::Identifier(left_name) = &**left {
+                if left_name == name {
+                    if let Expr::Number(1) = &**right {
+                        if *operator == crate::ast::BinaryOperator::Add {
+                            self.emit(&format!("// {} += 1 (Opti INC)", name));
+                            self.emit(&format!("VAL {}", address));
+                            self.emit("PASS_B D_B");
+                            self.emit(&format!("VAL {}", address));
+                            self.emit("INC RAM");
+                            return Ok(());
+                        } else if *operator == crate::ast::BinaryOperator::Sub {
+                            self.emit(&format!("// {} -= 1 (Opti DEC)", name));
+                            self.emit(&format!("VAL {}", address));
+                            self.emit("PASS_B D_B");
+                            self.emit(&format!("VAL {}", address));
+                            self.emit("DEC RAM");
+                            return Ok(());
+                        }
+                    }
+                }
+            }
+        }
+
         self.emit(&format!("// {} = ...", name));
         self.compile_expression(value)?;
         self.emit(&format!("VAL {}", address));
@@ -138,25 +164,46 @@ impl CodeGen {
         }
         self.emit("VAL 255");
         self.emit("PASS_B D");
-        self.emit(&format!("VAL {}", start_address));
+        self.emit_jump_target(start_address);
         self.emit("PASS_A JMP");
 
         Ok(())
     }
 
     fn compile_if(&mut self, condition: &Expr, body: &Vec<Stmt>) -> Result<(), String> {
+        // OPTIMISATION DE LA CONDITION : a == b devient (a - b != 0)
+        let mut optimized = false;
+        if let Expr::BinaryOp { left, operator: crate::ast::BinaryOperator::Equal, right } = condition {
+            self.compile_expression(left)?;
+            match &**right {
+                Expr::Number(n) => { self.emit(&format!("VAL {}", n)); self.emit("SUB D"); optimized = true; },
+                Expr::Identifier(var) => {
+                    let addr = self.symbols.lookup(var).unwrap();
+                    self.emit(&format!("VAL {}", addr));
+                    self.emit("SUB D_B");
+                    optimized = true;
+                },
+                _ => {}
+            }
+        }
+
         self.emit("// --- IF ---");
         self.compile_expression(condition)?;
         self.emit("VAL 0");
         self.emit("CMP_EQ D");
+
         let jump_index = self.output.len();
         self.emit("VAL 0");
+        self.emit("VAL 0");
+        self.emit("VAL 0");
         self.emit("PASS_A JMP");
+
         for stmt in body {
             self.compile_statement(stmt)?;
         }
+
         let end_address = self.current_address();
-        self.output[jump_index] = format!("VAL {}", end_address);
+        self.patch_jump_target(jump_index, end_address);
 
         Ok(())
     }
@@ -168,18 +215,24 @@ impl CodeGen {
         self.compile_expression(condition)?;
         self.emit("VAL 0");
         self.emit("CMP_EQ D");
+
         let jump_index = self.output.len();
         self.emit("VAL 0");
+        self.emit("VAL 0");
+        self.emit("VAL 0");
         self.emit("PASS_A JMP");
+
         for stmt in body {
             self.compile_statement(stmt)?;
         }
+
         self.emit("VAL 255");
         self.emit("PASS_B D");
-        self.emit(&format!("VAL {}", start_address));
+        self.emit_jump_target(start_address);
         self.emit("PASS_A JMP");
+
         let end_address = self.current_address();
-        self.output[jump_index] = format!("VAL {}", end_address);
+        self.patch_jump_target(jump_index, end_address);
 
         Ok(())
     }
@@ -200,7 +253,7 @@ impl CodeGen {
             }
             Expr::BinaryOp { left, operator, right } => {
                 self.compile_expression(right)?;
-                let temp_addr = 240; // Zone OS
+                let temp_addr = 120;
                 self.emit(&format!("// --- Cache droite (adresse {}) ---", temp_addr));
                 self.emit(&format!("VAL {}", temp_addr));
                 self.emit("PASS_A RAM");
@@ -226,6 +279,24 @@ impl CodeGen {
                 Ok(())
             }
             _ => Err(format!("Compilation non implémentée pour cette expression : {:?}", expr)),
+        }
+    }
+
+    fn emit_jump_target(&mut self, target: usize) {
+        if target <= 127 {
+            self.emit(&format!("VAL {}", target));
+        } else {
+            panic!("ERREUR ARCHITECTURE : Impossible de sauter à la ligne {}. La limite stricte de la ROM est de 127 instructions !", target);
+        }
+    }
+
+    fn patch_jump_target(&mut self, index: usize, target: usize) {
+        if target <= 127 {
+            self.output[index] = format!("VAL {}", target);
+            self.output[index + 1] = format!("VAL {}", target);
+            self.output[index + 2] = format!("VAL {}", target);
+        } else {
+            panic!("ERREUR ARCHITECTURE : Impossible de sauter à la ligne {}. La limite stricte de la ROM est de 127 instructions !", target);
         }
     }
 }

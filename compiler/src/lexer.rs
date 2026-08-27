@@ -103,6 +103,17 @@ impl Lexer {
                 ';' => tokens.push(Token::Semicolon),
                 '<' => tokens.push(Token::LessThan),
                 '>' => tokens.push(Token::GreaterThan),
+                '/' => {
+                    if self.peek_next() == '/' {
+                        while self.position < self.input.len() && self.input[self.position] != '\n' {
+                            self.position += 1;
+                        }
+                        continue;
+                    } else {
+                        panic!("Caractère '/' inattendu (la division n'est pas supportée)");
+                    }
+                }
+
                 _ => {
                     panic!("Caractère non reconnu : {}", current);
                 }
