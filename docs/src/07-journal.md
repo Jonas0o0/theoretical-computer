@@ -121,4 +121,23 @@
   - L'AST ne stocke que ce qui a du sens logique. Les notions de texte comme les points-virgules, les parenthèses ou la fin du fichier (`EOF`) n'ont pas leur place dans l'arbre.
   - J'ai dû adapter le design du langage aux contraintes matérielles. C'est ce qui a motivé le choix de ne pas gérer les arguments de fonctions dans la V1, à cause de l'absence de pile (stack) matérielle sur mon CPU 8-bits.
 
-
+## [2026-08-22] - Compilateur - Génération de Code Assembleur et Sprint 8
+- **Objectif** : Traduire l'AST de manière automatisée en instructions assembleur brutes, et valider la chaîne de compilation complète de bout en bout.
+- **Tâches** :
+  - Développer un gestionnaire basique d'adresses mémoire (allocation automatique des variables dans la RAM).
+  - Développer le générateur de code (parcourir l'AST et recracher les instructions ASM).
+  - Relier le compilateur à l'assembleur pour automatiser la création du binaire .bin.
+  - Compiler et exécuter avec succès un programme de test simple (ex: boucle while et clignotement de RAM).
+- **Réalisation** :
+  - Conception et développement intégral du module de génération de code (`codegen.rs`) traduisant l'ensemble de l'AST (variables, boucles, conditions, fonctions inlinées et opérations binaires) en assembleur.
+  - Gestion de la table des symboles pour l'allocation automatique de la RAM utilisateur (limitée à l'adresse 119 pour préserver l'espace de l'OS et des entrées-sorties Memory-Mapped).
+  - Mise en place du *backpatching* et de l'optimisation des sauts via les instructions de l'ALU (`SHL`, `INC`).
+  - Automatisation complète du pipeline de compilation en invoquant l'assembleur via un sous-processus `Command` directement depuis le compilateur.
+- **Difficultés** :
+  - Gestion de la limite stricte de la ROM (127 instructions maximales) causée par le codage sur 7 bits de l'instruction `VAL`.
+  - Résolution du paradoxe des sauts conditionnels où le calcul de l'adresse cible écrasait par inadvertance le registre `D` (qui stockait le résultat de la condition).
+  - Structuration de la logique pour mapper proprement les opérateurs du langage de haut niveau (`JUMP`) vers les opcodes spécifiques de l'ALU sans corrompre la pile ou l'état des registres.
+- **Apprentissages** :
+  - Maîtrise de la contrainte matérielle de la "Zero-Page" et de la segmentation mémoire.
+  - Apprentissage concret de la rigueur nécessaire lors de l'écriture d'un compilateur de bout en bout, où chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel.
+  - Application du principe DRY (*Don't Repeat Yourself*) en architecturant une toolchain modulaire interconnectée.

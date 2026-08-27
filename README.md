@@ -23,7 +23,7 @@ Plutôt que d'utiliser un ordinateur comme une boîte noire, ce projet le recons
 | 3 | **CPU** | ISA 8 bits maison, Control Unit, cycle Fetch/Decode/Execute | Terminé |
 | 4 | **Machine Virtuelle** | Émulation haute performance, Memory-Mapped I/O (clavier, écran) | Terminé |
 | 5 | **Assembleur** | Parseur mnémoniques → binaire | Terminé |
-| 6 | **Compilateur (JUMP)** | Langage haut niveau maison Lexer terminé, Parser en cours | En cours |
+| 6 | **Compilateur (JUMP)** | Langage haut niveau maison Lexer terminé, Parser en cours | Terminé |
 
 Chaque couche est développée selon une approche **Double-Track** : conception physique dans **Logisim** (source de vérité matérielle) et émulation logicielle en **Rust**, validée par des tests unitaires exhaustifs (tables de vérité, cas limites).
 

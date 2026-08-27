@@ -189,11 +189,9 @@ La couche 5 a permis de créer un assembleur, premier outil logiciel permettant 
 Manipulation concrète du fonctionnement d'un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s'articule avec le cycle d'exécution bas niveau déjà construit.
 
 ## Couche 6 : Compilation et Langage Haut Niveau <a name="couche-6"></a>
-*(Section en cours de construction analyse lexicale et analyse syntaxique réalisées ; génération de code à venir.)*
+La couche 6 a permis de construire un compilateur complet pour un mini-langage de programmation propre, nommé **JUMP**, capable de traduire un code source de haut niveau en instructions assembleur (Couche 5), exécutables sur le CPU simulé.
 
-La couche 6 vise à construire un compilateur pour un mini-langage de programmation propre, nommé **JUMP**, capable de générer du code assembleur (Couche 5) à partir d'un code source de plus haut niveau.
-
-### Résultats de la recherche (à date) :
+### Résultats de la recherche :
 
 1. **Spécification du langage JUMP** : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).
 2. **Analyse lexicale (Lexer)** : implémentation en Rust d'un Lexer découpant un fichier source JUMP en un vecteur de `Tokens` typés première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).
@@ -203,24 +201,31 @@ La couche 6 vise à construire un compilateur pour un mini-langage de programmat
 6. **Grammaire sans parenthèses obligatoires** : les conditions (`if`) et boucles (`while`) suivent une syntaxe proche de Rust, sans parenthèses imposées autour de la condition.
 7. **Séparation Statements / Expressions** : délimitation stricte entre les instructions (`Statements`, qui exécutent une action, comme une assignation ou une boucle) et les expressions (`Expressions`, qui produisent une valeur, comme une opération arithmétique), afin de structurer le Parser proprement et éviter les conflits logiques.
 8. **Contrainte matérielle sur le design du langage** : la V1 de JUMP ne gère pas les arguments de fonctions, en raison de l'absence de pile (stack) matérielle sur le CPU 8 bits (Couche 3). Les fonctions (`fn`) restent donc de simples macros d'inlining, sans paramètres.
-9. **Méthodologie** : validation de la chaîne Lexer → Parser par construction d'un AST correctement imbriqué à partir de programmes JUMP de test.
+9. **Génération de code (`codegen.rs`)** : parcours complet de l'AST et traduction en instructions assembleur, couvrant les variables, boucles, conditions, fonctions inlinées et opérations binaires.
+10. **Table des symboles et allocation mémoire** : attribution automatique d'une adresse RAM à chaque variable déclarée (`let`), l'espace utilisateur étant volontairement limité à l'adresse 119 pour préserver la zone réservée à l'OS et au Memory-Mapped I/O (voir carte mémoire, Couche 4).
+11. **Backpatching et optimisation des sauts** : résolution différée des adresses de saut (une fois la position finale de la cible connue dans le flux d'instructions généré), combinée à une exploitation directe des opcodes de l'ALU (`SHL`, `INC`) pour optimiser certains calculs d'adresse.
+12. **Automatisation du pipeline** : le compilateur invoque directement l'assembleur via un sous-processus (`Command`), automatisant entièrement la chaîne source JUMP → binaire exécutable, sans étape manuelle intermédiaire.
+13. **Méthodologie** : validation de la chaîne complète Lexer → Parser → Codegen → Assembleur → VM par la compilation et l'exécution réussies de programmes de test (boucle `while`, écriture en RAM).
 
 ### Difficultés rencontrées
 
-- **Changement de paradigme** : passage d'une analyse linéaire (liste de Tokens produite par le Lexer) à la construction d'une structure hiérarchique et imbriquée (l'AST), nécessitant une bonne maîtrise des appels de fonctions récursives.
-- **Ambiguïtés syntaxiques** : distinction entre la consommation définitive d'un jeton (`advance`/`consume`) et l'anticipation du jeton suivant sans le consommer (`peek`), nécessaire par exemple pour déterminer si un identifiant est suivi d'un `=` (assignation) ou d'une `(` (appel de fonction), avant de décider comment le traiter.
-- **Frontière Statements / Expressions** : nécessité de délimiter clairement ces deux catégories dès la conception du Parser pour éviter les conflits logiques par la suite.
+- **Changement de paradigme (Parser)** : passage d'une analyse linéaire (liste de Tokens produite par le Lexer) à la construction d'une structure hiérarchique et imbriquée (l'AST), nécessitant une bonne maîtrise des appels de fonctions récursives.
+- **Ambiguïtés syntaxiques (Parser)** : distinction entre la consommation définitive d'un jeton (`advance`/`consume`) et l'anticipation du jeton suivant sans le consommer (`peek`), nécessaire par exemple pour déterminer si un identifiant est suivi d'un `=` (assignation) ou d'une `(` (appel de fonction), avant de décider comment le traiter.
+- **Frontière Statements / Expressions (Parser)** : nécessité de délimiter clairement ces deux catégories dès la conception du Parser pour éviter les conflits logiques par la suite.
+- **Limite d'adressage à 127 par instruction `VAL`** : une instruction de type A (`VAL`) encode une valeur immédiate sur 7 bits seulement (bit 7 réservé au choix nombre/calcul, voir Couche 3), ce qui ne permet pas de charger directement une adresse ou une valeur supérieure à 127 en une seule instruction. Or la RAM compte 256 cases : sans solution, seule la moitié inférieure (adresses 0 à 127) aurait été directement accessible en écriture/lecture.
+   - **Solution exploitée** : le câblage fixe de l'entrée A de l'ALU sur le registre D (choix de conception de la Couche 3) permet d'enchaîner un `SHL` (décalage à gauche, équivalent à une multiplication par 2) directement sur D. En combinant plusieurs `VAL` (valeurs ≤ 127) avec des `SHL`/additions successives, il devient possible de construire, par calcul, des valeurs supérieures à 127 directement dans les registres et donc d'atteindre l'intégralité des 256 cases de la RAM malgré la limite d'encodage des instructions.
+- **Paradoxe des sauts conditionnels** : le calcul de l'adresse cible d'un saut écrasait par inadvertance le registre `D`, qui stockait pourtant le résultat de la condition à évaluer nécessitant de réordonner soigneusement les instructions générées pour ne pas perdre cette valeur avant son utilisation.
+- **Limite de 127 instructions en ROM** : contrainte structurelle liée au même codage 7 bits des valeurs immédiates de l'instruction `VAL`, limitant la taille des programmes compilables sans stratégie de contournement supplémentaire.
+- **Mapping opérateurs haut niveau → opcodes ALU** : structuration de la génération de code pour traduire proprement chaque opérateur du langage JUMP vers l'opcode ALU correspondant, sans corrompre l'état des registres ni la pile d'exécution simulée par le compilateur.
 
 ### Apprentissages clés
 
-- Séparation stricte des responsabilités : le Parser se contente de vérifier la grammaire et de construire l'AST c'est au Générateur de Code (étape suivante) que revient la gestion de la logique et de la sémantique.
+- Séparation stricte des responsabilités entre les étapes du pipeline : le Parser vérifie la grammaire et construit l'AST, le Générateur de Code gère la logique et la sémantique.
 - L'AST est une représentation épurée du programme : seuls les éléments porteurs de sens logique y figurent, la syntaxe pure (ponctuation, délimiteurs) étant consommée et éliminée par le Parser.
-- La conception d'un langage doit composer avec les contraintes du matériel sous-jacent : l'absence de pile d'exécution sur le CPU a directement orienté le choix de ne pas supporter les arguments de fonctions dans cette première version du langage.
-
-### Prochaines étapes
-
-- Allocateur mémoire : parcours de l'AST pour attribuer une adresse RAM fixe à chaque variable (`let`).
-- Génération de code : traduction de l'AST en instructions assembleur JUMP → ISA (Couche 5).
+- La conception d'un langage doit composer avec les contraintes du matériel sous-jacent : l'absence de pile d'exécution sur le CPU a directement orienté le choix de ne pas supporter les arguments de fonctions ; la limite d'encodage à 7 bits des valeurs immédiates a nécessité une technique de construction de nombres par calcul (`SHL`) pour rester compatible avec l'ensemble de l'espace RAM.
+- Maîtrise concrète de la contrainte de « Zero-Page » et de la segmentation mémoire, déjà entrevue en Couche 3-4 mais pleinement exploitée ici dans la génération de code.
+- Rigueur nécessaire à l'écriture d'un compilateur de bout en bout : chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel une erreur de génération (comme l'écrasement du registre D) se traduit directement par un bug d'exécution difficile à tracer sans redescendre au niveau assembleur.
+- Application du principe DRY (*Don't Repeat Yourself*) en architecturant une toolchain modulaire interconnectée (Lexer, Parser, Codegen, Assembleur, VM), chaque étape restant indépendante et testable isolément.
 
 ### Schéma de la chaîne d'outils complète
 
@@ -228,8 +233,8 @@ La couche 6 vise à construire un compilateur pour un mini-langage de programmat
 flowchart LR
     SRC["Code source JUMP (.jump)"] --> LEX["Lexer -> Tokens"]
     LEX --> PARSE["Parser -> AST"]
-    PARSE --> ALLOC["Allocateur mémoire (à venir)"]
-    ALLOC --> CODEGEN["Génération de code (à venir)"]
+    PARSE --> ALLOC["Allocateur mémoire (table des symboles)"]
+    ALLOC --> CODEGEN["Génération de code (codegen.rs)"]
     CODEGEN --> ASM["Assembleur (mnémoniques -> binaire)"]
     ASM --> VM["Machine Virtuelle"]
     VM --> CPU["CPU simulé (Couche 3)"]
@@ -237,10 +242,14 @@ flowchart LR
 ```
 
 ## Conclusion <a name="conclusion"></a>
-*(Section provisoire | sera compléter au fil des prochains sprints.)*
+*(Section provisoire à compléter au fil des prochains sprints.)*
 
-À ce stade du projet, six couches sur sept ont été franchies, depuis la porte NAND jusqu'à l'analyse syntaxique d'un langage de programmation propre (JUMP). L'approche bottom-up et la méthodologie "Double-Track" (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l'intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).
+À ce stade du projet, les sept couches de l'architecture ont été franchies, depuis la porte NAND jusqu'à un compilateur fonctionnel pour un langage de haut niveau propre (JUMP), capable de générer et d'exécuter des programmes de bout en bout sur le matériel simulé. L'approche bottom-up et la méthodologie "Double-Track" (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l'intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).
 
-Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d'abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l'arbitrage d'un espace mémoire limité entre plusieurs usages concurrents (Couche 4), ou le changement de paradigme d'une analyse linéaire à une structure arborescente récursive (Couche 6, Parser).
+Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d'abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l'arbitrage d'un espace mémoire limité entre plusieurs usages concurrents (Couche 4), le changement de paradigme d'une analyse linéaire à une structure arborescente récursive (Couche 6, Parser), et la nécessité de contourner par calcul les limites d'encodage des instructions pour couvrir l'intégralité de l'espace mémoire (Couche 6, génération de code).
 
-La suite du projet (fin de la Couche 6) consistera à achever le compilateur du langage JUMP : allocation mémoire automatique des variables, puis génération de code assembleur pour clore la chaîne complète, des portes logiques jusqu'à un programme de haut niveau exécutable sur le matériel simulé.
+### Si c'était à refaire
+
+Plusieurs contraintes rencontrées tout au long du projet découlent directement du choix initial d'une architecture strictement 8 bits : la plage de valeurs immédiates limitée à 7 bits (0-127), l'espace RAM réduit à 256 cases, et les techniques de contournement nécessaires pour malgré tout adresser l'intégralité de la mémoire (voir Couche 6). Si le projet était repris depuis le début, l'architecture serait conçue **en 16 bits au minimum** de bout en bout (bus de données, registres, immédiats), ce qui aurait supprimé la majorité de ces contraintes de contournement sans changer la démarche pédagogique du projet. Une architecture alternative (par exemple avec une pile matérielle dédiée, pour lever la limitation actuelle sur les arguments de fonctions) pourrait également être envisagée pour pallier plus largement l'ensemble des limitations identifiées au fil des sprints.
+
+La suite immédiate du projet consiste à enrichir et fiabiliser le langage JUMP (gestion d'arguments de fonctions si une pile matérielle est ajoutée, optimisations du générateur de code) et à documenter des exemples de programmes complets (jeu, démonstrations graphiques) exploitant la chaîne d'outils construite de bout en bout.
