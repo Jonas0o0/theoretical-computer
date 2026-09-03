@@ -1,0 +1,27 @@
+// ==========================================
+// LE TÉLÉCRAN (MACHINE À DESSINER)
+// Z, Q, S, D pour dessiner sur l'écran
+// ==========================================
+
+let x = 7;
+let y = 7;
+let touche = 0;
+
+loop {
+    // Lecture du clavier
+    touche = peek(127);
+
+    // Mouvement du pinceau selon la touche
+    if touche == 122 { y = y - 1; } // Z : Haut
+    if touche == 115 { y = y + 1; } // S : Bas
+    if touche == 113 { x = x - 1; } // Q : Gauche
+    if touche == 100 { x = x + 1; } // D : Droite
+
+    // Purge du buffer clavier pour s'arrêter
+    poke(127, 0);
+
+    // Dessin du pixel
+    poke(125, x);
+    poke(126, y);
+    poke(124, 4);
+}
