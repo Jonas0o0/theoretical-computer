@@ -56,7 +56,6 @@ fn main() {
         }
         print_ram(&mut cpu, &mut stdout);
         cpu.clock_tick(false);
-        thread::sleep(Duration::from_millis(5));
     }
 
     execute!(stdout, Show, LeaveAlternateScreen).unwrap();
@@ -118,7 +117,8 @@ fn print_ram(cpu: &mut Cpu,stdout: &mut Stdout) {
         match color {
             1 => execute!(stdout, MoveTo(x, y), Print("██")).unwrap(),
             2 => execute!(stdout, MoveTo(x, y), Print("🍎")).unwrap(),
-            3 => execute!(stdout, MoveTo(x, y), Print("  ")).unwrap(),
+            3 => execute!(stdout, MoveTo(x, y), Print(" ")).unwrap(),
+            4 => execute!(stdout, MoveTo(x, y), Print("#")).unwrap(),
             _ => {}
         }
 
