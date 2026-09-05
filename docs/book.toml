@@ -2,3 +2,11 @@
 title = "Documentation Theoretical Computeur"
 authors = ["Jonas Facon"]
 language = "fr"
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output]
+
+[output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]

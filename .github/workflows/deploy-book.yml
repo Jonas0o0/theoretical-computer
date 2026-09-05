@@ -18,6 +18,7 @@ jobs:
       - name: Install mdBook
         run: |
           cargo install mdbook
+          cargo install mdbook-mermaid
 
       - name: Build the book
         run: |
