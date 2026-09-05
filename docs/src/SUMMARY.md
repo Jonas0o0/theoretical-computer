@@ -19,6 +19,7 @@
   - [Arithmétique et ALU](recherche/02-alu.md)
   - [Mémoire et Registres](recherche/03-memoire.md)
   - [Architecture du Processeur](recherche/04-cpu.md)
+  - [Jeu d'Instructions (ISA)](recherche/04b-isa.md)
   - [Machine Virtuelle](recherche/05-vm.md)
   - [Langage d'Assemblage](recherche/06-assembleur.md)
   - [Compilateur](recherche/07-compilateur.md)
