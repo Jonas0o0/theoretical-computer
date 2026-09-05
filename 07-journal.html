@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-12d5ac23.js";
+            window.path_to_searchindex_js = "searchindex-57c64f8f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -396,6 +396,42 @@ Tu as totalement raison, si c’est allé tout seul et que l’apprentissage pri
 <li>Maîtrise de la contrainte matérielle de la “Zero-Page” et de la segmentation mémoire.</li>
 <li>Apprentissage concret de la rigueur nécessaire lors de l’écriture d’un compilateur de bout en bout, où chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel.</li>
 <li>Application du principe DRY (<em>Don’t Repeat Yourself</em>) en architecturant une toolchain modulaire interconnectée.</li>
+</ul>
+</li>
+</ul>
+<p>Voici la complétion de ta documentation pour ce sprint mémorable. J’ai mis l’accent sur cette confrontation brutale (mais géniale) entre tes ambitions logicielles et la réalité physique de ton processeur, et comment tu as contourné le problème avec le Télécran.</p>
+<hr>
+<h2 id="2026-08-22-nand-to-game---le-jeu-snake-et-sprint-9"><a class="header" href="#2026-08-22-nand-to-game---le-jeu-snake-et-sprint-9">[2026-08-22] NAND to Game - Le Jeu Snake et Sprint 9</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Utiliser notre propre langage de haut niveau et notre compilateur pour programmer le jeu Snake et y jouer sur le CPU simulé.</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Programmer l’initialisation du jeu (variables de la grille, serpent, spawn de la pomme).</li>
+<li>Coder la boucle de jeu principale (logique de déplacement, collisions, lecture des inputs).</li>
+<li>Optimiser le code et les variables pour respecter les contraintes de mémoire (RAM sur 8 bits).</li>
+<li>Corriger les potentiels bugs finaux (dans le jeu ou dans le compilateur).</li>
+<li>Exécuter le Snake sur la VM et faire une première partie fonctionnelle.</li>
+</ul>
+</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li><strong>Abandon du jeu Snake (et de Pong)</strong> : Le développement de jeux avec une logique spatiale complexe (gestion de la queue dynamique du serpent, multiples collisions X/Y de Pong) générait un code assembleur beaucoup trop lourd (plus de 150 instructions), entraînant des crashs matériels (le processeur lisant dans le vide).</li>
+<li><strong>Pivot vers le “Télécran” (Etch-A-Sketch)</strong> : Conception et exécution réussie d’une application de dessin interactive en remplacement. Le programme lit en temps réel les frappes du clavier (touches Z, Q, S, D) via <code>peek(127)</code> et déplace un curseur pour dessiner sur l’écran en utilisant la commande <code>poke(..., 4)</code> avec un nouveau caractère matériel optimisé.</li>
+<li>L’astuce du Télécran (ne pas coder l’effacement du curseur pour laisser une trace) a permis de réduire drastiquement la taille du programme à moins de 90 instructions assembleur.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li><strong>Le mur de la ROM (127 instructions)</strong> : Découverte de la limite physique absolue de l’architecture. L’instruction <code>VAL</code> étant encodée sur 7 bits, la mémoire morte (ROM) ne peut pas adresser plus de 127 lignes de code.</li>
+<li><strong>Le paradoxe du Registre D</strong> : Impossibilité mathématique de faire un saut conditionnel au-delà de la ligne 127. Pour calculer une adresse &gt;127, l’ALU doit être utilisée. Or, l’entrée A de l’ALU est physiquement câblée au registre <code>D</code>. Puisque le registre <code>D</code> stocke le drapeau (Vrai/Faux) de la condition lors d’un <code>if</code>, utiliser l’ALU pour calculer l’adresse de saut écrase instantanément le résultat de la condition, corrompant le programme.</li>
+<li><strong>Le coût de la logique de haut niveau</strong> : Chaque bloc <code>if</code> en langage JUMP génère une douzaine d’instructions assembleur. Il a fallu se rendre à l’évidence qu’un jeu comme Snake est inatteignable sans instructions natives plus complexes ou une mémoire ROM plus vaste.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li><strong>Le matériel dicte le logiciel</strong> : Expérience concrète des contraintes de l’informatique des années 70 (la fameuse “Zero-Page Constraint”). Quand le hardware ne peut plus suivre, c’est le <em>Game Design</em> qui doit s’adapter pour économiser des octets.</li>
+<li><strong>Maîtrise du Memory-Mapped I/O</strong> : Validation totale du système d’entrées/sorties en haut niveau. La lecture asynchrone du clavier avec <code>peek(127)</code> et la réinitialisation matérielle avec <code>poke(127, 0)</code> fonctionnent à la perfection de bout en bout.</li>
+<li>Une boucle complète a été bouclée : de la porte NAND jusqu’à une application interactive avec contrôles au clavier, prouvant que l’architecture ISA personnalisée, bien que restreinte, est parfaitement fonctionnelle.</li>
 </ul>
 </li>
 </ul>

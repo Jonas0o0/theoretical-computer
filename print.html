@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-12d5ac23.js";
+            window.path_to_searchindex_js = "searchindex-57c64f8f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -204,17 +204,52 @@
 </ul>
 <h2 id="comment-naviguer-cette-documentation"><a class="header" href="#comment-naviguer-cette-documentation">Comment naviguer cette documentation</a></h2>
 <ul>
-<li>Le <a href="#guide-dutilisation--de-lassembleur-à-la-machine-virtuelle">Guide de Démarrage</a> explique comment écrire, assembler et exécuter un programme sur la machine simulée.</li>
+<li>Le <a href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide de Démarrage</a> explique comment écrire, assembler et exécuter un programme sur la machine simulée.</li>
 <li>La section <strong>Architecture &amp; Matériel</strong> détaille la conception du CPU et sa carte mémoire.</li>
 <li>La section <strong>Le Langage JUMP</strong> documente le langage de haut niveau du projet.</li>
 <li>La section <strong>Recherche &amp; Suivi</strong> contient les <a href="#thèse--construction-dun-ordinateur-à-partir-de-zéro-from-scratch">notes de thèse</a> (analyse technique détaillée de chaque couche) et le <a href="#journal-de-bord-lab-notebook">journal de bord</a> (suivi chronologique des sprints).</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="guide-dutilisation--de-lassembleur-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--de-lassembleur-à-la-machine-virtuelle">Guide d’utilisation : De l’Assembleur à la Machine Virtuelle</a></h1>
-<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur.</p>
-<p>Voici les 3 étapes pour écrire, compiler et lancer un programme.</p>
-<h2 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h2>
-<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple dans un dossier <code>examples/helloworld.asm</code>).</p>
+<h1 id="guide-dutilisation--du-code-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide d’utilisation : Du Code à la Machine Virtuelle</a></h1>
+<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur. Vous pouvez programmer la machine de deux manières : avec notre langage de haut niveau (<strong>JUMP</strong>) ou directement en <strong>Assembleur</strong>.</p>
+<hr>
+<h2 id="méthode-1--le-langage-jump-haut-niveau"><a class="header" href="#méthode-1--le-langage-jump-haut-niveau">Méthode 1 : Le langage JUMP (Haut Niveau)</a></h2>
+<p>C’est la méthode recommandée. Le compilateur JUMP gère automatiquement l’allocation de la mémoire, génère l’assembleur, et appelle l’outil d’assemblage de manière transparente.</p>
+<h3 id="étape-1--écrire-le-code-source-jmp"><a class="header" href="#étape-1--écrire-le-code-source-jmp">Étape 1 : Écrire le code source (.jmp)</a></h3>
+<p>Crée un fichier texte avec l’extension <code>.jmp</code> (par exemple <code>examples/dessin.jmp</code>).</p>
+<p><strong>Exemple d’un mini-programme de dessin interactif :</strong></p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// On initialise les coordonnées
+let x = 7;
+let y = 7;
+
+loop {
+    // On dessine le pixel (Gâchette d'affichage = 4)
+    poke(125, x);
+    poke(126, y);
+    poke(124, 4); 
+}
+
+<span class="boring">}</span></code></pre>
+<h3 id="étape-2--compiler-le-programme"><a class="header" href="#étape-2--compiler-le-programme">Étape 2 : Compiler le programme</a></h3>
+<p>Le compilateur va transformer votre code JUMP en Assembleur (<code>.asm</code>), puis invoquer automatiquement l’Assembleur pour générer le binaire exécutable (<code>.bin</code>).</p>
+<p>Depuis la racine du projet, lance :</p>
+<pre><code class="language-bash">cargo run -p compiler -- examples/dessin.jmp
+
+</code></pre>
+<p><strong>Résultat :</strong> Les fichiers <code>dessin.asm</code> et <code>dessin.bin</code> sont générés automatiquement.</p>
+<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
+<p>La VM charge le fichier binaire généré et lance l’exécution.</p>
+<pre><code class="language-bash">cargo run -p vm -- examples/dessin.bin
+
+</code></pre>
+<p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
+<hr>
+<h2 id="méthode-2--lassembleur-bas-niveau"><a class="header" href="#méthode-2--lassembleur-bas-niveau">Méthode 2 : L’Assembleur (Bas Niveau)</a></h2>
+<p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
+<h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
+<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
 <p><strong>Exemple pour écrire “Hi” en mémoire :</strong></p>
 <pre><code class="language-text">// Lettre 'H' (Code ASCII 72) dans la case RAM 100
 VAL 72
@@ -227,16 +262,19 @@ VAL 105
 PASS_B D
 VAL 101
 PASS_A RAM
+
 </code></pre>
-<h2 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h2>
+<h3 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h3>
 <p>L’assembleur lit ton fichier texte et le traduit en octets (des <code>0</code> et des <code>1</code>) pour le processeur. Depuis la racine du projet, lance :</p>
 <pre><code class="language-bash">cargo run -p assembler -- examples/helloworld.asm
+
 </code></pre>
 <p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h2 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h2>
-<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII).</p>
+<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm-1"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm-1">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
+<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
 <p>Depuis la racine du projet, lance :</p>
 <pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin
+
 </code></pre>
 <p><strong>Résultat :</strong> Un tableau s’affichera dans le terminal avec l’adresse mémoire, la valeur numérique, et le caractère ASCII correspondant.</p>
 <pre><code class="language-bash">--- ÉTAT DE LA RAM (Valeurs non nulles) ---
@@ -246,6 +284,7 @@ Adresse    | Valeur (Num) | ASCII
 101        | 105          | i
 ------------------------------------------
 Arrêt de la machine.
+
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="spécifications-de-larchitecture"><a class="header" href="#spécifications-de-larchitecture">Spécifications de l’Architecture</a></h1>
@@ -573,9 +612,9 @@ poke(252, 1);
 <h3 id="résultats-de-la-recherche--6"><a class="header" href="#résultats-de-la-recherche--6">Résultats de la recherche :</a></h3>
 <ol>
 <li><strong>Spécification du langage JUMP</strong> : rédaction de la grammaire et de la syntaxe exacte du langage, intégrée à la documentation du projet (mdBook).</li>
-<li><strong>Analyse lexicale (Lexer)</strong> : implémentation en Rust d’un Lexer découpant un fichier source JUMP en un vecteur de <code>Tokens</code> typés première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).</li>
+<li><strong>Analyse lexicale (Lexer)</strong> : implémentation en Rust d’un Lexer découpant un fichier source JUMP en un vecteur de <code>Tokens</code> typés — première étape classique de tout pipeline de compilation, transformant un flux de caractères brut en unités lexicales structurées (mots-clés, identifiants, opérateurs, littéraux, etc.).</li>
 <li><strong>Memory-Mapped I/O</strong> : intégration au niveau de la VM (voir Couche 4), avec un découpage précis des 256 octets de RAM entre variables, pile et adresses réservées à l’I/O.</li>
-<li><strong>Structures de l’AST</strong> : définition en Rust des énumérations <code>Program</code>, <code>Stmt</code>, <code>Expr</code> et <code>BinaryOperator</code>, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent les points-virgules, parenthèses, ou la fin de fichier (<code>EOF</code>), purement syntaxiques, n’ont pas leur place dans l’arbre.</li>
+<li><strong>Structures de l’AST</strong> : définition en Rust des énumérations <code>Program</code>, <code>Stmt</code>, <code>Expr</code> et <code>BinaryOperator</code>, formant la structure hiérarchique du langage JUMP. Seuls les éléments porteurs de sens logique y figurent : les points-virgules, parenthèses, ou la fin de fichier (<code>EOF</code>), purement syntaxiques, n’ont pas leur place dans l’arbre.</li>
 <li><strong>Analyse syntaxique (Parser)</strong> : implémentation d’un Parser à <strong>descente récursive</strong>, qui consomme le flux de Tokens produit par le Lexer pour construire l’AST. Le code a été factorisé via une fonction <code>parse_block()</code> dédiée à la lecture du contenu entre accolades, et un mapping optimisé pour la résolution des opérateurs mathématiques et de leur priorité.</li>
 <li><strong>Grammaire sans parenthèses obligatoires</strong> : les conditions (<code>if</code>) et boucles (<code>while</code>) suivent une syntaxe proche de Rust, sans parenthèses imposées autour de la condition.</li>
 <li><strong>Séparation Statements / Expressions</strong> : délimitation stricte entre les instructions (<code>Statements</code>, qui exécutent une action, comme une assignation ou une boucle) et les expressions (<code>Expressions</code>, qui produisent une valeur, comme une opération arithmétique), afin de structurer le Parser proprement et éviter les conflits logiques.</li>
@@ -584,21 +623,37 @@ poke(252, 1);
 <li><strong>Table des symboles et allocation mémoire</strong> : attribution automatique d’une adresse RAM à chaque variable déclarée (<code>let</code>), l’espace utilisateur étant volontairement limité à l’adresse 119 pour préserver la zone réservée à l’OS et au Memory-Mapped I/O (voir carte mémoire, Couche 4).</li>
 <li><strong>Backpatching et optimisation des sauts</strong> : résolution différée des adresses de saut (une fois la position finale de la cible connue dans le flux d’instructions généré), combinée à une exploitation directe des opcodes de l’ALU (<code>SHL</code>, <code>INC</code>) pour optimiser certains calculs d’adresse.</li>
 <li><strong>Automatisation du pipeline</strong> : le compilateur invoque directement l’assembleur via un sous-processus (<code>Command</code>), automatisant entièrement la chaîne source JUMP → binaire exécutable, sans étape manuelle intermédiaire.</li>
-<li><strong>Méthodologie</strong> : validation de la chaîne complète Lexer → Parser → Codegen → Assembleur → VM par la compilation et l’exécution réussies de programmes de test (boucle <code>while</code>, écriture en RAM).</li>
+<li><strong>Développement de l’application finale “Le Télécran”</strong> : conception et exécution réussies d’une application de dessin interactive. Le programme lit en temps réel les frappes du clavier (touches Z, Q, S, D) via <code>peek(127)</code> et déplace un curseur pour dessiner sur l’écran via <code>poke(..., 4)</code> avec un caractère matériel dédié. Cette application valide l’ensemble de la chaîne de compilation et du matériel simulé (NAND to Game).</li>
 </ol>
 <h3 id="difficultés-rencontrées"><a class="header" href="#difficultés-rencontrées">Difficultés rencontrées</a></h3>
 <ul>
-<li><strong>Changement de paradigme (Parser)</strong> : passage d’une analyse linéaire (liste de Tokens produite par le Lexer) à la construction d’une structure hiérarchique et imbriquée (l’AST), nécessitant une bonne maîtrise des appels de fonctions récursives.</li>
-<li><strong>Ambiguïtés syntaxiques (Parser)</strong> : distinction entre la consommation définitive d’un jeton (<code>advance</code>/<code>consume</code>) et l’anticipation du jeton suivant sans le consommer (<code>peek</code>), nécessaire par exemple pour déterminer si un identifiant est suivi d’un <code>=</code> (assignation) ou d’une <code>(</code> (appel de fonction), avant de décider comment le traiter.</li>
-<li><strong>Frontière Statements / Expressions (Parser)</strong> : nécessité de délimiter clairement ces deux catégories dès la conception du Parser pour éviter les conflits logiques par la suite.</li>
-<li><strong>Limite d’adressage à 127 par instruction <code>VAL</code></strong> : une instruction de type A (<code>VAL</code>) encode une valeur immédiate sur 7 bits seulement (bit 7 réservé au choix nombre/calcul, voir Couche 3), ce qui ne permet pas de charger directement une adresse ou une valeur supérieure à 127 en une seule instruction. Or la RAM compte 256 cases : sans solution, seule la moitié inférieure (adresses 0 à 127) aurait été directement accessible en écriture/lecture.
-<ul>
-<li><strong>Solution exploitée</strong> : le câblage fixe de l’entrée A de l’ALU sur le registre D (choix de conception de la Couche 3) permet d’enchaîner un <code>SHL</code> (décalage à gauche, équivalent à une multiplication par 2) directement sur D. En combinant plusieurs <code>VAL</code> (valeurs ≤ 127) avec des <code>SHL</code>/additions successives, il devient possible de construire, par calcul, des valeurs supérieures à 127 directement dans les registres et donc d’atteindre l’intégralité des 256 cases de la RAM malgré la limite d’encodage des instructions.</li>
-</ul>
+<li>
+<p><strong>Changement de paradigme (Parser)</strong> : passage d’une analyse linéaire (liste de Tokens produite par le Lexer) à la construction d’une structure hiérarchique et imbriquée (l’AST), nécessitant une bonne maîtrise des appels de fonctions récursives.</p>
 </li>
-<li><strong>Paradoxe des sauts conditionnels</strong> : le calcul de l’adresse cible d’un saut écrasait par inadvertance le registre <code>D</code>, qui stockait pourtant le résultat de la condition à évaluer nécessitant de réordonner soigneusement les instructions générées pour ne pas perdre cette valeur avant son utilisation.</li>
-<li><strong>Limite de 127 instructions en ROM</strong> : contrainte structurelle liée au même codage 7 bits des valeurs immédiates de l’instruction <code>VAL</code>, limitant la taille des programmes compilables sans stratégie de contournement supplémentaire.</li>
-<li><strong>Mapping opérateurs haut niveau → opcodes ALU</strong> : structuration de la génération de code pour traduire proprement chaque opérateur du langage JUMP vers l’opcode ALU correspondant, sans corrompre l’état des registres ni la pile d’exécution simulée par le compilateur.</li>
+<li>
+<p><strong>Ambiguïtés syntaxiques (Parser)</strong> : distinction entre la consommation définitive d’un jeton (<code>advance</code>/<code>consume</code>) et l’anticipation du jeton suivant sans le consommer (<code>peek</code>), nécessaire par exemple pour déterminer si un identifiant est suivi d’un <code>=</code> (assignation) ou d’une <code>(</code> (appel de fonction), avant de décider comment le traiter.</p>
+</li>
+<li>
+<p><strong>Frontière Statements / Expressions (Parser)</strong> : nécessité de délimiter clairement ces deux catégories dès la conception du Parser pour éviter les conflits logiques par la suite.</p>
+</li>
+<li>
+<p>**Limite d’adressage à 127 par instruction <code>VAL**</code> : une instruction de type A (<code>VAL</code>) encode une valeur immédiate sur 7 bits seulement (bit 7 réservé au choix nombre/calcul, voir Couche 3), ce qui ne permet pas de charger directement une adresse ou une valeur supérieure à 127 en une seule instruction. Or la RAM compte 256 cases : sans solution, seule la moitié inférieure (adresses 0 à 127) aurait été directement accessible en écriture/lecture.</p>
+</li>
+<li>
+<p><em>Solution exploitée</em> : le câblage fixe de l’entrée A de l’ALU sur le registre D (choix de conception de la Couche 3) permet d’enchaîner un <code>SHL</code> (décalage à gauche, équivalent à une multiplication par 2) directement sur D. En combinant plusieurs <code>VAL</code> (valeurs ≤ 127) avec des <code>SHL</code>/additions successives, il devient possible de construire, par calcul, des valeurs supérieures à 127 directement dans les registres et donc d’atteindre l’intégralité des 256 cases de la RAM malgré la limite d’encodage des instructions.</p>
+</li>
+<li>
+<p><strong>Paradoxe des sauts conditionnels</strong> : le calcul de l’adresse cible d’un saut écrasait par inadvertance le registre <code>D</code>, qui stockait pourtant le résultat de la condition à évaluer — nécessitant de réordonner soigneusement les instructions générées pour ne pas perdre cette valeur avant son utilisation.</p>
+</li>
+<li>
+<p><strong>Le mur de la ROM (Limite de 127 instructions)</strong> : contrainte structurelle liée au même codage 7 bits des adresses, plafonnant strictement la taille de n’importe quel programme à 127 lignes d’assembleur. Cette limite physique absolue a provoqué des crashs du compilateur lors des tentatives de développement de jeux complexes (Snake, Pong) nécessitant de multiples conditions <code>if</code>.</p>
+</li>
+<li>
+<p><em>Pivot matériel</em> : Le matériel dictant le logiciel, cela a forcé un pivot de <em>Game Design</em> vers le “Télécran” (Etch-A-Sketch), une application beaucoup plus légère qui économise des dizaines d’instructions en supprimant la logique de collision complexe et en s’épargnant l’effacement du curseur (moins de 90 instructions au final).</p>
+</li>
+<li>
+<p><strong>Mapping opérateurs haut niveau → opcodes ALU</strong> : structuration de la génération de code pour traduire proprement chaque opérateur du langage JUMP vers l’opcode ALU correspondant, sans corrompre l’état des registres ni la pile d’exécution simulée par le compilateur.</p>
+</li>
 </ul>
 <h3 id="apprentissages-clés-2"><a class="header" href="#apprentissages-clés-2">Apprentissages clés</a></h3>
 <ul>
@@ -606,27 +661,31 @@ poke(252, 1);
 <li>L’AST est une représentation épurée du programme : seuls les éléments porteurs de sens logique y figurent, la syntaxe pure (ponctuation, délimiteurs) étant consommée et éliminée par le Parser.</li>
 <li>La conception d’un langage doit composer avec les contraintes du matériel sous-jacent : l’absence de pile d’exécution sur le CPU a directement orienté le choix de ne pas supporter les arguments de fonctions ; la limite d’encodage à 7 bits des valeurs immédiates a nécessité une technique de construction de nombres par calcul (<code>SHL</code>) pour rester compatible avec l’ensemble de l’espace RAM.</li>
 <li>Maîtrise concrète de la contrainte de « Zero-Page » et de la segmentation mémoire, déjà entrevue en Couche 3-4 mais pleinement exploitée ici dans la génération de code.</li>
-<li>Rigueur nécessaire à l’écriture d’un compilateur de bout en bout : chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel une erreur de génération (comme l’écrasement du registre D) se traduit directement par un bug d’exécution difficile à tracer sans redescendre au niveau assembleur.</li>
+<li>Rigueur nécessaire à l’écriture d’un compilateur de bout en bout : chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel ; une erreur de génération (comme l’écrasement du registre D) se traduit directement par un bug d’exécution difficile à tracer sans redescendre au niveau assembleur.</li>
 <li>Application du principe DRY (<em>Don’t Repeat Yourself</em>) en architecturant une toolchain modulaire interconnectée (Lexer, Parser, Codegen, Assembleur, VM), chaque étape restant indépendante et testable isolément.</li>
 </ul>
 <h3 id="schéma-de-la-chaîne-doutils-complète"><a class="header" href="#schéma-de-la-chaîne-doutils-complète">Schéma de la chaîne d’outils complète</a></h3>
 <pre><code class="language-mermaid">flowchart LR
-    SRC["Code source JUMP (.jump)"] --&gt; LEX["Lexer -&gt; Tokens"]
+    SRC["Code source JUMP (.jmp)"] --&gt; LEX["Lexer -&gt; Tokens"]
     LEX --&gt; PARSE["Parser -&gt; AST"]
     PARSE --&gt; ALLOC["Allocateur mémoire (table des symboles)"]
     ALLOC --&gt; CODEGEN["Génération de code (codegen.rs)"]
     CODEGEN --&gt; ASM["Assembleur (mnémoniques -&gt; binaire)"]
-    ASM --&gt; VM["Machine Virtuelle"]
+    ASM --&gt; ASSEMBLEUR["Appel automatisé de l'Assembleur"]
+    ASSEMBLEUR --&gt; BIN["Binaire exécutable (.bin)"]
+    BIN --&gt; VM["Machine Virtuelle"]
     VM --&gt; CPU["CPU simulé (Couche 3)"]
     CPU --&gt; RAM["RAM 256 octets + Memory-Mapped I/O"]
+
 </code></pre>
-<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion <a name="conclusion"></a></a></h2>
-<p><em>(Section provisoire à compléter au fil des prochains sprints.)</em></p>
-<p>À ce stade du projet, les sept couches de l’architecture ont été franchies, depuis la porte NAND jusqu’à un compilateur fonctionnel pour un langage de haut niveau propre (JUMP), capable de générer et d’exécuter des programmes de bout en bout sur le matériel simulé. L’approche bottom-up et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception (voir par exemple la correction du comparateur en Couche 1).</p>
-<p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4), le changement de paradigme d’une analyse linéaire à une structure arborescente récursive (Couche 6, Parser), et la nécessité de contourner par calcul les limites d’encodage des instructions pour couvrir l’intégralité de l’espace mémoire (Couche 6, génération de code).</p>
+<h2 id="conclusion-finale"><a class="header" href="#conclusion-finale">Conclusion Finale</a></h2>
+<p>À ce stade du projet, l’intégralité des sept couches de l’architecture a été franchie avec succès, depuis le câblage de la porte logique NAND fondamentale jusqu’à la création d’un compilateur fonctionnel pour un langage de haut niveau propre (JUMP). L’exécution réussie de l’application interactive “Télécran”, contrôlable au clavier en temps réel, vient boucler la chaîne d’outils complète construite de bout en bout et valide formellement l’objectif “NAND to Game”.</p>
+<p>L’approche <em>bottom-up</em> et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées extrêmement efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception conceptuelles et matérielles.</p>
+<p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4), le changement de paradigme d’une analyse linéaire à une structure arborescente récursive (Couche 6, Parser), et la nécessité de contourner par calcul les limites d’encodage des instructions matérielles pour couvrir l’intégralité de l’espace mémoire (Couche 6, génération de code).</p>
 <h3 id="si-cétait-à-refaire"><a class="header" href="#si-cétait-à-refaire">Si c’était à refaire</a></h3>
-<p>Plusieurs contraintes rencontrées tout au long du projet découlent directement du choix initial d’une architecture strictement 8 bits : la plage de valeurs immédiates limitée à 7 bits (0-127), l’espace RAM réduit à 256 cases, et les techniques de contournement nécessaires pour malgré tout adresser l’intégralité de la mémoire (voir Couche 6). Si le projet était repris depuis le début, l’architecture serait conçue <strong>en 16 bits au minimum</strong> de bout en bout (bus de données, registres, immédiats), ce qui aurait supprimé la majorité de ces contraintes de contournement sans changer la démarche pédagogique du projet. Une architecture alternative (par exemple avec une pile matérielle dédiée, pour lever la limitation actuelle sur les arguments de fonctions) pourrait également être envisagée pour pallier plus largement l’ensemble des limitations identifiées au fil des sprints.</p>
-<p>La suite immédiate du projet consiste à enrichir et fiabiliser le langage JUMP (gestion d’arguments de fonctions si une pile matérielle est ajoutée, optimisations du générateur de code) et à documenter des exemples de programmes complets (jeu, démonstrations graphiques) exploitant la chaîne d’outils construite de bout en bout.</p>
+<p>L’enseignement majeur de ce projet est la démonstration implacable de la manière dont l’architecture matérielle dicte et contraint le développement logiciel. Plusieurs défis rencontrés découlent directement du choix initial d’une architecture strictement 8 bits : la plage de valeurs immédiates limitée à 7 bits (0-127), l’espace RAM réduit à 256 cases, le registre D couplé en dur à l’entrée A de l’ALU, et surtout le plafond de verre de la ROM empêchant l’exécution de programmes de plus de 127 instructions.</p>
+<p>Si le projet était repris depuis le début, l’architecture serait conçue <strong>en 16 bits au minimum</strong> de bout en bout (bus de données, registres, immédiats). Cette simple évolution aurait supprimé la majorité des goulots d’étranglement de la compilation logicielle, permis d’adresser des milliers de cases mémoire, et offert suffisamment de ROM pour faire tourner des jeux à la logique complexe (comme un véritable Snake) sans dénaturer l’approche pédagogique fondatrice du projet. L’ajout d’un registre pointeur de pile (Stack Pointer) matériel aurait également permis d’implémenter un véritable système d’appels de fonctions avec arguments locaux.</p>
+<p>Ce projet s’achève donc comme un formidable laboratoire d’ingénierie système : l’architecture a touché ses limites physiques, mais la solution a été trouvée par l’optimisation logicielle et le Game Design.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="journal-de-bord-lab-notebook"><a class="header" href="#journal-de-bord-lab-notebook">Journal de Bord (Lab Notebook)</a></h1>
 <h2 id="format-dentrée-"><a class="header" href="#format-dentrée-">Format d’entrée :</a></h2>
@@ -850,6 +909,42 @@ Tu as totalement raison, si c’est allé tout seul et que l’apprentissage pri
 <li>Maîtrise de la contrainte matérielle de la “Zero-Page” et de la segmentation mémoire.</li>
 <li>Apprentissage concret de la rigueur nécessaire lors de l’écriture d’un compilateur de bout en bout, où chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel.</li>
 <li>Application du principe DRY (<em>Don’t Repeat Yourself</em>) en architecturant une toolchain modulaire interconnectée.</li>
+</ul>
+</li>
+</ul>
+<p>Voici la complétion de ta documentation pour ce sprint mémorable. J’ai mis l’accent sur cette confrontation brutale (mais géniale) entre tes ambitions logicielles et la réalité physique de ton processeur, et comment tu as contourné le problème avec le Télécran.</p>
+<hr>
+<h2 id="2026-08-22-nand-to-game---le-jeu-snake-et-sprint-9"><a class="header" href="#2026-08-22-nand-to-game---le-jeu-snake-et-sprint-9">[2026-08-22] NAND to Game - Le Jeu Snake et Sprint 9</a></h2>
+<ul>
+<li><strong>Objectif</strong> : Utiliser notre propre langage de haut niveau et notre compilateur pour programmer le jeu Snake et y jouer sur le CPU simulé.</li>
+<li><strong>Tâches</strong> :
+<ul>
+<li>Programmer l’initialisation du jeu (variables de la grille, serpent, spawn de la pomme).</li>
+<li>Coder la boucle de jeu principale (logique de déplacement, collisions, lecture des inputs).</li>
+<li>Optimiser le code et les variables pour respecter les contraintes de mémoire (RAM sur 8 bits).</li>
+<li>Corriger les potentiels bugs finaux (dans le jeu ou dans le compilateur).</li>
+<li>Exécuter le Snake sur la VM et faire une première partie fonctionnelle.</li>
+</ul>
+</li>
+<li><strong>Réalisation</strong> :
+<ul>
+<li><strong>Abandon du jeu Snake (et de Pong)</strong> : Le développement de jeux avec une logique spatiale complexe (gestion de la queue dynamique du serpent, multiples collisions X/Y de Pong) générait un code assembleur beaucoup trop lourd (plus de 150 instructions), entraînant des crashs matériels (le processeur lisant dans le vide).</li>
+<li><strong>Pivot vers le “Télécran” (Etch-A-Sketch)</strong> : Conception et exécution réussie d’une application de dessin interactive en remplacement. Le programme lit en temps réel les frappes du clavier (touches Z, Q, S, D) via <code>peek(127)</code> et déplace un curseur pour dessiner sur l’écran en utilisant la commande <code>poke(..., 4)</code> avec un nouveau caractère matériel optimisé.</li>
+<li>L’astuce du Télécran (ne pas coder l’effacement du curseur pour laisser une trace) a permis de réduire drastiquement la taille du programme à moins de 90 instructions assembleur.</li>
+</ul>
+</li>
+<li><strong>Difficultés</strong> :
+<ul>
+<li><strong>Le mur de la ROM (127 instructions)</strong> : Découverte de la limite physique absolue de l’architecture. L’instruction <code>VAL</code> étant encodée sur 7 bits, la mémoire morte (ROM) ne peut pas adresser plus de 127 lignes de code.</li>
+<li><strong>Le paradoxe du Registre D</strong> : Impossibilité mathématique de faire un saut conditionnel au-delà de la ligne 127. Pour calculer une adresse &gt;127, l’ALU doit être utilisée. Or, l’entrée A de l’ALU est physiquement câblée au registre <code>D</code>. Puisque le registre <code>D</code> stocke le drapeau (Vrai/Faux) de la condition lors d’un <code>if</code>, utiliser l’ALU pour calculer l’adresse de saut écrase instantanément le résultat de la condition, corrompant le programme.</li>
+<li><strong>Le coût de la logique de haut niveau</strong> : Chaque bloc <code>if</code> en langage JUMP génère une douzaine d’instructions assembleur. Il a fallu se rendre à l’évidence qu’un jeu comme Snake est inatteignable sans instructions natives plus complexes ou une mémoire ROM plus vaste.</li>
+</ul>
+</li>
+<li><strong>Apprentissages</strong> :
+<ul>
+<li><strong>Le matériel dicte le logiciel</strong> : Expérience concrète des contraintes de l’informatique des années 70 (la fameuse “Zero-Page Constraint”). Quand le hardware ne peut plus suivre, c’est le <em>Game Design</em> qui doit s’adapter pour économiser des octets.</li>
+<li><strong>Maîtrise du Memory-Mapped I/O</strong> : Validation totale du système d’entrées/sorties en haut niveau. La lecture asynchrone du clavier avec <code>peek(127)</code> et la réinitialisation matérielle avec <code>poke(127, 0)</code> fonctionnent à la perfection de bout en bout.</li>
+<li>Une boucle complète a été bouclée : de la porte NAND jusqu’à une application interactive avec contrôles au clavier, prouvant que l’architecture ISA personnalisée, bien que restreinte, est parfaitement fonctionnelle.</li>
 </ul>
 </li>
 </ul>

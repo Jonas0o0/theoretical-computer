@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-12d5ac23.js";
+            window.path_to_searchindex_js = "searchindex-57c64f8f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -174,11 +174,46 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="guide-dutilisation--de-lassembleur-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--de-lassembleur-à-la-machine-virtuelle">Guide d’utilisation : De l’Assembleur à la Machine Virtuelle</a></h1>
-<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur.</p>
-<p>Voici les 3 étapes pour écrire, compiler et lancer un programme.</p>
-<h2 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h2>
-<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple dans un dossier <code>examples/helloworld.asm</code>).</p>
+                        <h1 id="guide-dutilisation--du-code-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide d’utilisation : Du Code à la Machine Virtuelle</a></h1>
+<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur. Vous pouvez programmer la machine de deux manières : avec notre langage de haut niveau (<strong>JUMP</strong>) ou directement en <strong>Assembleur</strong>.</p>
+<hr>
+<h2 id="méthode-1--le-langage-jump-haut-niveau"><a class="header" href="#méthode-1--le-langage-jump-haut-niveau">Méthode 1 : Le langage JUMP (Haut Niveau)</a></h2>
+<p>C’est la méthode recommandée. Le compilateur JUMP gère automatiquement l’allocation de la mémoire, génère l’assembleur, et appelle l’outil d’assemblage de manière transparente.</p>
+<h3 id="étape-1--écrire-le-code-source-jmp"><a class="header" href="#étape-1--écrire-le-code-source-jmp">Étape 1 : Écrire le code source (.jmp)</a></h3>
+<p>Crée un fichier texte avec l’extension <code>.jmp</code> (par exemple <code>examples/dessin.jmp</code>).</p>
+<p><strong>Exemple d’un mini-programme de dessin interactif :</strong></p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// On initialise les coordonnées
+let x = 7;
+let y = 7;
+
+loop {
+    // On dessine le pixel (Gâchette d'affichage = 4)
+    poke(125, x);
+    poke(126, y);
+    poke(124, 4); 
+}
+
+<span class="boring">}</span></code></pre>
+<h3 id="étape-2--compiler-le-programme"><a class="header" href="#étape-2--compiler-le-programme">Étape 2 : Compiler le programme</a></h3>
+<p>Le compilateur va transformer votre code JUMP en Assembleur (<code>.asm</code>), puis invoquer automatiquement l’Assembleur pour générer le binaire exécutable (<code>.bin</code>).</p>
+<p>Depuis la racine du projet, lance :</p>
+<pre><code class="language-bash">cargo run -p compiler -- examples/dessin.jmp
+
+</code></pre>
+<p><strong>Résultat :</strong> Les fichiers <code>dessin.asm</code> et <code>dessin.bin</code> sont générés automatiquement.</p>
+<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
+<p>La VM charge le fichier binaire généré et lance l’exécution.</p>
+<pre><code class="language-bash">cargo run -p vm -- examples/dessin.bin
+
+</code></pre>
+<p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
+<hr>
+<h2 id="méthode-2--lassembleur-bas-niveau"><a class="header" href="#méthode-2--lassembleur-bas-niveau">Méthode 2 : L’Assembleur (Bas Niveau)</a></h2>
+<p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
+<h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
+<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
 <p><strong>Exemple pour écrire “Hi” en mémoire :</strong></p>
 <pre><code class="language-text">// Lettre 'H' (Code ASCII 72) dans la case RAM 100
 VAL 72
@@ -191,16 +226,19 @@ VAL 105
 PASS_B D
 VAL 101
 PASS_A RAM
+
 </code></pre>
-<h2 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h2>
+<h3 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h3>
 <p>L’assembleur lit ton fichier texte et le traduit en octets (des <code>0</code> et des <code>1</code>) pour le processeur. Depuis la racine du projet, lance :</p>
 <pre><code class="language-bash">cargo run -p assembler -- examples/helloworld.asm
+
 </code></pre>
 <p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h2 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h2>
-<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII).</p>
+<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm-1"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm-1">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
+<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
 <p>Depuis la racine du projet, lance :</p>
 <pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin
+
 </code></pre>
 <p><strong>Résultat :</strong> Un tableau s’affichera dans le terminal avec l’adresse mémoire, la valeur numérique, et le caractère ASCII correspondant.</p>
 <pre><code class="language-bash">--- ÉTAT DE LA RAM (Valeurs non nulles) ---
@@ -210,6 +248,7 @@ Adresse    | Valeur (Num) | ASCII
 101        | 105          | i
 ------------------------------------------
 Arrêt de la machine.
+
 </code></pre>
 
                     </main>
