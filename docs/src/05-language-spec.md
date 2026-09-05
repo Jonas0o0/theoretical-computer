@@ -83,7 +83,7 @@ poke(252, 1);
 
 ```
 
-## 4. Le Compilateur JUMP (Sous le capot)
+## 4. Le Compilateur JUMP
 
 Pour comprendre comment le texte JUMP devient un programme exécutable, voici le pipeline du compilateur :
 

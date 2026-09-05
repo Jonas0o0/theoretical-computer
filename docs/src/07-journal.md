@@ -1,4 +1,4 @@
-# Journal de Bord (Lab Notebook)
+# Journal de Bord
 
 ## Format d'entrée :
 - **Date** : [Date]

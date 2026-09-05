@@ -1,5 +1,4 @@
-# Thèse : Construction d'un Ordinateur à partir de Zéro (from Scratch)
-
+# Thèse : Construction d'un Ordinateur à partir de Zéro
 ## Résumé
 *Ce document retrace la conception et l'implémentation complète d'une architecture informatique, des portes logiques jusqu'au langage de haut niveau.*
 

@@ -54,7 +54,7 @@ Vous pouvez maintenant interagir avec le programme directement dans le terminal 
 
 ---
 
-## Méthode 2 : L'Assembleur (Bas Niveau)
+## Méthode 2 : L'Assembleur
 
 Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l'ALU.
 
@@ -90,7 +90,7 @@ cargo run -p assembler -- examples/helloworld.asm
 
 **Résultat :** Cela va générer un fichier binaire `helloworld.bin` dans le même dossier.
 
-### Étape 3 : Lancer sur la Machine Virtuelle (VM)
+### Étape 3 : Lancer sur la Machine Virtuelle
 
 La VM charge le fichier binaire dans la ROM du CPU et lance l'horloge. À la fin de l'exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).
 

@@ -1,4 +1,4 @@
-# Carte Mémoire - CPU 8 bits (V2)
+# Carte Mémoire - CPU 8 bits
 
 Ce document décrit l'organisation de la RAM de notre processeur.
 Afin de pouvoir interagir avec le monde extérieur (Clavier et Écran) sans modifier l'architecture matérielle du CPU, nous utilisons la technique du **Memory-Mapped I/O**.
