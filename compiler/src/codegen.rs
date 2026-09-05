@@ -77,6 +77,7 @@ impl CodeGen {
             Stmt::Loop { body } => self.compile_loop(body),
             Stmt::InlineFn { name, body } => self.compile_inline_fn(name, body),
             Stmt::FnCall(name) => self.compile_fn_call(name),
+            Stmt::Poke { address, value } => self.compile_poke(address, value),
             _ => Err(format!("Compilation non implémentée pour cette instruction : {:?}", stmt)),
         }
     }
@@ -276,6 +277,13 @@ impl CodeGen {
                     _ => return Err(format!("L'opérateur {:?} n'est pas géré.", operator)),
                 };
                 self.emit(&format!("{} D_B", asm_op));
+                Ok(())
+            }
+            Expr::Peek(address) => {
+                self.compile_expression(address)?;
+                self.emit("PASS_A A");
+                self.emit("PASS_B D_B");
+
                 Ok(())
             }
             _ => Err(format!("Compilation non implémentée pour cette expression : {:?}", expr)),
