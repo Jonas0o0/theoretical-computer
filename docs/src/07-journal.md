@@ -141,3 +141,29 @@
   - Maîtrise de la contrainte matérielle de la "Zero-Page" et de la segmentation mémoire.
   - Apprentissage concret de la rigueur nécessaire lors de l'écriture d'un compilateur de bout en bout, où chaque instruction générée a un impact direct et immédiat sur la machine virtuelle et le comportement matériel.
   - Application du principe DRY (*Don't Repeat Yourself*) en architecturant une toolchain modulaire interconnectée.
+
+Voici la complétion de ta documentation pour ce sprint mémorable. J'ai mis l'accent sur cette confrontation brutale (mais géniale) entre tes ambitions logicielles et la réalité physique de ton processeur, et comment tu as contourné le problème avec le Télécran.
+
+---
+
+## [2026-08-22] NAND to Game - Le Jeu Snake et Sprint 9
+
+- **Objectif** : Utiliser notre propre langage de haut niveau et notre compilateur pour programmer le jeu Snake et y jouer sur le CPU simulé.
+- **Tâches** :
+  - Programmer l'initialisation du jeu (variables de la grille, serpent, spawn de la pomme).
+  - Coder la boucle de jeu principale (logique de déplacement, collisions, lecture des inputs).
+  - Optimiser le code et les variables pour respecter les contraintes de mémoire (RAM sur 8 bits).
+  - Corriger les potentiels bugs finaux (dans le jeu ou dans le compilateur).
+  - Exécuter le Snake sur la VM et faire une première partie fonctionnelle.
+- **Réalisation** :
+  - **Abandon du jeu Snake (et de Pong)** : Le développement de jeux avec une logique spatiale complexe (gestion de la queue dynamique du serpent, multiples collisions X/Y de Pong) générait un code assembleur beaucoup trop lourd (plus de 150 instructions), entraînant des crashs matériels (le processeur lisant dans le vide).
+  - **Pivot vers le "Télécran" (Etch-A-Sketch)** : Conception et exécution réussie d'une application de dessin interactive en remplacement. Le programme lit en temps réel les frappes du clavier (touches Z, Q, S, D) via `peek(127)` et déplace un curseur pour dessiner sur l'écran en utilisant la commande `poke(..., 4)` avec un nouveau caractère matériel optimisé.
+  - L'astuce du Télécran (ne pas coder l'effacement du curseur pour laisser une trace) a permis de réduire drastiquement la taille du programme à moins de 90 instructions assembleur.
+- **Difficultés** :
+  - **Le mur de la ROM (127 instructions)** : Découverte de la limite physique absolue de l'architecture. L'instruction `VAL` étant encodée sur 7 bits, la mémoire morte (ROM) ne peut pas adresser plus de 127 lignes de code.
+  - **Le paradoxe du Registre D** : Impossibilité mathématique de faire un saut conditionnel au-delà de la ligne 127. Pour calculer une adresse >127, l'ALU doit être utilisée. Or, l'entrée A de l'ALU est physiquement câblée au registre `D`. Puisque le registre `D` stocke le drapeau (Vrai/Faux) de la condition lors d'un `if`, utiliser l'ALU pour calculer l'adresse de saut écrase instantanément le résultat de la condition, corrompant le programme.
+  - **Le coût de la logique de haut niveau** : Chaque bloc `if` en langage JUMP génère une douzaine d'instructions assembleur. Il a fallu se rendre à l'évidence qu'un jeu comme Snake est inatteignable sans instructions natives plus complexes ou une mémoire ROM plus vaste.
+- **Apprentissages** :
+  - **Le matériel dicte le logiciel** : Expérience concrète des contraintes de l'informatique des années 70 (la fameuse "Zero-Page Constraint"). Quand le hardware ne peut plus suivre, c'est le *Game Design* qui doit s'adapter pour économiser des octets.
+  - **Maîtrise du Memory-Mapped I/O** : Validation totale du système d'entrées/sorties en haut niveau. La lecture asynchrone du clavier avec `peek(127)` et la réinitialisation matérielle avec `poke(127, 0)` fonctionnent à la perfection de bout en bout.
+  - Une boucle complète a été bouclée : de la porte NAND jusqu'à une application interactive avec contrôles au clavier, prouvant que l'architecture ISA personnalisée, bien que restreinte, est parfaitement fonctionnelle.
