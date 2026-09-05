@@ -14,5 +14,13 @@
 
 # Recherche & Suivi
 
-- [6. Notes de Thèse / Théorie](06-these.md)
+- [6. Notes de Recherche](recherche/00-introduction.md)
+  - [Logique Booléenne](recherche/01-logique.md)
+  - [Arithmétique et ALU](recherche/02-alu.md)
+  - [Mémoire et Registres](recherche/03-memoire.md)
+  - [Architecture du Processeur](recherche/04-cpu.md)
+  - [Machine Virtuelle](recherche/05-vm.md)
+  - [Langage d'Assemblage](recherche/06-assembleur.md)
+  - [Compilateur](recherche/07-compilateur.md)
+  - [Conclusion](recherche/08-conclusion.md)
 - [7. Journal de Bord (Sprint Log)](07-journal.md)

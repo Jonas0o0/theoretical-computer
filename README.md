@@ -27,7 +27,7 @@ Plutôt que d'utiliser un ordinateur comme une boîte noire, ce projet le recons
 
 Chaque couche est développée selon une approche **Double-Track** : conception physique dans **Logisim** (source de vérité matérielle) et émulation logicielle en **Rust**, validée par des tests unitaires exhaustifs (tables de vérité, cas limites).
 
-Le détail technique de chaque couche (équations, schémas, choix de conception) est documenté dans les [Notes de Thèse](./docs/src/06-these.md), et le suivi chronologique dans le [Journal de Bord](./docs/src/07-journal.md).
+Le détail technique de chaque couche (équations, schémas, choix de conception) est documenté dans les [Notes de Recherche](./docs/src/recherche/00-introduction.md), et le suivi chronologique dans le [Journal de Bord](./docs/src/07-journal.md).
 
 ## Démarrage rapide
 

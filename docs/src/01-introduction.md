@@ -29,4 +29,4 @@ Chaque composant matériel est développé selon une méthodologie **"Double-Tra
 - Le [Guide de Démarrage](02-quickstart.md) explique comment écrire, assembler et exécuter un programme sur la machine simulée.
 - La section **Architecture & Matériel** détaille la conception du CPU et sa carte mémoire.
 - La section **Le Langage JUMP** documente le langage de haut niveau du projet.
-- La section **Recherche & Suivi** contient les [notes de thèse](06-these.md) (analyse technique détaillée de chaque couche) et le [journal de bord](07-journal.md) (suivi chronologique des sprints).
+- La section **Recherche & Suivi** contient les [notes de recherche](recherche/00-introduction.md) (analyse technique détaillée de chaque couche) et le [journal de bord](07-journal.md) (suivi chronologique des sprints).

@@ -1,0 +1,15 @@
+# Conclusion Finale
+
+À ce stade du projet, l'intégralité des sept couches de l'architecture a été franchie avec succès, depuis le câblage de la porte logique NAND fondamentale jusqu'à la création d'un compilateur fonctionnel pour un langage de haut niveau propre (JUMP). L'exécution réussie de l'application interactive "Télécran", contrôlable au clavier en temps réel, vient boucler la chaîne d'outils complète construite de bout en bout et valide formellement l'objectif "NAND to Game".
+
+L'approche *bottom-up* et la méthodologie "Double-Track" (Logisim + Rust) se sont révélées extrêmement efficaces pour valider chaque couche indépendamment avant de l'intégrer dans la suivante, et pour détecter rapidement les erreurs de conception conceptuelles et matérielles.
+
+Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d'abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l'arbitrage d'un espace mémoire limité entre plusieurs usages concurrents (Couche 4), le changement de paradigme d'une analyse linéaire à une structure arborescente récursive (Couche 6, Parser), et la nécessité de contourner par calcul les limites d'encodage des instructions matérielles pour couvrir l'intégralité de l'espace mémoire (Couche 6, génération de code).
+
+### Si c'était à refaire
+
+L'enseignement majeur de ce projet est la démonstration implacable de la manière dont l'architecture matérielle dicte et contraint le développement logiciel. Plusieurs défis rencontrés découlent directement du choix initial d'une architecture strictement 8 bits : la plage de valeurs immédiates limitée à 7 bits (0-127), l'espace RAM réduit à 256 cases, le registre D couplé en dur à l'entrée A de l'ALU, et surtout le plafond de verre de la ROM empêchant l'exécution de programmes de plus de 127 instructions.
+
+Si le projet était repris depuis le début, l'architecture serait conçue **en 16 bits au minimum** de bout en bout (bus de données, registres, immédiats). Cette simple évolution aurait supprimé la majorité des goulots d'étranglement de la compilation logicielle, permis d'adresser des milliers de cases mémoire, et offert suffisamment de ROM pour faire tourner des jeux à la logique complexe (comme un véritable Snake) sans dénaturer l'approche pédagogique fondatrice du projet. L'ajout d'un registre pointeur de pile (Stack Pointer) matériel aurait également permis d'implémenter un véritable système d'appels de fonctions avec arguments locaux.
+
+Ce projet s'achève donc comme un formidable laboratoire d'ingénierie système : l'architecture a touché ses limites physiques, mais la solution a été trouvée par l'optimisation logicielle et le Game Design.
