@@ -8,5 +8,7 @@ command = "mdbook-mermaid"
 
 [output]
 
+[preprocessor.katex]
+
 [output.html]
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
