@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Langage d&#x27;Assemblage - Documentation Theoretical Computeur</title>
+        <title>Jeu d&#x27;Instructions (ISA) - Documentation Theoretical Computeur</title>
 
 
         <!-- Custom HTML head -->
@@ -175,26 +175,106 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="couche-5--langage-dassemblage"><a class="header" href="#couche-5--langage-dassemblage">Couche 5 : Langage d’Assemblage</a></h1>
-<p>La couche 5 a permis de créer un assembleur, premier outil logiciel permettant de programmer le CPU sans écrire directement les instructions en binaire.</p>
-<h3 id="résultats-de-la-recherche-"><a class="header" href="#résultats-de-la-recherche-">Résultats de la recherche :</a></h3>
-<ol>
-<li><strong>Assembleur</strong> : implémentation en Rust d’un parseur traduisant des mnémoniques textuels (assembleur) en instructions binaires 8 bits, conformes à l’ISA défini en Couche 3.</li>
-<li><strong>Premier programme exécuté</strong> : validation de la chaîne complète (assembleur → binaire → VM → CPU simulé) par l’exécution réussie d’un programme <em>Hello World</em>, écrivant une chaîne ASCII en mémoire.</li>
-<li><strong>Facilité de mise en œuvre</strong> : contrairement aux couches précédentes, la traduction assembleur → binaire et son exécution se sont mises en place sans difficulté majeure, la logique de correspondance mnémonique → opcode/mode découlant directement de l’ISA déjà spécifié.</li>
-</ol>
-<h3 id="apprentissages-clés"><a class="header" href="#apprentissages-clés">Apprentissages clés</a></h3>
-<p>Manipulation concrète du fonctionnement d’un assembleur : comment un texte lisible par un humain (mnémoniques) se traduit mécaniquement en instructions binaires exploitables par le CPU, et comment ce processus s’articule avec le cycle d’exécution bas niveau déjà construit.</p>
+<h1 id="documentation-de-larchitecture-isa-8-bits"><a class="header" href="#documentation-de-larchitecture-isa-8-bits">Documentation de l’Architecture ISA 8-bits</a></h1>
+<h2 id="1-le-problème-de-lespace-contrainte-des-8-bits"><a class="header" href="#1-le-problème-de-lespace-contrainte-des-8-bits">1. Le Problème de l’Espace (Contrainte des 8 bits)</a></h2>
+<p>Dans une architecture strictement limitée à 8 bits, intégrer une ALU complète à 16 opérations exige 4 bits, et l’identification de l’instruction prend 1 bit. Il ne restait que <strong>3 bits libres</strong> pour contrôler 5 signaux physiques indispensables : la source de l’entrée B de l’ALU (Registre A ou RAM), les autorisations d’écriture (Load A, Load D, Write M) et les instructions de Saut (Jump).</p>
+<h2 id="2-la-solution--lencodage-par-modes"><a class="header" href="#2-la-solution--lencodage-par-modes">2. La Solution : L’Encodage par Modes</a></h2>
+<p>Pour contourner cette limite, les 3 derniers bits ne contrôlent pas des fils individuels, mais définissent un <strong>Mode d’Exécution</strong>. Ces bits agissent comme un sélecteur qui préconfigure le processeur selon 8 profils matériels précis (lecture, écriture, saut conditionnel), permettant de réaliser toutes les opérations nécessaires en compressant intelligemment les signaux de contrôle.</p>
+<hr>
+<h2 id="3-format-général-de-linstruction"><a class="header" href="#3-format-général-de-linstruction">3. Format Général de l’Instruction</a></h2>
+<p>Chaque instruction de 8 bits est structurée de la manière suivante :</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Bit 7</th><th style="text-align: center">Bit 6</th><th style="text-align: center">Bit 5</th><th style="text-align: center">Bit 4</th><th style="text-align: center">Bit 3</th><th style="text-align: center">Bit 2</th><th style="text-align: center">Bit 1</th><th style="text-align: center">Bit 0</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><strong>T</strong></td><td style="text-align: center"><strong>O</strong></td><td style="text-align: center"><strong>O</strong></td><td style="text-align: center"><strong>O</strong></td><td style="text-align: center"><strong>O</strong></td><td style="text-align: center"><strong>M</strong></td><td style="text-align: center"><strong>M</strong></td><td style="text-align: center"><strong>M</strong></td></tr>
+<tr><td style="text-align: center">Type</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">ALU</td><td style="text-align: center">-</td><td style="text-align: center">-</td><td style="text-align: center">Mode</td><td style="text-align: center">-</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><strong>T (1 bit)</strong> : Type d’instruction (Adresse ou Calcul)</li>
+<li><strong>OOOO (4 bits)</strong> : Opcode de l’ALU</li>
+<li><strong>MMM (3 bits)</strong> : Mode d’exécution (Sources, Destinations, Jumps)</li>
+</ul>
+<hr>
+<h2 id="4-décodage-du-bit-de-type-t"><a class="header" href="#4-décodage-du-bit-de-type-t">4. Décodage du Bit de Type (<code>T</code>)</a></h2>
+<p>Ce bit de poids fort définit le comportement global du processeur pour le cycle en cours.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center"><code>T</code></th><th style="text-align: left">Nom</th><th style="text-align: left">Action du CPU</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><strong>0</strong></td><td style="text-align: left"><strong>Instruction Type A (Adresse / Valeur)</strong></td><td style="text-align: left">L’ALU est désactivée. Le CPU prend les 7 bits restants (<code>0vvv_vvvv</code>) et stocke directement cette valeur dans le <strong>Registre A</strong>.</td></tr>
+<tr><td style="text-align: center"><strong>1</strong></td><td style="text-align: left"><strong>Instruction Type C (Calcul)</strong></td><td style="text-align: left">L’ALU est activée. Le CPU lit l’Opcode (<code>OOOO</code>) pour le calcul et le Mode (<code>MMM</code>) pour diriger les données.</td></tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="5-table-des-opcodes-de-lalu-oooo"><a class="header" href="#5-table-des-opcodes-de-lalu-oooo">5. Table des Opcodes de l’ALU (<code>OOOO</code>)</a></h2>
+<p><em>(Actif uniquement si <code>T = 1</code>. L’entrée A de l’ALU est toujours reliée au Registre D).</em></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Opcode (<code>OOOO</code>)</th><th style="text-align: left">Opération</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>0000</code></td><td style="text-align: left"><strong>ADD</strong></td><td style="text-align: left">A + B</td></tr>
+<tr><td style="text-align: center"><code>0001</code></td><td style="text-align: left"><strong>SUB</strong></td><td style="text-align: left">A - B</td></tr>
+<tr><td style="text-align: center"><code>0010</code></td><td style="text-align: left"><strong>RSUB</strong></td><td style="text-align: left">B - A</td></tr>
+<tr><td style="text-align: center"><code>0011</code></td><td style="text-align: left"><strong>INC</strong></td><td style="text-align: left">A + 1</td></tr>
+<tr><td style="text-align: center"><code>0100</code></td><td style="text-align: left"><strong>DEC</strong></td><td style="text-align: left">A - 1</td></tr>
+<tr><td style="text-align: center"><code>0101</code></td><td style="text-align: left"><strong>AND</strong></td><td style="text-align: left">A AND B (Logique)</td></tr>
+<tr><td style="text-align: center"><code>0110</code></td><td style="text-align: left"><strong>OR</strong></td><td style="text-align: left">A OR B (Logique)</td></tr>
+<tr><td style="text-align: center"><code>0111</code></td><td style="text-align: left"><strong>XOR</strong></td><td style="text-align: left">A XOR B (Logique)</td></tr>
+<tr><td style="text-align: center"><code>1000</code></td><td style="text-align: left"><strong>NOT</strong></td><td style="text-align: left">NOT A (Logique)</td></tr>
+<tr><td style="text-align: center"><code>1001</code></td><td style="text-align: left"><strong>SHL</strong></td><td style="text-align: left">A &lt;&lt; 1 (Décalage gauche)</td></tr>
+<tr><td style="text-align: center"><code>1010</code></td><td style="text-align: left"><strong>SHR</strong></td><td style="text-align: left">A &gt;&gt; 1 (Décalage droite)</td></tr>
+<tr><td style="text-align: center"><code>1011</code></td><td style="text-align: left"><strong>CMP_EQ</strong></td><td style="text-align: left">A == B (Sort <code>11111111</code> si vrai, <code>00000000</code> si faux)</td></tr>
+<tr><td style="text-align: center"><code>1100</code></td><td style="text-align: left"><strong>CMP_LT</strong></td><td style="text-align: left">A &lt; B (Sort <code>11111111</code> si vrai, <code>00000000</code> si faux)</td></tr>
+<tr><td style="text-align: center"><code>1101</code></td><td style="text-align: left"><strong>CMP_GT</strong></td><td style="text-align: left">A &gt; B (Sort <code>11111111</code> si vrai, <code>00000000</code> si faux)</td></tr>
+<tr><td style="text-align: center"><code>1110</code></td><td style="text-align: left"><strong>PASS_A</strong></td><td style="text-align: left">Renvoie l’entrée A intacte</td></tr>
+<tr><td style="text-align: center"><code>1111</code></td><td style="text-align: left"><strong>PASS_B</strong></td><td style="text-align: left">Renvoie l’entrée B intacte</td></tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="6-table-des-modes-dexécution-mmm"><a class="header" href="#6-table-des-modes-dexécution-mmm">6. Table des Modes d’Exécution (<code>MMM</code>)</a></h2>
+<p><em>(Actif uniquement si <code>T = 1</code>. Définit l’entrée B de l’ALU, les registres modifiés, et la logique de saut).</em></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Mode (<code>MMM</code>)</th><th style="text-align: left">Entrée B (ALU)</th><th style="text-align: left">Destination (Sauvegarde)</th><th style="text-align: center">Saut (Jump)</th><th style="text-align: left">Description de l’usage</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>000</code></td><td style="text-align: left">Registre A</td><td style="text-align: left"><strong>Registre D</strong></td><td style="text-align: center">Non</td><td style="text-align: left">Calcul pur (ex: <code>D = D + A</code>)</td></tr>
+<tr><td style="text-align: center"><code>001</code></td><td style="text-align: left">RAM[A]</td><td style="text-align: left"><strong>Registre D</strong></td><td style="text-align: center">Non</td><td style="text-align: left">Lecture mémoire (ex: <code>D = D + RAM[A]</code>)</td></tr>
+<tr><td style="text-align: center"><code>010</code></td><td style="text-align: left">Registre A</td><td style="text-align: left"><strong>Registre A</strong></td><td style="text-align: center">Non</td><td style="text-align: left">Mise à jour adresse (ex: <code>A = D + A</code>)</td></tr>
+<tr><td style="text-align: center"><code>011</code></td><td style="text-align: left">Registre A</td><td style="text-align: left"><strong>RAM[A]</strong></td><td style="text-align: center">Non</td><td style="text-align: left">Écriture mémoire (ex: <code>RAM[A] = D op A</code>)</td></tr>
+<tr><td style="text-align: center"><code>100</code></td><td style="text-align: left">RAM[A]</td><td style="text-align: left"><strong>RAM[A]</strong></td><td style="text-align: center">Non</td><td style="text-align: left">Modif. mémoire directe (ex: <code>RAM[A] = D op RAM</code>)</td></tr>
+<tr><td style="text-align: center"><code>101</code></td><td style="text-align: left">Registre A</td><td style="text-align: left">Aucune</td><td style="text-align: center"><strong>OUI, si sortie ALU != 0</strong></td><td style="text-align: left">Condition : Comparer D et A, puis sauter à A</td></tr>
+<tr><td style="text-align: center"><code>110</code></td><td style="text-align: left">RAM[A]</td><td style="text-align: left">Aucune</td><td style="text-align: center"><strong>OUI, si sortie ALU != 0</strong></td><td style="text-align: left">Condition : Comparer D et RAM, puis sauter à A</td></tr>
+<tr><td style="text-align: center"><code>111</code></td><td style="text-align: left">Registre A</td><td style="text-align: left"><strong>Reg D</strong> ET <strong>Reg A</strong></td><td style="text-align: center">Non</td><td style="text-align: left">Clonage : Copier le résultat dans D et A</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>Note sur le Saut Conditionnel (JUMP) :</strong>
+Les modes <code>101</code> et <code>110</code> évaluent la sortie de l’ALU. Si le résultat renvoyé par l’ALU n’est pas strictement égal à <code>00000000</code>, le PC charge l’adresse contenue dans le Registre A. Ces modes sont prévus pour être combinés avec les Opcodes de comparaison (<code>CMP</code>).</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../recherche/05-vm.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recherche/04-cpu.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../recherche/07-compilateur.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../recherche/05-vm.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -204,11 +284,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../recherche/05-vm.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recherche/04-cpu.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../recherche/07-compilateur.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../recherche/05-vm.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
