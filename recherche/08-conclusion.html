@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>2. Guide de Démarrage - Documentation Theoretical Computeur</title>
+        <title>Conclusion - Documentation Theoretical Computeur</title>
 
 
         <!-- Custom HTML head -->
@@ -12,33 +12,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
-        <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-e96d0476.css">
-        <link rel="stylesheet" href="css/chrome-d279d366.css">
-        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../css/chrome-d279d366.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
-        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
-        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2d090dd8.js";
+            window.path_to_searchindex_js = "../searchindex-2d090dd8.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-7d482aec.js"></script>
+        <script src="../toc-7d482aec.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -105,7 +105,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -140,7 +140,7 @@
                     <h1 class="menu-title">Documentation Theoretical Computeur</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
@@ -174,92 +174,24 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="guide-dutilisation--du-code-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide d’utilisation : Du Code à la Machine Virtuelle</a></h1>
-<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur. Vous pouvez programmer la machine de deux manières : avec notre langage de haut niveau (<strong>JUMP</strong>) ou directement en <strong>Assembleur</strong>.</p>
-<hr>
-<h2 id="méthode-1--le-langage-jump-haut-niveau"><a class="header" href="#méthode-1--le-langage-jump-haut-niveau">Méthode 1 : Le langage JUMP (Haut Niveau)</a></h2>
-<p>C’est la méthode recommandée. Le compilateur JUMP gère automatiquement l’allocation de la mémoire, génère l’assembleur, et appelle l’outil d’assemblage de manière transparente.</p>
-<h3 id="étape-1--écrire-le-code-source-jmp"><a class="header" href="#étape-1--écrire-le-code-source-jmp">Étape 1 : Écrire le code source (.jmp)</a></h3>
-<p>Crée un fichier texte avec l’extension <code>.jmp</code> (par exemple <code>examples/dessin.jmp</code>).</p>
-<p><strong>Exemple d’un mini-programme de dessin interactif :</strong></p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// On initialise les coordonnées
-let x = 7;
-let y = 7;
-
-loop {
-    // On dessine le pixel (Gâchette d'affichage = 4)
-    poke(125, x);
-    poke(126, y);
-    poke(124, 4); 
-}
-
-<span class="boring">}</span></code></pre>
-<h3 id="étape-2--compiler-le-programme"><a class="header" href="#étape-2--compiler-le-programme">Étape 2 : Compiler le programme</a></h3>
-<p>Le compilateur va transformer votre code JUMP en Assembleur (<code>.asm</code>), puis invoquer automatiquement l’Assembleur pour générer le binaire exécutable (<code>.bin</code>).</p>
-<p>Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p compiler -- examples/dessin.jmp
-
-</code></pre>
-<p><strong>Résultat :</strong> Les fichiers <code>dessin.asm</code> et <code>dessin.bin</code> sont générés automatiquement.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
-<p>La VM charge le fichier binaire généré et lance l’exécution.</p>
-<pre><code class="language-bash">cargo run -p vm -- examples/dessin.bin
-
-</code></pre>
-<p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
-<hr>
-<h2 id="méthode-2--lassembleur"><a class="header" href="#méthode-2--lassembleur">Méthode 2 : L’Assembleur</a></h2>
-<p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
-<h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
-<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
-<p><strong>Exemple pour écrire “Hi” en mémoire :</strong></p>
-<pre><code class="language-text">// Lettre 'H' (Code ASCII 72) dans la case RAM 100
-VAL 72
-PASS_B D
-VAL 100
-PASS_A RAM
-
-// Lettre 'i' (Code ASCII 105) dans la case RAM 101
-VAL 105
-PASS_B D
-VAL 101
-PASS_A RAM
-
-</code></pre>
-<h3 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h3>
-<p>L’assembleur lit ton fichier texte et le traduit en octets (des <code>0</code> et des <code>1</code>) pour le processeur. Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p assembler -- examples/helloworld.asm
-
-</code></pre>
-<p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle">Étape 3 : Lancer sur la Machine Virtuelle</a></h3>
-<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
-<p>Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin
-
-</code></pre>
-<p><strong>Résultat :</strong> Un tableau s’affichera dans le terminal avec l’adresse mémoire, la valeur numérique, et le caractère ASCII correspondant.</p>
-<pre><code class="language-bash">--- ÉTAT DE LA RAM (Valeurs non nulles) ---
-Adresse    | Valeur (Num) | ASCII
-------------------------------------------
-100        | 72           | H
-101        | 105          | i
-------------------------------------------
-Arrêt de la machine.
-
-</code></pre>
+                        <h1 id="conclusion-finale"><a class="header" href="#conclusion-finale">Conclusion Finale</a></h1>
+<p>À ce stade du projet, l’intégralité des sept couches de l’architecture a été franchie avec succès, depuis le câblage de la porte logique NAND fondamentale jusqu’à la création d’un compilateur fonctionnel pour un langage de haut niveau propre (JUMP). L’exécution réussie de l’application interactive “Télécran”, contrôlable au clavier en temps réel, vient boucler la chaîne d’outils complète construite de bout en bout et valide formellement l’objectif “NAND to Game”.</p>
+<p>L’approche <em>bottom-up</em> et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées extrêmement efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception conceptuelles et matérielles.</p>
+<p>Les difficultés rencontrées ont majoritairement porté sur des points de passage entre niveaux d’abstraction : la limite de la simulation purement combinatoire face à la logique séquentielle (Couche 2), la compression de plusieurs signaux de contrôle sur un nombre de bits restreint (Couche 3), l’arbitrage d’un espace mémoire limité entre plusieurs usages concurrents (Couche 4), le changement de paradigme d’une analyse linéaire à une structure arborescente récursive (Couche 6, Parser), et la nécessité de contourner par calcul les limites d’encodage des instructions matérielles pour couvrir l’intégralité de l’espace mémoire (Couche 6, génération de code).</p>
+<h3 id="si-cétait-à-refaire"><a class="header" href="#si-cétait-à-refaire">Si c’était à refaire</a></h3>
+<p>L’enseignement majeur de ce projet est la démonstration implacable de la manière dont l’architecture matérielle dicte et contraint le développement logiciel. Plusieurs défis rencontrés découlent directement du choix initial d’une architecture strictement 8 bits : la plage de valeurs immédiates limitée à 7 bits (0-127), l’espace RAM réduit à 256 cases, le registre D couplé en dur à l’entrée A de l’ALU, et surtout le plafond de verre de la ROM empêchant l’exécution de programmes de plus de 127 instructions.</p>
+<p>Si le projet était repris depuis le début, l’architecture serait conçue <strong>en 16 bits au minimum</strong> de bout en bout (bus de données, registres, immédiats). Cette simple évolution aurait supprimé la majorité des goulots d’étranglement de la compilation logicielle, permis d’adresser des milliers de cases mémoire, et offert suffisamment de ROM pour faire tourner des jeux à la logique complexe (comme un véritable Snake) sans dénaturer l’approche pédagogique fondatrice du projet. L’ajout d’un registre pointeur de pile (Stack Pointer) matériel aurait également permis d’implémenter un véritable système d’appels de fonctions avec arguments locaux.</p>
+<p>Ce projet s’achève donc comme un formidable laboratoire d’ingénierie système : l’architecture a touché ses limites physiques, mais la solution a été trouvée par l’optimisation logicielle et le Game Design.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="01-introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recherche/07-compilateur.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="03-architecture.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../07-journal.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -269,11 +201,11 @@ Arrêt de la machine.
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="01-introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recherche/07-compilateur.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="03-architecture.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../07-journal.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -293,17 +225,17 @@ Arrêt de la machine.
         </script>
 
 
-        <script src="elasticlunr-ef4e11c1.min.js"></script>
-        <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-09f2665d.js"></script>
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-09f2665d.js"></script>
 
-        <script src="clipboard-1626706a.min.js"></script>
-        <script src="highlight-abc7f01d.js"></script>
-        <script src="book-609e4cb8.js"></script>
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="mermaid-eefea253.min.js"></script>
-        <script src="mermaid-init-53b67c53.js"></script>
+        <script src="../mermaid-eefea253.min.js"></script>
+        <script src="../mermaid-init-53b67c53.js"></script>
 
 
 

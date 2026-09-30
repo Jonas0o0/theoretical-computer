@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>2. Guide de Démarrage - Documentation Theoretical Computeur</title>
+        <title>Mémoire et Registres - Documentation Theoretical Computeur</title>
 
 
         <!-- Custom HTML head -->
@@ -12,33 +12,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
-        <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-e96d0476.css">
-        <link rel="stylesheet" href="css/chrome-d279d366.css">
-        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../css/chrome-d279d366.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
-        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
-        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2d090dd8.js";
+            window.path_to_searchindex_js = "../searchindex-2d090dd8.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-7d482aec.js"></script>
+        <script src="../toc-7d482aec.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -105,7 +105,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -140,7 +140,7 @@
                     <h1 class="menu-title">Documentation Theoretical Computeur</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
@@ -174,92 +174,138 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="guide-dutilisation--du-code-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide d’utilisation : Du Code à la Machine Virtuelle</a></h1>
-<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur. Vous pouvez programmer la machine de deux manières : avec notre langage de haut niveau (<strong>JUMP</strong>) ou directement en <strong>Assembleur</strong>.</p>
-<hr>
-<h2 id="méthode-1--le-langage-jump-haut-niveau"><a class="header" href="#méthode-1--le-langage-jump-haut-niveau">Méthode 1 : Le langage JUMP (Haut Niveau)</a></h2>
-<p>C’est la méthode recommandée. Le compilateur JUMP gère automatiquement l’allocation de la mémoire, génère l’assembleur, et appelle l’outil d’assemblage de manière transparente.</p>
-<h3 id="étape-1--écrire-le-code-source-jmp"><a class="header" href="#étape-1--écrire-le-code-source-jmp">Étape 1 : Écrire le code source (.jmp)</a></h3>
-<p>Crée un fichier texte avec l’extension <code>.jmp</code> (par exemple <code>examples/dessin.jmp</code>).</p>
-<p><strong>Exemple d’un mini-programme de dessin interactif :</strong></p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// On initialise les coordonnées
-let x = 7;
-let y = 7;
+                        <h1 id="couche-2--mémoire-et-registres"><a class="header" href="#couche-2--mémoire-et-registres">Couche 2 : Mémoire et Registres</a></h1>
+<p>L’implémentation de la couche 2 a permis d’introduire la notion d’<strong>état</strong> dans l’architecture, jusqu’ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM de 256 cases, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits (pour l’adressage de la ROM, voir Couche 3).</p>
+<h3 id="résultats-de-la-recherche-"><a class="header" href="#résultats-de-la-recherche-">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Limite de la simulation combinatoire</strong> : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n’est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n’a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.</li>
+<li><strong>Construction théorique de la bascule D</strong> : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l’entrée peut modifier l’état stocké.</li>
+<li><strong>Registre</strong> : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l’état est stocké directement dans une variable, et une méthode <code>clock_tick(data_in, load, reset)</code> reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par <code>data_in</code> si <code>load</code> est actif, ou la remettre à zéro si <code>reset</code> est actif reset étant prioritaire sur load. Ce registre générique reste en 8 bits (<code>Byte</code>), en cohérence avec le reste de l’architecture (ALU, RAM).</li>
+<li><strong>RAM</strong> : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L’écriture (<code>clock_tick</code>) et la lecture (<code>read_output</code>) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP (<a href="04-memory-map.html">04-memory-map.md</a>).</li>
+<li><strong>Program Counter (PC)</strong> : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d’adresser une ROM (mémoire de programme) bien plus grande que la RAM de données jusqu’à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l’adresse suivante à charger : soit une adresse de saut fournie explicitement (si <code>load</code> est actif), soit l’adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.</li>
+<li><strong>Méthodologie</strong> : comme pour les couches précédentes, chaque composant (<code>Register</code>, <code>Ram</code>, <code>PC</code>) a été validé par des tests unitaires en Rust, couvrant l’initialisation, le chargement, le maintien de la valeur, et la réinitialisation.</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong> : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).</p>
+</blockquote>
+<h3 id="schéma-du-program-counter"><a class="header" href="#schéma-du-program-counter">Schéma du Program Counter</a></h3>
+<pre class="mermaid">flowchart TD
+    CUR["PC actuel (16 bits)"] --&gt; MUX_ADDR{"MUX (load)"}
+    JUMP["Adresse de saut (16 bits)"] --&gt; MUX_ADDR
+    MUX_ADDR --&gt; BASE["Adresse de base"]
 
-loop {
-    // On dessine le pixel (Gâchette d'affichage = 4)
-    poke(125, x);
-    poke(126, y);
-    poke(124, 4); 
-}
+    ONE["1"] --&gt; MUX_INC{"MUX (load)"}
+    ZERO["0"] --&gt; MUX_INC
+    MUX_INC --&gt; INC["Incrément"]
 
-<span class="boring">}</span></code></pre>
-<h3 id="étape-2--compiler-le-programme"><a class="header" href="#étape-2--compiler-le-programme">Étape 2 : Compiler le programme</a></h3>
-<p>Le compilateur va transformer votre code JUMP en Assembleur (<code>.asm</code>), puis invoquer automatiquement l’Assembleur pour générer le binaire exécutable (<code>.bin</code>).</p>
-<p>Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p compiler -- examples/dessin.jmp
+    BASE --&gt; ADD["Additionneur 16 bits"]
+    INC --&gt; ADD
+    ADD --&gt; NEXT["PC suivant (16 bits)"]
+    NEXT --&gt; REG["Registre interne du PC (load=true)"]
+    REG --&gt; CUR
+</pre>
 
-</code></pre>
-<p><strong>Résultat :</strong> Les fichiers <code>dessin.asm</code> et <code>dessin.bin</code> sont générés automatiquement.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
-<p>La VM charge le fichier binaire généré et lance l’exécution.</p>
-<pre><code class="language-bash">cargo run -p vm -- examples/dessin.bin
+<h2 id="spécification-de-la-mémoire-couche-2"><a class="header" href="#spécification-de-la-mémoire-couche-2">Spécification de la Mémoire (Couche 2)</a></h2>
+<p>Ce document détaille l’introduction de la notion d’<strong>état</strong> dans l’architecture, jusqu’ici purement combinatoire (Couches 0 et 1). Trois composants sont couverts : le registre générique, la RAM, et le Program Counter (PC).</p>
+<h2 id="1-logique-séquentielle-vs-logique-combinatoire"><a class="header" href="#1-logique-séquentielle-vs-logique-combinatoire">1. Logique Séquentielle vs Logique Combinatoire</a></h2>
+<p>Toutes les couches précédentes reposaient sur des circuits <strong>combinatoires</strong> : la sortie ne dépend que des entrées présentes, sans mémoire du passé. Un registre, à l’inverse, doit <strong>retenir</strong> une valeur dans le temps — il s’agit de logique <strong>séquentielle</strong>.</p>
+<p>L’élément de base de toute mémoire est la <strong>bascule D</strong>, elle-même construite à partir de <strong>verrous</strong> (latch) :</p>
+<ul>
+<li><strong>Verrou SR</strong> (Set-Reset) : construit à partir de deux portes NOR croisées, où la sortie de chaque porte est reboucaisée sur l’entrée de l’autre.</li>
+<li><strong>Verrou D</strong> : version sécurisée du verrou SR, où une porte AND est ajoutée devant chaque NOR afin de contrôler précisément le moment où l’entrée est autorisée à modifier l’état stocké.</li>
+</ul>
+<p><strong>Particularité</strong> : le rebouclage d’une sortie sur une entrée qui dépend d’elle-même est un circuit à boucle combinatoire. Ce type de circuit est physiquement réalisable (Logisim), mais <strong>non représentable par de simples fonctions pures</strong> telles qu’utilisées dans notre émulation Rust jusqu’ici (une fonction pure ne peut pas dépendre de sa propre sortie). C’est pourquoi la bascule D est conçue et documentée uniquement au niveau du schéma Logisim, et n’est pas reconstruite porte par porte dans l’émulation Rust.</p>
+<p>En Rust, l’état est donc représenté directement par une variable, et une méthode <code>clock_tick</code> simule le comportement observable d’une bascule à chaque cycle d’horloge (charger / conserver / réinitialiser), sans reconstruire le bouclage physique sous-jacent.</p>
+<h2 id="2-registre-register"><a class="header" href="#2-registre-register">2. Registre (<code>Register</code>)</a></h2>
+<p>Le registre générique stocke une valeur de 8 bits (<code>Byte</code>). À chaque cycle (<code>clock_tick</code>), son comportement suit une priorité stricte : <strong>reset &gt; load &gt; maintien</strong>.</p>
+<p><strong>Table de sélection :</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th><code>reset</code></th><th><code>load</code></th><th>Valeur à <code>t+1</code></th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>x</td><td><code>00000000</code></td></tr>
+<tr><td>0</td><td>1</td><td><code>data_in</code></td></tr>
+<tr><td>0</td><td>0</td><td>valeur inchangée (<code>value(t)</code>)</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Équation :</strong>
+$$ value(t{+}1) = MUX\big(MUX(value(t),\ data_in,\ load),\ 0,\ reset\big) $$</p>
+<h2 id="3-mémoire-vive-ram"><a class="header" href="#3-mémoire-vive-ram">3. Mémoire Vive (<code>Ram</code>)</a></h2>
+<p>La RAM est un ensemble de cases mémoire de 8 bits (<code>Byte</code>), chacune adressable individuellement. L’adresse est portée sur 16 bits, ce qui permet d’adresser $2^{16} = 65,536$ cases — bien plus que les 256 cases obtenues avec une adresse 8 bits.</p>
+<p><strong>Comportement :</strong></p>
+<ul>
+<li><strong>Lecture</strong> (<code>read_output(address)</code>) : retourne la valeur stockée à <code>address</code>, sans effet de bord.</li>
+<li><strong>Écriture</strong> (<code>clock_tick(address, data_in, load)</code>) : si <code>load</code> est actif, remplace la valeur à <code>address</code> par <code>data_in</code> ; sinon, la mémoire reste inchangée. Une écriture à une adresse donnée n’affecte aucune autre case.</li>
+</ul>
+<blockquote>
+<p><strong>Note d’implémentation</strong> : le code fourni initialement utilisait une adresse 8 bits (256 cases). Le passage à une adresse 16 bits (65 536 cases) nécessite d’adapter le type d’adresse (<code>Byte</code> → un type 16 bits, ex. <code>Byte16</code> ou équivalent) et la taille du tableau interne (<code>[Byte; 65536]</code>). Si ce n’est pas encore fait côté code, il faudra qu’on l’adapte.</p>
+</blockquote>
+<h2 id="4-compteur-de-programme-pc"><a class="header" href="#4-compteur-de-programme-pc">4. Compteur de Programme (<code>PC</code>)</a></h2>
+<p>Le PC repose sur un registre interne <strong>dédié de 16 bits</strong> (distinct du registre générique 8 bits), nécessaire pour pouvoir adresser l’intégralité de l’espace mémoire de la RAM (65 536 cases).</p>
+<p>À chaque cycle, le PC calcule sa prochaine valeur en deux étapes :</p>
+<ol>
+<li>
+<p><strong>Sélection de l’adresse de base</strong> : selon <code>load</code>, on choisit entre l’adresse courante (<code>load = 0</code>) et l’adresse de saut fournie (<code>load = 1</code>).
+$$ base = MUX(PC_{actuel},\ adresse_saut,\ load) $$</p>
+</li>
+<li>
+<p><strong>Sélection de l’incrément</strong> : selon <code>load</code>, on ajoute soit 1 (cas normal, pas de saut), soit 0 (cas d’un saut, l’adresse de saut est utilisée telle quelle).
+$$ incr\acute{e}ment = MUX(1,\ 0,\ load) $$</p>
+</li>
+<li>
+<p><strong>Calcul final</strong> : la valeur suivante est obtenue en additionnant <code>base</code> et <code>incrément</code>, puis chargée systématiquement (<code>load = true</code>) dans le registre interne du PC.
+$$ PC_{suivant} = base + incr\acute{e}ment $$
+$$ registre_interne \leftarrow PC_{suivant} \quad (load = 1) $$</p>
+</li>
+</ol>
+<p><strong>Table de comportement observable :</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th><code>load</code></th><th><code>reset</code></th><th>Comportement</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td><code>PC_suivant = PC_actuel + 1</code> (incrémentation normale)</td></tr>
+<tr><td>1</td><td>0</td><td><code>PC_suivant = adresse_saut</code> (saut)</td></tr>
+<tr><td>x</td><td>1</td><td><code>PC_suivant = 0</code> (réinitialisation, prioritaire)</td></tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>Note d’implémentation</strong> : de même que pour la RAM, l’adressage du PC sur 16 bits nécessite que l’additionneur utilisé (actuellement <code>au8</code>, 8 bits) soit remplacé par une version 16 bits, ou que deux <code>au8</code> soient chaînés avec propagation de retenue.</p>
+</blockquote>
+<h3 id="schéma-du-program-counter-1"><a class="header" href="#schéma-du-program-counter-1">Schéma du Program Counter</a></h3>
+<pre class="mermaid">flowchart TD
+    CUR["PC actuel (16 bits)"] --&gt; MUX_ADDR{"MUX (load)"}
+    JUMP["Adresse de saut (16 bits)"] --&gt; MUX_ADDR
+    MUX_ADDR --&gt; BASE["Adresse de base"]
 
-</code></pre>
-<p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
-<hr>
-<h2 id="méthode-2--lassembleur"><a class="header" href="#méthode-2--lassembleur">Méthode 2 : L’Assembleur</a></h2>
-<p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
-<h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
-<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
-<p><strong>Exemple pour écrire “Hi” en mémoire :</strong></p>
-<pre><code class="language-text">// Lettre 'H' (Code ASCII 72) dans la case RAM 100
-VAL 72
-PASS_B D
-VAL 100
-PASS_A RAM
+    ONE["1"] --&gt; MUX_INC{"MUX (load)"}
+    ZERO["0"] --&gt; MUX_INC
+    MUX_INC --&gt; INC["Incrément"]
 
-// Lettre 'i' (Code ASCII 105) dans la case RAM 101
-VAL 105
-PASS_B D
-VAL 101
-PASS_A RAM
+    BASE --&gt; ADD["Additionneur 16 bits"]
+    INC --&gt; ADD
+    ADD --&gt; NEXT["PC suivant (16 bits)"]
+    NEXT --&gt; REG["Registre interne du PC (load=true)"]
+    REG --&gt; CUR
+</pre>
 
-</code></pre>
-<h3 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h3>
-<p>L’assembleur lit ton fichier texte et le traduit en octets (des <code>0</code> et des <code>1</code>) pour le processeur. Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p assembler -- examples/helloworld.asm
-
-</code></pre>
-<p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle">Étape 3 : Lancer sur la Machine Virtuelle</a></h3>
-<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
-<p>Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin
-
-</code></pre>
-<p><strong>Résultat :</strong> Un tableau s’affichera dans le terminal avec l’adresse mémoire, la valeur numérique, et le caractère ASCII correspondant.</p>
-<pre><code class="language-bash">--- ÉTAT DE LA RAM (Valeurs non nulles) ---
-Adresse    | Valeur (Num) | ASCII
-------------------------------------------
-100        | 72           | H
-101        | 105          | i
-------------------------------------------
-Arrêt de la machine.
-
-</code></pre>
+<h3 id="méthodologie-de-validation"><a class="header" href="#méthodologie-de-validation">Méthodologie de validation</a></h3>
+<p>Comme pour les couches précédentes, chaque composant (<code>Register</code>, <code>Ram</code>, <code>PC</code>) a été validé par des tests unitaires en Rust, couvrant l’initialisation, le chargement, le maintien de la valeur, et la réinitialisation.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="01-introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recherche/02-alu.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="03-architecture.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../recherche/04-cpu.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -269,11 +315,11 @@ Arrêt de la machine.
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="01-introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recherche/02-alu.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="03-architecture.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../recherche/04-cpu.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -293,17 +339,17 @@ Arrêt de la machine.
         </script>
 
 
-        <script src="elasticlunr-ef4e11c1.min.js"></script>
-        <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-09f2665d.js"></script>
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-09f2665d.js"></script>
 
-        <script src="clipboard-1626706a.min.js"></script>
-        <script src="highlight-abc7f01d.js"></script>
-        <script src="book-609e4cb8.js"></script>
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="mermaid-eefea253.min.js"></script>
-        <script src="mermaid-init-53b67c53.js"></script>
+        <script src="../mermaid-eefea253.min.js"></script>
+        <script src="../mermaid-init-53b67c53.js"></script>
 
 
 

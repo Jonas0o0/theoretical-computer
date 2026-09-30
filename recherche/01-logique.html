@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>2. Guide de Démarrage - Documentation Theoretical Computeur</title>
+        <title>Logique Booléenne - Documentation Theoretical Computeur</title>
 
 
         <!-- Custom HTML head -->
@@ -12,33 +12,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
-        <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-e96d0476.css">
-        <link rel="stylesheet" href="css/chrome-d279d366.css">
-        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../css/chrome-d279d366.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
-        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
-        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2d090dd8.js";
+            window.path_to_searchindex_js = "../searchindex-2d090dd8.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-7d482aec.js"></script>
+        <script src="../toc-7d482aec.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -105,7 +105,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -140,7 +140,7 @@
                     <h1 class="menu-title">Documentation Theoretical Computeur</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
@@ -174,92 +174,75 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="guide-dutilisation--du-code-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide d’utilisation : Du Code à la Machine Virtuelle</a></h1>
-<p>Ce projet contient la chaîne de compilation complète pour exécuter des programmes sur notre architecture processeur. Vous pouvez programmer la machine de deux manières : avec notre langage de haut niveau (<strong>JUMP</strong>) ou directement en <strong>Assembleur</strong>.</p>
-<hr>
-<h2 id="méthode-1--le-langage-jump-haut-niveau"><a class="header" href="#méthode-1--le-langage-jump-haut-niveau">Méthode 1 : Le langage JUMP (Haut Niveau)</a></h2>
-<p>C’est la méthode recommandée. Le compilateur JUMP gère automatiquement l’allocation de la mémoire, génère l’assembleur, et appelle l’outil d’assemblage de manière transparente.</p>
-<h3 id="étape-1--écrire-le-code-source-jmp"><a class="header" href="#étape-1--écrire-le-code-source-jmp">Étape 1 : Écrire le code source (.jmp)</a></h3>
-<p>Crée un fichier texte avec l’extension <code>.jmp</code> (par exemple <code>examples/dessin.jmp</code>).</p>
-<p><strong>Exemple d’un mini-programme de dessin interactif :</strong></p>
-<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// On initialise les coordonnées
-let x = 7;
-let y = 7;
-
-loop {
-    // On dessine le pixel (Gâchette d'affichage = 4)
-    poke(125, x);
-    poke(126, y);
-    poke(124, 4); 
-}
-
-<span class="boring">}</span></code></pre>
-<h3 id="étape-2--compiler-le-programme"><a class="header" href="#étape-2--compiler-le-programme">Étape 2 : Compiler le programme</a></h3>
-<p>Le compilateur va transformer votre code JUMP en Assembleur (<code>.asm</code>), puis invoquer automatiquement l’Assembleur pour générer le binaire exécutable (<code>.bin</code>).</p>
-<p>Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p compiler -- examples/dessin.jmp
-
-</code></pre>
-<p><strong>Résultat :</strong> Les fichiers <code>dessin.asm</code> et <code>dessin.bin</code> sont générés automatiquement.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
-<p>La VM charge le fichier binaire généré et lance l’exécution.</p>
-<pre><code class="language-bash">cargo run -p vm -- examples/dessin.bin
-
-</code></pre>
-<p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
-<hr>
-<h2 id="méthode-2--lassembleur"><a class="header" href="#méthode-2--lassembleur">Méthode 2 : L’Assembleur</a></h2>
-<p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
-<h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
-<p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
-<p><strong>Exemple pour écrire “Hi” en mémoire :</strong></p>
-<pre><code class="language-text">// Lettre 'H' (Code ASCII 72) dans la case RAM 100
-VAL 72
-PASS_B D
-VAL 100
-PASS_A RAM
-
-// Lettre 'i' (Code ASCII 105) dans la case RAM 101
-VAL 105
-PASS_B D
-VAL 101
-PASS_A RAM
-
-</code></pre>
-<h3 id="étape-2--compiler-avec-lassembleur"><a class="header" href="#étape-2--compiler-avec-lassembleur">Étape 2 : Compiler avec l’Assembleur</a></h3>
-<p>L’assembleur lit ton fichier texte et le traduit en octets (des <code>0</code> et des <code>1</code>) pour le processeur. Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p assembler -- examples/helloworld.asm
-
-</code></pre>
-<p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle">Étape 3 : Lancer sur la Machine Virtuelle</a></h3>
-<p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
-<p>Depuis la racine du projet, lance :</p>
-<pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin
-
-</code></pre>
-<p><strong>Résultat :</strong> Un tableau s’affichera dans le terminal avec l’adresse mémoire, la valeur numérique, et le caractère ASCII correspondant.</p>
-<pre><code class="language-bash">--- ÉTAT DE LA RAM (Valeurs non nulles) ---
-Adresse    | Valeur (Num) | ASCII
-------------------------------------------
-100        | 72           | H
-101        | 105          | i
-------------------------------------------
-Arrêt de la machine.
-
-</code></pre>
+                        <h1 id="couche-0--logique-booléenne"><a class="header" href="#couche-0--logique-booléenne">Couche 0 : Logique Booléenne</a></h1>
+<p>L’implémentation de la couche 0 a permis de valider l’universalité de la porte <strong>NAND</strong>.</p>
+<h3 id="résultats-de-la-recherche-"><a class="header" href="#résultats-de-la-recherche-">Résultats de la recherche :</a></h3>
+<ol>
+<li><strong>Universalité</strong> : Nous avons prouvé par la pratique que les portes fondamentales (NOT, AND, OR) peuvent être exclusivement construites à partir de portes NAND.</li>
+<li><strong>Routage</strong> : La conception du Multiplexeur (MUX) et du Démultiplexeur (DMUX) a posé les bases de l’aiguillage des signaux, essentiel pour la future Unité de Contrôle.</li>
+<li><strong>Méthodologie</strong> : L’approche “Double-Track” (Logisim + Rust) a permis de confirmer la justesse des circuits avant leur intégration. Les tests unitaires en Rust ont validé 100% des tables de vérité mathématiques.</li>
+</ol>
+<h2 id="spécification-des-portes-logiques-couche-0"><a class="header" href="#spécification-des-portes-logiques-couche-0">Spécification des Portes Logiques (Couche 0)</a></h2>
+<p>Ce document détaille l’implémentation de la logique combinatoire de base de notre architecture. Dans une démarche de rigueur, toutes les portes élémentaires sont dérivées d’une porte universelle : la porte <strong>NAND</strong>.</p>
+<h2 id="1-la-porte-universelle--nand"><a class="header" href="#1-la-porte-universelle--nand">1. La Porte Universelle : NAND</a></h2>
+<p>La porte <strong>NAND</strong> (NON-ET) renvoie faux (<code>0</code>) si et seulement si toutes ses entrées sont vraies (<code>1</code>). Elle est l’axiome de notre processeur.</p>
+<p><strong>Équation logique :</strong>
+$$ NAND(A, B) = \overline{A \cdot B} $$</p>
+<p><strong>Table de vérité :</strong></p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>A</th><th>B</th><th>Sortie</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="2-dérivation-des-portes-fondamentales"><a class="header" href="#2-dérivation-des-portes-fondamentales">2. Dérivation des portes fondamentales</a></h2>
+<h3 id="porte-not-non"><a class="header" href="#porte-not-non">Porte NOT (NON)</a></h3>
+<p>La porte NOT inverse le signal d’entrée. On l’obtient en connectant la même entrée aux deux broches du NAND.</p>
+<p><strong>Équation :</strong>
+$$ NOT(A) = NAND(A, A) = \overline{A \cdot A} = \overline{A} $$</p>
+<h3 id="porte-and-et"><a class="header" href="#porte-and-et">Porte AND (ET)</a></h3>
+<p>La porte AND renvoie vrai si toutes ses entrées sont vraies. C’est simplement un NAND dont on a inversé la sortie.</p>
+<p><strong>Équation :</strong>
+$$ AND(A, B) = NOT(NAND(A, B)) = \overline{\overline{A \cdot B}} = A \cdot B $$</p>
+<h3 id="porte-or-ou"><a class="header" href="#porte-or-ou">Porte OR (OU)</a></h3>
+<p>La porte OR renvoie vrai si au moins une entrée est vraie. On applique ici le théorème de De Morgan : inverser les entrées d’un NAND équivaut à faire un OR.</p>
+<p><strong>Équation :</strong>
+$$ OR(A, B) = NAND(NOT(A), NOT(B)) = \overline{\overline{A} \cdot \overline{B}} = A + B $$</p>
+<h3 id="porte-xor-ou-exclusif"><a class="header" href="#porte-xor-ou-exclusif">Porte XOR (OU Exclusif)</a></h3>
+<p>La porte XOR renvoie vrai si les entrées sont strictement différentes (l’une ou l’autre, mais pas les deux).</p>
+<p><strong>Équation standard :</strong>
+$$ XOR(A, B) = (A \cdot \overline{B}) + (\overline{A} \cdot B) = A \oplus B $$</p>
+<h2 id="3-logique-de-routage-multiplexage"><a class="header" href="#3-logique-de-routage-multiplexage">3. Logique de Routage (Multiplexage)</a></h2>
+<h3 id="multiplexeur-mux"><a class="header" href="#multiplexeur-mux">Multiplexeur (MUX)</a></h3>
+<p>Le Multiplexeur agit comme un aiguillage : il sélectionne entre deux entrées $A$ et $B$ en fonction d’un signal de sélection $S$.</p>
+<ul>
+<li>Si $S = 0$, il sort $A$.</li>
+<li>Si $S = 1$, il sort $B$.</li>
+</ul>
+<p><strong>Équation :</strong>
+$$ MUX(A, B, S) = (A \cdot \overline{S}) + (B \cdot S) $$</p>
+<h3 id="démultiplexeur-dmux"><a class="header" href="#démultiplexeur-dmux">Démultiplexeur (DMUX)</a></h3>
+<p>Le Démultiplexeur fait l’inverse : il prend un signal d’entrée $E$ et le route vers la sortie $Out_0$ ou $Out_1$ en fonction du sélecteur $S$.</p>
+<p><strong>Équations :</strong>
+$$ Out_0 = E \cdot \overline{S} $$
+$$ Out_1 = E \cdot S $$</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="01-introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../recherche/00-introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="03-architecture.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../recherche/02-alu.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -269,11 +252,11 @@ Arrêt de la machine.
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="01-introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../recherche/00-introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="03-architecture.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../recherche/02-alu.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -293,17 +276,17 @@ Arrêt de la machine.
         </script>
 
 
-        <script src="elasticlunr-ef4e11c1.min.js"></script>
-        <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-09f2665d.js"></script>
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-09f2665d.js"></script>
 
-        <script src="clipboard-1626706a.min.js"></script>
-        <script src="highlight-abc7f01d.js"></script>
-        <script src="book-609e4cb8.js"></script>
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="mermaid-eefea253.min.js"></script>
-        <script src="mermaid-init-53b67c53.js"></script>
+        <script src="../mermaid-eefea253.min.js"></script>
+        <script src="../mermaid-init-53b67c53.js"></script>
 
 
 
