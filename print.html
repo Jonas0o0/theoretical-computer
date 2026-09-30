@@ -471,7 +471,7 @@ poke(252, 1);
 <li><strong>Méthodologie</strong> : L’approche “Double-Track” (Logisim + Rust) a de nouveau permis de valider chaque sous-unité indépendamment avant son intégration dans l’ALU finale. Les tests unitaires en Rust ont validé 100% des 16 opérations de la table de vérité de l’ALU. Ce sprint a nécessité 3 semaines au lieu d’une, principalement en raison des corrections apportées au CMP et à l’ALU.</li>
 </ol>
 <h3 id="schéma-de-sélection-de-lalu"><a class="header" href="#schéma-de-sélection-de-lalu">Schéma de sélection de l’ALU</a></h3>
-<pre><code class="language-mermaid">flowchart TD
+<pre class="mermaid">flowchart TD
     OP["Opcode (4 bits)"] --&gt; M0["m0"]
     OP --&gt; M1["m1"]
 
@@ -490,7 +490,8 @@ poke(252, 1);
 
     MUXF --&gt; RES["Résultat (8 bits)"]
     AU -.-&gt; CARRY["Retenue sortante\n(non utilisée pour l'instant)"]
-</code></pre>
+</pre>
+
 <h2 id="couche-2--mémoire-et-registres"><a class="header" href="#couche-2--mémoire-et-registres">Couche 2 : Mémoire et Registres <a name="couche-2"></a></a></h2>
 <p>L’implémentation de la couche 2 a permis d’introduire la notion d’<strong>état</strong> dans l’architecture, jusqu’ici purement combinatoire. Elle repose sur trois composants : un registre générique 8 bits, une unité de RAM de 256 cases, et un Program Counter (PC) reposant sur un registre interne dédié de 16 bits (pour l’adressage de la ROM, voir Couche 3).</p>
 <h3 id="résultats-de-la-recherche--2"><a class="header" href="#résultats-de-la-recherche--2">Résultats de la recherche :</a></h3>
@@ -506,7 +507,7 @@ poke(252, 1);
 <p><strong>Note</strong> : le PC (16 bits) et la RAM (8 bits) ont des tailles différentes par conception voir Couche 3 pour le détail de cette architecture à deux espaces mémoire distincts (ROM 16 bits / RAM 8 bits).</p>
 </blockquote>
 <h3 id="schéma-du-program-counter"><a class="header" href="#schéma-du-program-counter">Schéma du Program Counter</a></h3>
-<pre><code class="language-mermaid">flowchart TD
+<pre class="mermaid">flowchart TD
     CUR["PC actuel (16 bits)"] --&gt; MUX_ADDR{"MUX (load)"}
     JUMP["Adresse de saut (16 bits)"] --&gt; MUX_ADDR
     MUX_ADDR --&gt; BASE["Adresse de base"]
@@ -520,7 +521,8 @@ poke(252, 1);
     ADD --&gt; NEXT["PC suivant (16 bits)"]
     NEXT --&gt; REG["Registre interne du PC (load=true)"]
     REG --&gt; CUR
-</code></pre>
+</pre>
+
 <h2 id="couche-3--architecture-du-processeur-cpu"><a class="header" href="#couche-3--architecture-du-processeur-cpu">Couche 3 : Architecture du Processeur (CPU) <a name="couche-3"></a></a></h2>
 <p>L’implémentation de la couche 3 a permis d’assembler l’ALU (Couche 1) et les éléments de mémoire (Couche 2) en un processeur complet, capable d’exécuter un programme de manière autonome via un cycle Fetch/Decode/Execute. Le jeu d’instructions complet (ISA) est spécifié dans <a href="../../hardware/cpu/ISA.html"><code>hardware/cpu/ISA.md</code></a>.</p>
 <h3 id="résultats-de-la-recherche--3"><a class="header" href="#résultats-de-la-recherche--3">Résultats de la recherche :</a></h3>
@@ -571,7 +573,7 @@ poke(252, 1);
 </li>
 </ol>
 <h3 id="schéma-du-cycle-fetchdecodeexecute"><a class="header" href="#schéma-du-cycle-fetchdecodeexecute">Schéma du cycle Fetch/Decode/Execute</a></h3>
-<pre><code class="language-mermaid">flowchart TD
+<pre class="mermaid">flowchart TD
     PC["PC (16 bits)"] --&gt; FETCH["Fetch : lecture de la ROM à l'adresse PC"]
     FETCH --&gt; BITT{"Bit T (bit 7)"}
 
@@ -584,7 +586,8 @@ poke(252, 1);
     NUM --&gt; NEXT["PC suivant (incrément ou jump)"]
     EXEC --&gt; NEXT
     NEXT --&gt; PC
-</code></pre>
+</pre>
+
 <h2 id="couche-4--machine-virtuelle-et-émulation"><a class="header" href="#couche-4--machine-virtuelle-et-émulation">Couche 4 : Machine Virtuelle et Émulation <a name="couche-4"></a></a></h2>
 <p>L’implémentation de la couche 4 a permis de construire une Machine Virtuelle (VM) capable d’exécuter le CPU simulé (Couche 3) à haute performance, et de le doter d’entrées/sorties pour interagir avec l’extérieur.</p>
 <h3 id="résultats-de-la-recherche--4"><a class="header" href="#résultats-de-la-recherche--4">Résultats de la recherche :</a></h3>
@@ -665,7 +668,7 @@ poke(252, 1);
 <li>Application du principe DRY (<em>Don’t Repeat Yourself</em>) en architecturant une toolchain modulaire interconnectée (Lexer, Parser, Codegen, Assembleur, VM), chaque étape restant indépendante et testable isolément.</li>
 </ul>
 <h3 id="schéma-de-la-chaîne-doutils-complète"><a class="header" href="#schéma-de-la-chaîne-doutils-complète">Schéma de la chaîne d’outils complète</a></h3>
-<pre><code class="language-mermaid">flowchart LR
+<pre class="mermaid">flowchart LR
     SRC["Code source JUMP (.jmp)"] --&gt; LEX["Lexer -&gt; Tokens"]
     LEX --&gt; PARSE["Parser -&gt; AST"]
     PARSE --&gt; ALLOC["Allocateur mémoire (table des symboles)"]
@@ -677,7 +680,8 @@ poke(252, 1);
     VM --&gt; CPU["CPU simulé (Couche 3)"]
     CPU --&gt; RAM["RAM 256 octets + Memory-Mapped I/O"]
 
-</code></pre>
+</pre>
+
 <h2 id="conclusion-finale"><a class="header" href="#conclusion-finale">Conclusion Finale</a></h2>
 <p>À ce stade du projet, l’intégralité des sept couches de l’architecture a été franchie avec succès, depuis le câblage de la porte logique NAND fondamentale jusqu’à la création d’un compilateur fonctionnel pour un langage de haut niveau propre (JUMP). L’exécution réussie de l’application interactive “Télécran”, contrôlable au clavier en temps réel, vient boucler la chaîne d’outils complète construite de bout en bout et valide formellement l’objectif “NAND to Game”.</p>
 <p>L’approche <em>bottom-up</em> et la méthodologie “Double-Track” (Logisim + Rust) se sont révélées extrêmement efficaces pour valider chaque couche indépendamment avant de l’intégrer dans la suivante, et pour détecter rapidement les erreurs de conception conceptuelles et matérielles.</p>
