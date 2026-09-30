@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-57c64f8f.js";
+            window.path_to_searchindex_js = "searchindex-7ea1090d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -210,7 +210,7 @@ loop {
 </code></pre>
 <p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
 <hr>
-<h2 id="méthode-2--lassembleur-bas-niveau"><a class="header" href="#méthode-2--lassembleur-bas-niveau">Méthode 2 : L’Assembleur (Bas Niveau)</a></h2>
+<h2 id="méthode-2--lassembleur"><a class="header" href="#méthode-2--lassembleur">Méthode 2 : L’Assembleur</a></h2>
 <p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
 <h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
 <p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
@@ -234,7 +234,7 @@ PASS_A RAM
 
 </code></pre>
 <p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm-1"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm-1">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
+<h3 id="étape-3--lancer-sur-la-machine-virtuelle"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle">Étape 3 : Lancer sur la Machine Virtuelle</a></h3>
 <p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
 <p>Depuis la racine du projet, lance :</p>
 <pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin

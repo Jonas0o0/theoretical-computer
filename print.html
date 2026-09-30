@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-57c64f8f.js";
+            window.path_to_searchindex_js = "searchindex-7ea1090d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a51d7fec.js"></script>
@@ -207,7 +207,7 @@
 <li>Le <a href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide de Démarrage</a> explique comment écrire, assembler et exécuter un programme sur la machine simulée.</li>
 <li>La section <strong>Architecture &amp; Matériel</strong> détaille la conception du CPU et sa carte mémoire.</li>
 <li>La section <strong>Le Langage JUMP</strong> documente le langage de haut niveau du projet.</li>
-<li>La section <strong>Recherche &amp; Suivi</strong> contient les <a href="#thèse--construction-dun-ordinateur-à-partir-de-zéro-from-scratch">notes de thèse</a> (analyse technique détaillée de chaque couche) et le <a href="#journal-de-bord-lab-notebook">journal de bord</a> (suivi chronologique des sprints).</li>
+<li>La section <strong>Recherche &amp; Suivi</strong> contient les <a href="#thèse--construction-dun-ordinateur-à-partir-de-zéro">notes de thèse</a> (analyse technique détaillée de chaque couche) et le <a href="#journal-de-bord">journal de bord</a> (suivi chronologique des sprints).</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="guide-dutilisation--du-code-à-la-machine-virtuelle"><a class="header" href="#guide-dutilisation--du-code-à-la-machine-virtuelle">Guide d’utilisation : Du Code à la Machine Virtuelle</a></h1>
@@ -246,7 +246,7 @@ loop {
 </code></pre>
 <p>Vous pouvez maintenant interagir avec le programme directement dans le terminal !</p>
 <hr>
-<h2 id="méthode-2--lassembleur-bas-niveau"><a class="header" href="#méthode-2--lassembleur-bas-niveau">Méthode 2 : L’Assembleur (Bas Niveau)</a></h2>
+<h2 id="méthode-2--lassembleur"><a class="header" href="#méthode-2--lassembleur">Méthode 2 : L’Assembleur</a></h2>
 <p>Si vous souhaitez écrire les instructions matérielles à la main pour contrôler directement les registres et l’ALU.</p>
 <h3 id="étape-1--écrire-le-code-source-asm"><a class="header" href="#étape-1--écrire-le-code-source-asm">Étape 1 : Écrire le code source (.asm)</a></h3>
 <p>Crée un fichier texte avec l’extension <code>.asm</code> (par exemple <code>examples/helloworld.asm</code>).</p>
@@ -270,7 +270,7 @@ PASS_A RAM
 
 </code></pre>
 <p><strong>Résultat :</strong> Cela va générer un fichier binaire <code>helloworld.bin</code> dans le même dossier.</p>
-<h3 id="étape-3--lancer-sur-la-machine-virtuelle-vm-1"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle-vm-1">Étape 3 : Lancer sur la Machine Virtuelle (VM)</a></h3>
+<h3 id="étape-3--lancer-sur-la-machine-virtuelle"><a class="header" href="#étape-3--lancer-sur-la-machine-virtuelle">Étape 3 : Lancer sur la Machine Virtuelle</a></h3>
 <p>La VM charge le fichier binaire dans la ROM du CPU et lance l’horloge. À la fin de l’exécution, elle affiche le contenu de la RAM (utile pour voir le texte ASCII ou le résultat des calculs).</p>
 <p>Depuis la racine du projet, lance :</p>
 <pre><code class="language-bash">cargo run -p vm -- examples/helloworld.bin
@@ -309,7 +309,7 @@ Arrêt de la machine.
 <li><strong>CPU</strong> : Unité de Contrôle, Décodeur d’instructions.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="carte-mémoire---cpu-8-bits-v2"><a class="header" href="#carte-mémoire---cpu-8-bits-v2">Carte Mémoire - CPU 8 bits (V2)</a></h1>
+<h1 id="carte-mémoire---cpu-8-bits"><a class="header" href="#carte-mémoire---cpu-8-bits">Carte Mémoire - CPU 8 bits</a></h1>
 <p>Ce document décrit l’organisation de la RAM de notre processeur.
 Afin de pouvoir interagir avec le monde extérieur (Clavier et Écran) sans modifier l’architecture matérielle du CPU, nous utilisons la technique du <strong>Memory-Mapped I/O</strong>.</p>
 <blockquote>
@@ -418,7 +418,7 @@ poke(254, y);
 poke(252, 1);
 
 </code></pre>
-<h2 id="4-le-compilateur-jump-sous-le-capot"><a class="header" href="#4-le-compilateur-jump-sous-le-capot">4. Le Compilateur JUMP (Sous le capot)</a></h2>
+<h2 id="4-le-compilateur-jump"><a class="header" href="#4-le-compilateur-jump">4. Le Compilateur JUMP</a></h2>
 <p>Pour comprendre comment le texte JUMP devient un programme exécutable, voici le pipeline du compilateur :</p>
 <ol>
 <li><strong>Lexer (Analyseur Lexical) :</strong> Convertit le texte brut en une séquence de “Tokens” (Jeton <code>LET</code>, Jeton <code>IDENTIFIER</code>, etc.).</li>
@@ -427,7 +427,7 @@ poke(252, 1);
 <li><strong>Générateur de Code :</strong> Traduit l’AST en instructions assembleur brutes (<code>VAL</code>, <code>PASS_A</code>, etc.), prêt à être chargé dans la ROM du processeur.</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="thèse--construction-dun-ordinateur-à-partir-de-zéro-from-scratch"><a class="header" href="#thèse--construction-dun-ordinateur-à-partir-de-zéro-from-scratch">Thèse : Construction d’un Ordinateur à partir de Zéro (from Scratch)</a></h1>
+<h1 id="thèse--construction-dun-ordinateur-à-partir-de-zéro"><a class="header" href="#thèse--construction-dun-ordinateur-à-partir-de-zéro">Thèse : Construction d’un Ordinateur à partir de Zéro</a></h1>
 <h2 id="résumé"><a class="header" href="#résumé">Résumé</a></h2>
 <p><em>Ce document retrace la conception et l’implémentation complète d’une architecture informatique, des portes logiques jusqu’au langage de haut niveau.</em></p>
 <h2 id="table-des-matières"><a class="header" href="#table-des-matières">Table des Matières</a></h2>
@@ -498,7 +498,7 @@ poke(252, 1);
 <li><strong>Limite de la simulation combinatoire</strong> : la bascule D, brique fondamentale de tout élément mémoire, repose sur une boucle combinatoire une sortie rebouclée sur une entrée qui dépend elle-même de cette sortie. Ce type de circuit séquentiel n’est pas représentable par de simples fonctions pures Rust, qui ne portent aucune notion de temps ni de bouclage. La bascule D n’a donc été conçue que dans Logisim, où le rebouclage physique est possible, et non simulée en Rust.</li>
 <li><strong>Construction théorique de la bascule D</strong> : un verrou SR (Set-Reset) se construit à partir de deux portes NOR croisées. Un verrou D en est une version sécurisée : une porte AND est ajoutée devant chaque NOR, ce qui permet de contrôler précisément le moment où l’entrée peut modifier l’état stocké.</li>
 <li><strong>Registre</strong> : côté Rust, plutôt que de reconstruire une bascule D à partir de portes logiques, l’état est stocké directement dans une variable, et une méthode <code>clock_tick(data_in, load, reset)</code> reproduit le comportement attendu à chaque cycle : conserver la valeur, la remplacer par <code>data_in</code> si <code>load</code> est actif, ou la remettre à zéro si <code>reset</code> est actif reset étant prioritaire sur load. Ce registre générique reste en 8 bits (<code>Byte</code>), en cohérence avec le reste de l’architecture (ALU, RAM).</li>
-<li><strong>RAM</strong> : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L’écriture (<code>clock_tick</code>) et la lecture (<code>read_output</code>) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP (<a href="#carte-mémoire---cpu-8-bits-v2">04-memory-map.md</a>).</li>
+<li><strong>RAM</strong> : composée de 256 cases de 8 bits chacune, adressables individuellement via une adresse de 8 bits. L’écriture (<code>clock_tick</code>) et la lecture (<code>read_output</code>) ciblent une adresse précise, sans affecter les autres cases mémoire. Cette taille est confirmée et détaillée dans la carte mémoire du langage JUMP (<a href="#carte-mémoire---cpu-8-bits">04-memory-map.md</a>).</li>
 <li><strong>Program Counter (PC)</strong> : contrairement au registre générique et à la RAM, le PC repose sur un registre interne dédié de 16 bits. Ce choix anticipe le besoin de la Couche 3 d’adresser une ROM (mémoire de programme) bien plus grande que la RAM de données jusqu’à 65 536 lignes de code. À chaque cycle, le PC combine deux multiplexeurs et une unité arithmétique pour déterminer l’adresse suivante à charger : soit une adresse de saut fournie explicitement (si <code>load</code> est actif), soit l’adresse courante incrémentée de 1 (sinon). Le résultat est ensuite systématiquement chargé dans ce registre interne.</li>
 <li><strong>Méthodologie</strong> : comme pour les couches précédentes, chaque composant (<code>Register</code>, <code>Ram</code>, <code>PC</code>) a été validé par des tests unitaires en Rust, couvrant l’initialisation, le chargement, le maintien de la valeur, et la réinitialisation.</li>
 </ol>
@@ -687,7 +687,7 @@ poke(252, 1);
 <p>Si le projet était repris depuis le début, l’architecture serait conçue <strong>en 16 bits au minimum</strong> de bout en bout (bus de données, registres, immédiats). Cette simple évolution aurait supprimé la majorité des goulots d’étranglement de la compilation logicielle, permis d’adresser des milliers de cases mémoire, et offert suffisamment de ROM pour faire tourner des jeux à la logique complexe (comme un véritable Snake) sans dénaturer l’approche pédagogique fondatrice du projet. L’ajout d’un registre pointeur de pile (Stack Pointer) matériel aurait également permis d’implémenter un véritable système d’appels de fonctions avec arguments locaux.</p>
 <p>Ce projet s’achève donc comme un formidable laboratoire d’ingénierie système : l’architecture a touché ses limites physiques, mais la solution a été trouvée par l’optimisation logicielle et le Game Design.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="journal-de-bord-lab-notebook"><a class="header" href="#journal-de-bord-lab-notebook">Journal de Bord (Lab Notebook)</a></h1>
+<h1 id="journal-de-bord"><a class="header" href="#journal-de-bord">Journal de Bord</a></h1>
 <h2 id="format-dentrée-"><a class="header" href="#format-dentrée-">Format d’entrée :</a></h2>
 <ul>
 <li><strong>Date</strong> : [Date]</li>
